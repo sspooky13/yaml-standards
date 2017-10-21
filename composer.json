@@ -1,0 +1,49 @@
+{
+    "name": "sspooky13/yaml-alphabetical-checker",
+    "type": "library",
+    "description": "YAML alphabetical checker and fixer",
+    "keywords": ["yaml", "alphabetical", "fixer", "checker"],
+    "homepage": "https://github.com/sspooky13/yaml-alphabetical-fixer",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Peter Turek",
+            "email": "peter.turek13@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "YamlAlphabeticalChecker\\": [
+                "src"
+            ]
+        },
+        "classmap": [
+            "src"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "YamlAlphabeticalChecker\\": [
+                "tests"
+            ]
+        },
+        "classmap": [
+            "tests"
+        ]
+    },
+    "require": {
+        "php": "~5.6 || ~7.0",
+        "symfony/console": "~3.0",
+        "symfony/yaml": "~3.0"
+    },
+    "require-dev": {
+        "phing/phing": "2.16.*",
+        "phpunit/phpunit": "5.7.* || 6.4.*",
+        "shopsys/coding-standards": "3.1.*"
+    },
+    "scripts": {
+        "build": [
+            "@composer install"
+        ]
+    }
+}
