@@ -10,14 +10,17 @@ use Symfony\Component\Yaml\Exception\ParseException;
 
 class YamlCheckCommand extends Command
 {
-    const OPTION_DIR = 'dir';
+    const
+        OPTION_DIR = 'dir',
+        OPTION_SHOW_DIFF = 'diff';
 
     protected function configure()
     {
         $this
             ->setName('yaml-alphabetical-check')
             ->setDescription('Check if yaml files is alphabetically sorted')
-            ->addOption(self::OPTION_DIR, null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Directories to check');
+            ->addOption(self::OPTION_DIR, null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Directories to check')
+            ->addOption(self::OPTION_SHOW_DIFF, null, InputOption::VALUE_NONE, 'Show difference in yaml file');
     }
 
     /**
@@ -32,6 +35,7 @@ class YamlCheckCommand extends Command
 
         $yamlAlphabeticalChecker = new YamlAlphabeticalChecker();
         $pathToYamlFiles = YamlFilesPathService::getPathToYamlFiles($input->getOption(self::OPTION_DIR));
+        $isShowDiffOptionEnabled = $input->getOption(self::OPTION_SHOW_DIFF) === true;
 
         foreach ($pathToYamlFiles as $pathToYamlFile) {
             $output->write(sprintf('Checking %s: ', $pathToYamlFile));
@@ -47,6 +51,11 @@ class YamlCheckCommand extends Command
                 if ($sortCheckResult) {
                     $output->writeln('<fg=green>OK</fg=green>');
                 } else {
+                    if ($isShowDiffOptionEnabled) {
+                        $output->write($yamlAlphabeticalChecker->getDifference($pathToYamlFile));
+                        return 2;
+                    }
+
                     $output->writeln('<fg=red>ERROR</fg=red>');
                 }
             } catch (ParseException $e) {
