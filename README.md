@@ -57,6 +57,7 @@ or setting for ANT:
 ## Exit codes
 Exit code is built using following bit flags:
 
-    0 Basic functionality.
+    0 OK.
     1 General error (file is not readable, error with parse yaml file).
-    2 Some file is unsorted (only in diff mode).
+    2 Some file is unsorted (only in clasic mode).
+    4 Show in unsorted file right sort (only in diff mode).

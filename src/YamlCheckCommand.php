@@ -36,6 +36,7 @@ class YamlCheckCommand extends Command
         $yamlAlphabeticalChecker = new YamlAlphabeticalChecker();
         $pathToYamlFiles = YamlFilesPathService::getPathToYamlFiles($input->getOption(self::OPTION_DIR));
         $isShowDiffOptionEnabled = $input->getOption(self::OPTION_SHOW_DIFF) === true;
+        $errors = [];
 
         foreach ($pathToYamlFiles as $pathToYamlFile) {
             $output->write(sprintf('Checking %s: ', $pathToYamlFile));
@@ -56,16 +57,21 @@ class YamlCheckCommand extends Command
                         return 2;
                     }
 
+                    $errors[] = $pathToYamlFile;
                     $output->writeln('<fg=red>ERROR</fg=red>');
                 }
             } catch (ParseException $e) {
                 $output->writeln(sprintf('Unable to parse the YAML string: %s', $e->getMessage()));
-                return 1;
+                return 4;
             }
         }
 
         $output->writeln('');
         $output->writeln('<fg=green>End of checking yaml files.</fg=green>');
+
+        if (count($errors) > 0) {
+            return 2;
+        }
 
         return 0;
     }
