@@ -11,21 +11,30 @@ class YamlFilesPathService
 {
     /**
      * @param string[] $pathToDirs
+     * @param string[] $excludedFileMasks
      * @return array
      */
-    public static function getPathToYamlFiles(array $pathToDirs)
+    public static function getPathToYamlFiles(array $pathToDirs, array $excludedFileMasks = [])
     {
-        $fileList = [];
+        $pathToFiles = [];
         foreach ($pathToDirs as $pathToDir) {
             $recursiveDirectoryIterator = new RecursiveDirectoryIterator($pathToDir);
             $recursiveIteratorIterator = new RecursiveIteratorIterator($recursiveDirectoryIterator);
             $regexIterator = new RegexIterator($recursiveIteratorIterator, '/^.+\.yml$/i', RecursiveRegexIterator::GET_MATCH);
 
             foreach ($regexIterator as $pathToFile) {
-                $fileList[] = reset($pathToFile);
+                $pathToFiles[] = reset($pathToFile);
             }
         }
 
-        return $fileList;
+        foreach ($excludedFileMasks as $excludedFileMask) {
+            foreach ($pathToFiles as $key => $pathToFile) {
+                if (strpos($pathToFile, $excludedFileMask) !== false) {
+                    unset($pathToFiles[$key]);
+                }
+            }
+        }
+
+        return $pathToFiles;
     }
 }

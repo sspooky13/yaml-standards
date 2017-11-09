@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- add new option for exclude files with mask, eg. `--exclude=service`
 
 ## [1.0.1] - 2017-11-05
 ### Fixed

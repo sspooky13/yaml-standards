@@ -12,7 +12,8 @@ class YamlCheckCommand extends Command
 {
     const
         OPTION_DIR = 'dir',
-        OPTION_SHOW_DIFF = 'diff';
+        OPTION_SHOW_DIFF = 'diff',
+        OPTION_EXCLUDE = 'exclude';
 
     protected function configure()
     {
@@ -20,7 +21,8 @@ class YamlCheckCommand extends Command
             ->setName('yaml-alphabetical-check')
             ->setDescription('Check if yaml files is alphabetically sorted')
             ->addOption(self::OPTION_DIR, null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Directories to check')
-            ->addOption(self::OPTION_SHOW_DIFF, null, InputOption::VALUE_NONE, 'Show difference in yaml file');
+            ->addOption(self::OPTION_SHOW_DIFF, null, InputOption::VALUE_NONE, 'Show difference in yaml file')
+            ->addOption(self::OPTION_EXCLUDE, null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Exclude file mask from check');
     }
 
     /**
@@ -34,8 +36,10 @@ class YamlCheckCommand extends Command
         $output->writeln('');
 
         $yamlAlphabeticalChecker = new YamlAlphabeticalChecker();
-        $pathToYamlFiles = YamlFilesPathService::getPathToYamlFiles($input->getOption(self::OPTION_DIR));
+        $excludedFileMasks = $input->getOption(self::OPTION_EXCLUDE);
+        $pathToYamlFiles = YamlFilesPathService::getPathToYamlFiles($input->getOption(self::OPTION_DIR), $excludedFileMasks);
         $isShowDiffOptionEnabled = $input->getOption(self::OPTION_SHOW_DIFF) === true;
+
         $errors = [];
 
         foreach ($pathToYamlFiles as $pathToYamlFile) {
