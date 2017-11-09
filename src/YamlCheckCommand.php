@@ -12,7 +12,7 @@ use Symfony\Component\Yaml\Exception\ParseException;
 class YamlCheckCommand extends Command
 {
     const
-        ARGUMENT_DIRS = 'dirs',
+        ARGUMENT_DIRS_OR_FILES = 'dirsOrFiles',
         OPTION_SHOW_DIFF = 'diff',
         OPTION_EXCLUDE = 'exclude';
 
@@ -21,7 +21,7 @@ class YamlCheckCommand extends Command
         $this
             ->setName('yaml-alphabetical-check')
             ->setDescription('Check if yaml files is alphabetically sorted')
-            ->addArgument(self::ARGUMENT_DIRS, InputArgument::REQUIRED | InputArgument::IS_ARRAY, 'Paths to directories to check')
+            ->addArgument(self::ARGUMENT_DIRS_OR_FILES, InputArgument::REQUIRED | InputArgument::IS_ARRAY, 'Paths to directories or files to check')
             ->addOption(self::OPTION_SHOW_DIFF, null, InputOption::VALUE_NONE, 'Show difference in yaml file')
             ->addOption(self::OPTION_EXCLUDE, null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Exclude file mask from check');
     }
@@ -36,10 +36,10 @@ class YamlCheckCommand extends Command
         $output->writeln('<fg=green>Start checking yaml files.</fg=green>');
         $output->writeln('');
 
-        $dirs = $input->getArgument(self::ARGUMENT_DIRS);
+        $dirsOrFiles = $input->getArgument(self::ARGUMENT_DIRS_OR_FILES);
         $excludedFileMasks = $input->getOption(self::OPTION_EXCLUDE);
         $isShowDiffOptionEnabled = $input->getOption(self::OPTION_SHOW_DIFF) === true;
-        $pathToYamlFiles = YamlFilesPathService::getPathToYamlFiles($dirs, $excludedFileMasks);
+        $pathToYamlFiles = YamlFilesPathService::getPathToYamlFiles($dirsOrFiles, $excludedFileMasks);
 
         $yamlAlphabeticalChecker = new YamlAlphabeticalChecker();
         $errors = [];
