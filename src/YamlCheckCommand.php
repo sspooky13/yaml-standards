@@ -3,6 +3,7 @@
 namespace YamlAlphabeticalChecker;
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -11,7 +12,7 @@ use Symfony\Component\Yaml\Exception\ParseException;
 class YamlCheckCommand extends Command
 {
     const
-        OPTION_DIR = 'dir',
+        ARGUMENT_DIRS = 'dirs',
         OPTION_SHOW_DIFF = 'diff',
         OPTION_EXCLUDE = 'exclude';
 
@@ -20,7 +21,7 @@ class YamlCheckCommand extends Command
         $this
             ->setName('yaml-alphabetical-check')
             ->setDescription('Check if yaml files is alphabetically sorted')
-            ->addOption(self::OPTION_DIR, null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Directories to check')
+            ->addArgument(self::ARGUMENT_DIRS, InputArgument::REQUIRED | InputArgument::IS_ARRAY, 'Paths to directories to check')
             ->addOption(self::OPTION_SHOW_DIFF, null, InputOption::VALUE_NONE, 'Show difference in yaml file')
             ->addOption(self::OPTION_EXCLUDE, null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Exclude file mask from check');
     }
@@ -35,11 +36,12 @@ class YamlCheckCommand extends Command
         $output->writeln('<fg=green>Start checking yaml files.</fg=green>');
         $output->writeln('');
 
-        $yamlAlphabeticalChecker = new YamlAlphabeticalChecker();
+        $dirs = $input->getArgument(self::ARGUMENT_DIRS);
         $excludedFileMasks = $input->getOption(self::OPTION_EXCLUDE);
-        $pathToYamlFiles = YamlFilesPathService::getPathToYamlFiles($input->getOption(self::OPTION_DIR), $excludedFileMasks);
         $isShowDiffOptionEnabled = $input->getOption(self::OPTION_SHOW_DIFF) === true;
+        $pathToYamlFiles = YamlFilesPathService::getPathToYamlFiles($dirs, $excludedFileMasks);
 
+        $yamlAlphabeticalChecker = new YamlAlphabeticalChecker();
         $errors = [];
 
         foreach ($pathToYamlFiles as $pathToYamlFile) {

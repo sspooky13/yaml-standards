@@ -4,6 +4,9 @@
 ### Added
 - add new option for exclude files with mask, eg. `--exclude=service`
 
+### Changed
+- option directories changed to required argument
+
 ## [1.0.1] - 2017-11-05
 ### Fixed
 - fix return exit code in classic mode
