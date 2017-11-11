@@ -14,7 +14,7 @@
 >
 
     <testsuites>
-        <testsuite name="Yaml alphabetical checker">
+        <testsuite name="Unit">
             <directory>tests/</directory>
         </testsuite>
     </testsuites>
