@@ -2,6 +2,7 @@
 
 namespace YamlAlphabeticalChecker;
 
+use SebastianBergmann\Diff\Differ;
 use Symfony\Component\Yaml\Yaml;
 
 class YamlAlphabeticalChecker
@@ -34,22 +35,8 @@ class YamlAlphabeticalChecker
         $yamlStringData = Yaml::dump($yamlArrayData, 10, 2);
         $yamlStringDataSorted = Yaml::dump($yamlArrayDataSorted, 10, 2);
 
-        $yamlDataExploded = explode("\n", $yamlStringData);
-        $yamlSortedDataExploded = explode("\n", $yamlStringDataSorted);
-        $yamlDifference = "\n";
-
-        foreach ($yamlDataExploded as $key => $value) {
-            $currentSortedLine = $yamlSortedDataExploded[$key];
-
-            if ($value !== $currentSortedLine) {
-                $yamlDifference .= '<fg=red>- ' . $value . "\n</fg=red>";
-                $yamlDifference .= '<fg=green>+ ' . $currentSortedLine . "\n</fg=green>";
-            } else {
-                $yamlDifference .= $value . "\n";
-            }
-        }
-
-        return $yamlDifference;
+        $differ = new Differ();
+        return $differ->diff($yamlStringData, $yamlStringDataSorted);
     }
 
     /**
