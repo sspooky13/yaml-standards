@@ -8,6 +8,9 @@
 - option directories changed to required argument
 - to argument for directories you can send file path and directories
 
+### Removed
+- remove `classic` mode and replace him for `diff` mode
+
 ## [1.0.1] - 2017-11-05
 ### Fixed
 - fix return exit code in classic mode

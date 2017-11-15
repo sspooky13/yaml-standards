@@ -13,7 +13,6 @@ class YamlCheckCommand extends Command
 {
     const
         ARGUMENT_DIRS_OR_FILES = 'dirsOrFiles',
-        OPTION_SHOW_DIFF = 'diff',
         OPTION_EXCLUDE = 'exclude';
 
     protected function configure()
@@ -22,7 +21,6 @@ class YamlCheckCommand extends Command
             ->setName('yaml-alphabetical-check')
             ->setDescription('Check if yaml files is alphabetically sorted')
             ->addArgument(self::ARGUMENT_DIRS_OR_FILES, InputArgument::REQUIRED | InputArgument::IS_ARRAY, 'Paths to directories or files to check')
-            ->addOption(self::OPTION_SHOW_DIFF, null, InputOption::VALUE_NONE, 'Show difference in yaml file')
             ->addOption(self::OPTION_EXCLUDE, null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Exclude file mask from check');
     }
 
@@ -38,7 +36,6 @@ class YamlCheckCommand extends Command
 
         $dirsOrFiles = $input->getArgument(self::ARGUMENT_DIRS_OR_FILES);
         $excludedFileMasks = $input->getOption(self::OPTION_EXCLUDE);
-        $isShowDiffOptionEnabled = $input->getOption(self::OPTION_SHOW_DIFF) === true;
         $pathToYamlFiles = YamlFilesPathService::getPathToYamlFiles($dirsOrFiles, $excludedFileMasks);
 
         $yamlAlphabeticalChecker = new YamlAlphabeticalChecker();
@@ -57,13 +54,8 @@ class YamlCheckCommand extends Command
                     $message = '<fg=green>OK</fg=green>';
                     $results[] = new Result($pathToYamlFile, $message);
                 } else {
-                    if ($isShowDiffOptionEnabled) {
-                        $diff = $yamlAlphabeticalChecker->getDifference($pathToYamlFile);
-                        $results[] = new Result($pathToYamlFile, $diff, Result::RESULT_CODE_INVALID_SORT);
-                    }
-
-                    $message = '<fg=red>ERROR</fg=red>';
-                    $results[] = new Result($pathToYamlFile, $message, Result::RESULT_CODE_INVALID_SORT);
+                    $diff = $yamlAlphabeticalChecker->getDifference($pathToYamlFile);
+                    $results[] = new Result($pathToYamlFile, $diff, Result::RESULT_CODE_INVALID_SORT);
                 }
             } catch (ParseException $e) {
                 $message = sprintf('Unable to parse the YAML string: %s', $e->getMessage());
