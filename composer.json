@@ -1,9 +1,9 @@
 {
     "name": "sspooky13/yaml-alphabetical-checker",
     "type": "library",
-    "description": "YAML alphabetical checker and fixer",
-    "keywords": ["yaml", "alphabetical", "fixer", "checker"],
-    "homepage": "https://github.com/sspooky13/yaml-alphabetical-fixer",
+    "description": "YAML alphabetical checker",
+    "keywords": ["yaml", "alphabetical", "checker"],
+    "homepage": "https://github.com/sspooky13/yaml-alphabetical-checker",
     "license": "MIT",
     "authors": [
         {
