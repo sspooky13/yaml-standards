@@ -11,10 +11,9 @@ class YamlFilesPathService
 {
     /**
      * @param string[] $pathToDirsOrFiles
-     * @param string[] $excludedFileMasks
      * @return array
      */
-    public static function getPathToYamlFiles(array $pathToDirsOrFiles, array $excludedFileMasks = [])
+    public static function getPathToYamlFiles(array $pathToDirsOrFiles)
     {
         $pathToFiles = [];
         foreach ($pathToDirsOrFiles as $pathToDirOrFile) {
@@ -29,14 +28,6 @@ class YamlFilesPathService
 
             foreach ($regexIterator as $pathToFile) {
                 $pathToFiles[] = reset($pathToFile);
-            }
-        }
-
-        foreach ($excludedFileMasks as $excludedFileMask) {
-            foreach ($pathToFiles as $key => $pathToFile) {
-                if (strpos($pathToFile, $excludedFileMask) !== false) {
-                    unset($pathToFiles[$key]);
-                }
             }
         }
 

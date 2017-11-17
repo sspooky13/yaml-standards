@@ -36,12 +36,16 @@ class YamlCheckCommand extends Command
 
         $dirsOrFiles = $input->getArgument(self::ARGUMENT_DIRS_OR_FILES);
         $excludedFileMasks = $input->getOption(self::OPTION_EXCLUDE);
-        $pathToYamlFiles = YamlFilesPathService::getPathToYamlFiles($dirsOrFiles, $excludedFileMasks);
+        $pathToYamlFiles = YamlFilesPathService::getPathToYamlFiles($dirsOrFiles);
 
         $yamlAlphabeticalChecker = new YamlAlphabeticalChecker();
         $results = [];
 
         foreach ($pathToYamlFiles as $pathToYamlFile) {
+            if ($this->isFileSkipped($pathToYamlFile, $excludedFileMasks)) {
+                continue;
+            }
+
             if (!is_readable($pathToYamlFile)) {
                 $message = '<fg=red>File is not readable.</fg=red>';
                 $results[] = new Result($pathToYamlFile, $message, Result::RESULT_CODE_GENERAL_ERROR);
@@ -85,5 +89,21 @@ class YamlCheckCommand extends Command
         $output->writeln('<fg=green>End of checking yaml files.</fg=green>');
 
         return $resultCode;
+    }
+
+    /**
+     * @param string $pathToFile
+     * @param array $excludedFileMasks
+     * @return bool
+     */
+    private function isFileSkipped($pathToFile, array $excludedFileMasks = [])
+    {
+        foreach ($excludedFileMasks as $excludedFileMask) {
+            if (strpos($pathToFile, $excludedFileMask) !== false) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
