@@ -23,7 +23,7 @@ Or alternatively, include a dependency for sspooky13/yaml-alphabetical-checker i
 ```json
 {
     "require-dev": {
-        "sspooky13/yaml-alphabetical-checker": "~1.0"
+        "sspooky13/yaml-alphabetical-checker": "~2.0"
     }
 }
 ```
@@ -33,7 +33,7 @@ Or alternatively, include a dependency for sspooky13/yaml-alphabetical-checker i
 ## Usage
 For run from command line:
 
-    ./bin/yaml-alphabetical-checker ./app ./src/path/to/config/file.yml ./src .
+    ./bin/yaml-alphabetical-checker ./app ./src/path/to/config/file.yml ./src --exclude=serv --exclude=conf
 
 If you need exclude a files from check, you can print command `--exclude=NAME` how much you want.
 
