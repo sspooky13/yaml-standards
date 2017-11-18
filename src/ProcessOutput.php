@@ -56,4 +56,22 @@ class ProcessOutput
 
         return "\r" . $progressLine;
     }
+
+    /**
+     * @return string
+     */
+    public function getLegend()
+    {
+        $symbols = [];
+
+        foreach (self::$statusMap as $status) {
+            $symbol = $status['symbol'];
+            $format = $status['format'];
+            $description = $status['description'];
+
+            $symbols[$symbol] = sprintf('%s-%s', sprintf($format, $symbol), $description);
+        }
+
+        return sprintf("\nLegend: %s\n", implode(', ', $symbols));
+    }
 }

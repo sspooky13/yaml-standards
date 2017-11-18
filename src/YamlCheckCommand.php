@@ -67,6 +67,7 @@ class YamlCheckCommand extends Command
                 $output->write($processOutput->process(ProcessOutput::STATUS_CODE_ERROR));
             }
         }
+        $output->writeln($processOutput->getLegend());
 
         return $this->printOutput($output, $results);
     }
