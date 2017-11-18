@@ -338,4 +338,17 @@
         </if>
     </target>
 
+    <target name="tests-unit" description="Runs unit tests.">
+        <exec
+                executable="${path.phpunit.executable}"
+                logoutput="true"
+                passthru="true"
+                checkreturn="true"
+        >
+            <arg value="--colors=always"/>
+            <arg value="--testsuite"/>
+            <arg value="Unit"/>
+        </exec>
+    </target>
+
 </project>

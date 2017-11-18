@@ -10,22 +10,29 @@ use RegexIterator;
 class YamlFilesPathService
 {
     /**
-     * @param string[] $pathToDirs
+     * @param string[] $pathToDirsOrFiles
      * @return array
      */
-    public static function getPathToYamlFiles(array $pathToDirs)
+    public static function getPathToYamlFiles(array $pathToDirsOrFiles)
     {
-        $fileList = [];
-        foreach ($pathToDirs as $pathToDir) {
-            $recursiveDirectoryIterator = new RecursiveDirectoryIterator($pathToDir);
+        $pathToFiles = [];
+        foreach ($pathToDirsOrFiles as $pathToDirOrFile) {
+            if (is_file($pathToDirOrFile)) {
+                $pathToFiles[] = $pathToDirOrFile;
+                continue;
+            }
+
+            $recursiveDirectoryIterator = new RecursiveDirectoryIterator($pathToDirOrFile);
             $recursiveIteratorIterator = new RecursiveIteratorIterator($recursiveDirectoryIterator);
             $regexIterator = new RegexIterator($recursiveIteratorIterator, '/^.+\.yml$/i', RecursiveRegexIterator::GET_MATCH);
 
             foreach ($regexIterator as $pathToFile) {
-                $fileList[] = reset($pathToFile);
+                $pathToFiles[] = reset($pathToFile);
             }
         }
 
-        return $fileList;
+        $pathToFiles = str_replace('\\', '/', $pathToFiles);
+
+        return array_unique($pathToFiles);
     }
 }

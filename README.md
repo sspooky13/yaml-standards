@@ -4,13 +4,14 @@
 [![Total Downloads](https://poser.pugx.org/sspooky13/yaml-alphabetical-checker/downloads)](https://packagist.org/packages/sspooky13/yaml-alphabetical-checker)
 [![Build Status](https://travis-ci.org/sspooky13/yaml-alphabetical-checker.svg?branch=master)](https://travis-ci.org/sspooky13/yaml-alphabetical-checker)
 
-This library helps you to keep YAML file alphabetically sorted.
+This library helps you to keep YAML files alphabetically sorted.
 
 ## Requirements
 Works with minimal requirement:
 - PHP 5.6 or higher
 - symfony/console version 3.0
 - symfony/yaml version 3.0
+- sebastian/diff version 1.4
 
 ## Installation
 If you prefer using [Composer](http://getcomposer.org/) you can easily install with the following command:
@@ -22,19 +23,19 @@ Or alternatively, include a dependency for sspooky13/yaml-alphabetical-checker i
 ```json
 {
     "require-dev": {
-        "sspooky13/yaml-alphabetical-checker": "~1.0"
+        "sspooky13/yaml-alphabetical-checker": "~2.0"
     }
 }
 ```
 ## Options for run
-- `--diff` Show right sort in next unsorted file.
+- `--exclude=text` Exclude file contains the `text` in name. Can be used more times.
 
 ## Usage
 For run from command line:
 
-    ./bin/yaml-alphabetical-checker --dir=./app --dir=./src.
+    ./bin/yaml-alphabetical-checker ./app ./src/path/to/config/file.yml ./src --exclude=serv --exclude=conf
 
-If you need check more directory, you can add dirs call `--dir=PATH_TO_DIR` how much you want.
+If you need exclude a files from check, you can print command `--exclude=NAME` how much you want.
 
 or setting for ANT:
 
@@ -48,8 +49,11 @@ or setting for ANT:
         passthru="true"
         checkreturn="true"
     >
-        <arg path="--dir=./app" />
-        <arg path="--dir=./src" />
+        <arg value="./app" />
+        <arg value="./src/path/to/config/file.yml" />
+        <arg value="./src" />
+        <arg value="--exclude=serv" />
+        <arg value="--exclude=conf" />
     </exec>
 </target>
 ```
@@ -58,6 +62,5 @@ or setting for ANT:
 Exit code is built using following bit flags:
 
     0 OK.
-    1 General error (file is not readable, error with parse yaml file).
-    2 Some file is unsorted (only in clasic mode).
-    4 Show in unsorted file right sort (only in diff mode).
+    1 Some file is unsorted.
+    2 General error (file is not readable, error with parse yaml file).
