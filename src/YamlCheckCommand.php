@@ -48,7 +48,7 @@ class YamlCheckCommand extends Command
             }
 
             if (!is_readable($pathToYamlFile)) {
-                $message = '<fg=red>File is not readable.</fg=red>';
+                $message = 'File is not readable.';
                 $results[] = new Result($pathToYamlFile, $message, Result::RESULT_CODE_GENERAL_ERROR);
                 $output->write($processOutput->process(ProcessOutput::STATUS_CODE_ERROR));
             }
