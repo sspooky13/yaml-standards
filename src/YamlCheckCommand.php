@@ -31,6 +31,8 @@ class YamlCheckCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        Reporting::startTiming();
+
         $dirsOrFiles = $input->getArgument(self::ARGUMENT_DIRS_OR_FILES);
         $excludedFileMasks = $input->getOption(self::OPTION_EXCLUDE);
         $pathToYamlFiles = YamlFilesPathService::getPathToYamlFiles($dirsOrFiles);
@@ -87,6 +89,8 @@ class YamlCheckCommand extends Command
             $output->writeln('-------------------------------------------------');
             $output->writeln($result->getMessage() . PHP_EOL);
         }
+
+        $output->writeln(Reporting::printRunTime());
 
         return $resultCode;
     }
