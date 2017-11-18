@@ -31,39 +31,40 @@ class YamlCheckCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('<fg=green>Start checking yaml files.</fg=green>');
-        $output->writeln('');
-
         $dirsOrFiles = $input->getArgument(self::ARGUMENT_DIRS_OR_FILES);
         $excludedFileMasks = $input->getOption(self::OPTION_EXCLUDE);
         $pathToYamlFiles = YamlFilesPathService::getPathToYamlFiles($dirsOrFiles);
+        $processOutput = new ProcessOutput(count($pathToYamlFiles));
 
         $yamlAlphabeticalChecker = new YamlAlphabeticalChecker();
         $results = [];
 
         foreach ($pathToYamlFiles as $pathToYamlFile) {
             if ($this->isFileSkipped($pathToYamlFile, $excludedFileMasks)) {
+                $output->write($processOutput->process(ProcessOutput::STATUS_CODE_SKIPP));
                 continue;
             }
 
             if (!is_readable($pathToYamlFile)) {
                 $message = '<fg=red>File is not readable.</fg=red>';
                 $results[] = new Result($pathToYamlFile, $message, Result::RESULT_CODE_GENERAL_ERROR);
+                $output->write($processOutput->process(ProcessOutput::STATUS_CODE_ERROR));
             }
 
             try {
                 $sortCheckResult = $yamlAlphabeticalChecker->isDataSorted($pathToYamlFile);
 
                 if ($sortCheckResult) {
-                    $message = '<fg=green>OK</fg=green>';
-                    $results[] = new Result($pathToYamlFile, $message);
+                    $output->write($processOutput->process(ProcessOutput::STATUS_CODE_OK));
                 } else {
                     $diff = $yamlAlphabeticalChecker->getDifference($pathToYamlFile);
                     $results[] = new Result($pathToYamlFile, $diff, Result::RESULT_CODE_INVALID_SORT);
+                    $output->write($processOutput->process(ProcessOutput::STATUS_CODE_INVALID_SORT));
                 }
             } catch (ParseException $e) {
                 $message = sprintf('Unable to parse the YAML string: %s', $e->getMessage());
                 $results[] = new Result($pathToYamlFile, $message, Result::RESULT_CODE_GENERAL_ERROR);
+                $output->write($processOutput->process(ProcessOutput::STATUS_CODE_ERROR));
             }
         }
 
@@ -81,12 +82,10 @@ class YamlCheckCommand extends Command
 
         foreach ($results as $result) {
             $resultCode = $result->getResultCode() > $resultCode ? $result->getResultCode() : $resultCode;
-            $output->write(sprintf('Checking %s: ', $result->getPathToFile()));
-            $output->writeln($result->getMessage());
+            $output->writeln(sprintf('FILE: %s', $result->getPathToFile()));
+            $output->writeln('-------------------------------------------------');
+            $output->writeln($result->getMessage() . PHP_EOL);
         }
-
-        $output->writeln('');
-        $output->writeln('<fg=green>End of checking yaml files.</fg=green>');
 
         return $resultCode;
     }
