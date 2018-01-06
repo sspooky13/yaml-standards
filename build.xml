@@ -28,6 +28,7 @@
             <arg value="install" />
         </exec>
     </target>
+    <target name="build-ci" depends="standards, tests-unit" description="Run build commands on CI."/>
 
     <target name="standards" depends="phplint,phpcs-fixer,phpcs,phpmd" description="Checks coding standards."/>
     <target name="standards-diff" depends="phplint-diff,phpcs-fixer-diff,phpcs-diff,phpmd-diff" description="Checks coding standards on changed files."/>

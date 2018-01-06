@@ -7,4 +7,5 @@ php:
   - 7.2
 
 script:
-  - composer run build
+  - composer install
+  - vendor/bin/phing build-ci
