@@ -59,6 +59,18 @@ or setting for ANT:
 </target>
 ```
 
+## PHPStorm Integration
+You can integrate YAML alphabetical checker into PHPStorm by using File Watcher.
+
+1. Open Settings -> Tools -> File Watchers
+2. Add new -> custom
+3. Give it a name
+3. Select file type: `YAML`
+4. Program: `\vendor\bin\yaml-alphabetical-checker.bat`
+5. Arguments: `$FilePath$` for check actual opened file or `$SourcepathEntry$` for check all source file, etc.
+
+Now, file watcher check YAML files, whether is right alphabetically sorted and will open the console if they have errors
+
 ## Exit codes
 Exit code is built using following bit flags:
 
