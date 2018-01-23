@@ -6,14 +6,22 @@ clone_folder: c:\projects\yaml-alphabetical-checker
 
 environment:
   matrix:
-  - dependencies: 5.6
-    php_ver_target: 5.6
-  - dependencies: 7.0
-    php_ver_target: 7.0
-  - dependencies: 7.1
-    php_ver_target: 7.1
-  - dependencies: 7.2
-    php_ver_target: 7.2
+#  - dependencies: lowest
+#    php_version: 5.6
+  - dependencies: highest
+    php_version: 5.6
+#  - dependencies: lowest
+#    php_version: 7.0
+  - dependencies: highest
+    php_version: 7.0
+#  - dependencies: lowest
+#    php_version: 7.1
+  - dependencies: highest
+    php_version: 7.1
+#  - dependencies: lowest
+#    php_version: 7.2
+  - dependencies: highest
+    php_version: 7.2
 
 cache:
   - C:\ProgramData\chocolatey\bin -> .appveyor.yml
@@ -28,7 +36,7 @@ init:
 
 install:
   - IF EXIST c:\tools\php (SET PHP=0)
-  - ps: appveyor-retry cinst --params '""/InstallDir:C:\tools\php""' --ignore-checksums -y php --version ((choco search php --exact --all-versions -r | select-string -pattern $env:php_ver_target | sort { [version]($_ -split '\|' | select -last 1) } -Descending | Select-Object -first 1) -replace '[php|]','')
+  - ps: appveyor-retry cinst --params '""/InstallDir:C:\tools\php""' --ignore-checksums -y php --version ((choco search php --exact --all-versions -r | select-string -pattern $env:php_version | sort { [version]($_ -split '\|' | select -last 1) } -Descending | Select-Object -first 1) -replace '[php|]','')
   - cd c:\tools\php
   - IF %PHP%==1 copy php.ini-production php.ini /Y
   - IF %PHP%==1 echo date.timezone="UTC" >> php.ini
@@ -40,10 +48,8 @@ install:
   - appveyor-retry appveyor DownloadFile https://getcomposer.org/composer.phar
   - cd c:\projects\yaml-alphabetical-checker
   - composer self-update
-  - IF %dependencies%==5.6 appveyor-retry composer install
-  - IF %dependencies%==7.0 appveyor-retry composer install
-  - IF %dependencies%==7.1 appveyor-retry composer install
-  - IF %dependencies%==7.2 appveyor-retry composer install
+  - IF %dependencies%==lowest appveyor-retry composer update --prefer-lowest --prefer-dist --no-interaction --no-progress
+  - IF %dependencies%==highest appveyor-retry composer update --prefer-dist --no-interaction --no-progress
 
 test_script:
   - phing build-ci
