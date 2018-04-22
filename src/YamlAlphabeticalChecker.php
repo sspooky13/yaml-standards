@@ -32,8 +32,8 @@ class YamlAlphabeticalChecker
         $yamlArrayDataSorted = $yamlArrayData;
         $this->recursiveKsort($yamlArrayDataSorted);
 
-        $yamlStringData = Yaml::dump($yamlArrayData, 10, 2);
-        $yamlStringDataSorted = Yaml::dump($yamlArrayDataSorted, 10, 2);
+        $yamlStringData = Yaml::dump($yamlArrayData, PHP_INT_MAX, 2);
+        $yamlStringDataSorted = Yaml::dump($yamlArrayDataSorted, PHP_INT_MAX, 2);
 
         $differ = new Differ();
         return $differ->diff($yamlStringData, $yamlStringDataSorted);
