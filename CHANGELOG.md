@@ -1,10 +1,20 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- add `.yaml` file support
+
+### Changed
+- change yaml dump inline to highest in alphabetical checker
+- command is now lazy loaded
+- remove unnecessary indent from alphabetical checker
+
+### Fixed
+- if file is not readable, then continue to next file
 
 ## [2.0.0] - 2017-11-18
 ### Added
-- add new option for exclude files with mask, eg. `--exclude=service`
+- add new option for exclude files with mask, e.g. `--exclude=service`
 
 ### Changed
 - option directories changed to required argument
