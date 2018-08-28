@@ -9,12 +9,14 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Exception\ParseException;
 use YamlAlphabeticalChecker\Checker\YamlAlphabeticalChecker;
+use YamlAlphabeticalChecker\Checker\YamlIndentChecker;
 
 class YamlCommand extends Command
 {
     const
         ARGUMENT_DIRS_OR_FILES = 'dirsOrFiles',
-        OPTION_EXCLUDE = 'exclude';
+        OPTION_EXCLUDE = 'exclude',
+        OPTION_CHECK_YAML_COUNT_OF_INDENTS = 'check-indents-count-of-indents';
 
     protected static $defaultName = 'yaml-alphabetical-check';
 
@@ -23,7 +25,8 @@ class YamlCommand extends Command
         $this
             ->setDescription('Check if yaml files is alphabetically sorted')
             ->addArgument(self::ARGUMENT_DIRS_OR_FILES, InputArgument::REQUIRED | InputArgument::IS_ARRAY, 'Paths to directories or files to check')
-            ->addOption(self::OPTION_EXCLUDE, null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Exclude file mask from check');
+            ->addOption(self::OPTION_EXCLUDE, null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Exclude file mask from check')
+            ->addOption(self::OPTION_CHECK_YAML_COUNT_OF_INDENTS, null, InputOption::VALUE_REQUIRED, 'Check count of indents in yaml file');
     }
 
     /**
@@ -37,10 +40,12 @@ class YamlCommand extends Command
 
         $dirsOrFiles = $input->getArgument(self::ARGUMENT_DIRS_OR_FILES);
         $excludedFileMasks = $input->getOption(self::OPTION_EXCLUDE);
+        $countOfIndents = $input->getOption(self::OPTION_CHECK_YAML_COUNT_OF_INDENTS);
         $pathToYamlFiles = YamlFilesPathService::getPathToYamlFiles($dirsOrFiles);
         $processOutput = new ProcessOutput(count($pathToYamlFiles));
 
         $yamlAlphabeticalChecker = new YamlAlphabeticalChecker();
+        $yamlIndentChecker = new YamlIndentChecker();
         $results = [];
 
         foreach ($pathToYamlFiles as $pathToYamlFile) {
@@ -58,6 +63,16 @@ class YamlCommand extends Command
 
             try {
                 $sortCheckResult = $yamlAlphabeticalChecker->isDataSorted($pathToYamlFile);
+                if ($countOfIndents !== null) {
+                    $indentCheckResult = $yamlIndentChecker->getCorrectIndentsInFile($pathToYamlFile, $countOfIndents);
+
+                    if ($indentCheckResult === null) {
+                        $output->write($processOutput->process(ProcessOutput::STATUS_CODE_OK));
+                    } else {
+                        $results[] = new Result($pathToYamlFile, $indentCheckResult, Result::RESULT_CODE_INVALID_SORT);
+                        $output->write($processOutput->process(ProcessOutput::STATUS_CODE_INVALID_SORT));
+                    }
+                }
 
                 if ($sortCheckResult) {
                     $output->write($processOutput->process(ProcessOutput::STATUS_CODE_OK));
