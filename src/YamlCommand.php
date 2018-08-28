@@ -18,6 +18,7 @@ class YamlCommand extends Command
     const
         ARGUMENT_DIRS_OR_FILES = 'dirsOrFiles',
         OPTION_EXCLUDE = 'exclude',
+        OPTION_CHECK_ALPHABETICAL_SORT_DEPTH = 'check-alphabetical-sort-depth',
         OPTION_CHECK_YAML_COUNT_OF_INDENTS = 'check-indents-count-of-indents',
         OPTION_CHECK_INLINE = 'check-inline',
         OPTION_CHECK_LEVEL_FOR_SPACES_BETWEEN_GROUPS = 'check-spaces-between-groups-to-level';
@@ -30,6 +31,7 @@ class YamlCommand extends Command
             ->setDescription('Check if yaml files is alphabetically sorted')
             ->addArgument(self::ARGUMENT_DIRS_OR_FILES, InputArgument::REQUIRED | InputArgument::IS_ARRAY, 'Paths to directories or files to check')
             ->addOption(self::OPTION_EXCLUDE, null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Exclude file mask from check')
+            ->addOption(self::OPTION_CHECK_ALPHABETICAL_SORT_DEPTH, null, InputOption::VALUE_REQUIRED, 'Check yaml file is right sorted in set depth')
             ->addOption(self::OPTION_CHECK_YAML_COUNT_OF_INDENTS, null, InputOption::VALUE_REQUIRED, 'Check count of indents in yaml file')
             ->addOption(self::OPTION_CHECK_INLINE, null, InputOption::VALUE_NONE, 'Check yaml file complies inline standards')
             ->addOption(self::OPTION_CHECK_LEVEL_FOR_SPACES_BETWEEN_GROUPS, null, InputOption::VALUE_REQUIRED, 'Check yaml file have correct space between groups for set level');
@@ -46,6 +48,7 @@ class YamlCommand extends Command
 
         $dirsOrFiles = $input->getArgument(self::ARGUMENT_DIRS_OR_FILES);
         $excludedFileMasks = $input->getOption(self::OPTION_EXCLUDE);
+        $checkAlphabeticalSortDepth = $input->getOption(self::OPTION_CHECK_ALPHABETICAL_SORT_DEPTH);
         $countOfIndents = $input->getOption(self::OPTION_CHECK_YAML_COUNT_OF_INDENTS);
         $checkInlineStandard = $input->getOption(self::OPTION_CHECK_INLINE);
         $levelForCheckSpacesBetweenGroups = $input->getOption(self::OPTION_CHECK_LEVEL_FOR_SPACES_BETWEEN_GROUPS);
@@ -73,7 +76,16 @@ class YamlCommand extends Command
             }
 
             try {
-                $sortCheckResult = $yamlAlphabeticalChecker->isDataSorted($pathToYamlFile);
+                if ($checkAlphabeticalSortDepth !== null) {
+                    $rightSortedData = $yamlAlphabeticalChecker->getRightSortedData($pathToYamlFile, $checkAlphabeticalSortDepth);
+
+                    if ($rightSortedData === null) {
+                        $output->write($processOutput->process(ProcessOutput::STATUS_CODE_OK));
+                    } else {
+                        $results[] = new Result($pathToYamlFile, $rightSortedData, Result::RESULT_CODE_INVALID_SORT);
+                        $output->write($processOutput->process(ProcessOutput::STATUS_CODE_INVALID_SORT));
+                    }
+                }
 
                 if ($countOfIndents !== null) {
                     $indentCheckResult = $yamlIndentChecker->getCorrectIndentsInFile($pathToYamlFile, $countOfIndents);
@@ -106,14 +118,6 @@ class YamlCommand extends Command
                         $results[] = new Result($pathToYamlFile, $spacesBetweenGroupsCheckResult, Result::RESULT_CODE_INVALID_SORT);
                         $output->write($processOutput->process(ProcessOutput::STATUS_CODE_INVALID_SORT));
                     }
-                }
-
-                if ($sortCheckResult) {
-                    $output->write($processOutput->process(ProcessOutput::STATUS_CODE_OK));
-                } else {
-                    $diff = $yamlAlphabeticalChecker->getDifference($pathToYamlFile);
-                    $results[] = new Result($pathToYamlFile, $diff, Result::RESULT_CODE_INVALID_SORT);
-                    $output->write($processOutput->process(ProcessOutput::STATUS_CODE_INVALID_SORT));
                 }
             } catch (ParseException $e) {
                 $message = sprintf('Unable to parse the YAML string: %s', $e->getMessage());
