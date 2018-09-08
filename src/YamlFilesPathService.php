@@ -11,7 +11,7 @@ class YamlFilesPathService
 {
     /**
      * @param string[] $pathToDirsOrFiles
-     * @return array
+     * @return string[]
      */
     public static function getPathToYamlFiles(array $pathToDirsOrFiles)
     {
