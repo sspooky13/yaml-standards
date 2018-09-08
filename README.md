@@ -7,13 +7,6 @@
 
 This library helps you to keep YAML files alphabetically sorted.
 
-## Requirements
-Works with minimal requirement:
-- PHP 5.6 or higher
-- symfony/console version 3.0
-- symfony/yaml version 3.0
-- sebastian/diff version 1.4
-
 ## Installation
 If you prefer using [Composer](http://getcomposer.org/) you can easily install with the following command:
 
