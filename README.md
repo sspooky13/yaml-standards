@@ -1,6 +1,5 @@
 # YAML alphabetical checker
 
-[![Latest Stable Version](https://poser.pugx.org/sspooky13/yaml-alphabetical-checker/v/stable)](https://packagist.org/packages/sspooky13/yaml-alphabetical-checker)
 [![Total Downloads](https://poser.pugx.org/sspooky13/yaml-alphabetical-checker/downloads)](https://packagist.org/packages/sspooky13/yaml-alphabetical-checker)
 [![Build Status](https://travis-ci.org/sspooky13/yaml-alphabetical-checker.svg?branch=master)](https://travis-ci.org/sspooky13/yaml-alphabetical-checker)
 [![Build status](https://ci.appveyor.com/api/projects/status/rw89r5m32827vh2d/branch/master?svg=true)](https://ci.appveyor.com/project/sspooky13/yaml-alphabetical-checker/branch/master)
