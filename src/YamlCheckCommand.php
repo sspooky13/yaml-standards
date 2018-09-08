@@ -15,10 +15,11 @@ class YamlCheckCommand extends Command
         ARGUMENT_DIRS_OR_FILES = 'dirsOrFiles',
         OPTION_EXCLUDE = 'exclude';
 
+    protected static $defaultName = 'yaml-alphabetical-check';
+
     protected function configure()
     {
         $this
-            ->setName('yaml-alphabetical-check')
             ->setDescription('Check if yaml files is alphabetically sorted')
             ->addArgument(self::ARGUMENT_DIRS_OR_FILES, InputArgument::REQUIRED | InputArgument::IS_ARRAY, 'Paths to directories or files to check')
             ->addOption(self::OPTION_EXCLUDE, null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Exclude file mask from check');
