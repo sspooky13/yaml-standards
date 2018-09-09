@@ -1,10 +1,13 @@
 <?php
 
-namespace YamlAlphabeticalChecker;
+namespace YamlAlphabeticalChecker\Checker;
 
 use SebastianBergmann\Diff\Differ;
 use Symfony\Component\Yaml\Yaml;
 
+/**
+ * Check yaml file is alphabetical sorted
+ */
 class YamlAlphabeticalChecker
 {
     /**
