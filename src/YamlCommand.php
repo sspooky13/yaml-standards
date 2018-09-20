@@ -11,6 +11,7 @@ use Symfony\Component\Yaml\Exception\ParseException;
 use YamlAlphabeticalChecker\Checker\YamlAlphabeticalChecker;
 use YamlAlphabeticalChecker\Checker\YamlIndentChecker;
 use YamlAlphabeticalChecker\Checker\YamlInlineChecker;
+use YamlAlphabeticalChecker\Checker\YamlSpacesBetweenGroupsChecker;
 
 class YamlCommand extends Command
 {
@@ -18,7 +19,8 @@ class YamlCommand extends Command
         ARGUMENT_DIRS_OR_FILES = 'dirsOrFiles',
         OPTION_EXCLUDE = 'exclude',
         OPTION_CHECK_YAML_COUNT_OF_INDENTS = 'check-indents-count-of-indents',
-        OPTION_CHECK_INLINE = 'check-inline';
+        OPTION_CHECK_INLINE = 'check-inline',
+        OPTION_CHECK_LEVEL_FOR_SPACES_BETWEEN_GROUPS = 'check-spaces-between-groups-to-level';
 
     protected static $defaultName = 'yaml-alphabetical-check';
 
@@ -29,7 +31,8 @@ class YamlCommand extends Command
             ->addArgument(self::ARGUMENT_DIRS_OR_FILES, InputArgument::REQUIRED | InputArgument::IS_ARRAY, 'Paths to directories or files to check')
             ->addOption(self::OPTION_EXCLUDE, null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Exclude file mask from check')
             ->addOption(self::OPTION_CHECK_YAML_COUNT_OF_INDENTS, null, InputOption::VALUE_REQUIRED, 'Check count of indents in yaml file')
-            ->addOption(self::OPTION_CHECK_INLINE, null, InputOption::VALUE_NONE, 'Check yaml file complies inline standards');
+            ->addOption(self::OPTION_CHECK_INLINE, null, InputOption::VALUE_NONE, 'Check yaml file complies inline standards')
+            ->addOption(self::OPTION_CHECK_LEVEL_FOR_SPACES_BETWEEN_GROUPS, null, InputOption::VALUE_REQUIRED, 'Check yaml file have correct space between groups for set level');
     }
 
     /**
@@ -45,6 +48,7 @@ class YamlCommand extends Command
         $excludedFileMasks = $input->getOption(self::OPTION_EXCLUDE);
         $countOfIndents = $input->getOption(self::OPTION_CHECK_YAML_COUNT_OF_INDENTS);
         $checkInlineStandard = $input->getOption(self::OPTION_CHECK_INLINE);
+        $levelForCheckSpacesBetweenGroups = $input->getOption(self::OPTION_CHECK_LEVEL_FOR_SPACES_BETWEEN_GROUPS);
 
         $pathToYamlFiles = YamlFilesPathService::getPathToYamlFiles($dirsOrFiles);
         $processOutput = new ProcessOutput(count($pathToYamlFiles));
@@ -52,6 +56,7 @@ class YamlCommand extends Command
         $yamlAlphabeticalChecker = new YamlAlphabeticalChecker();
         $yamlIndentChecker = new YamlIndentChecker();
         $yamlInlineChecker = new YamlInlineChecker();
+        $yamlSpacesBetweenGroupsChecker = new YamlSpacesBetweenGroupsChecker();
         $results = [];
 
         foreach ($pathToYamlFiles as $pathToYamlFile) {
@@ -88,6 +93,17 @@ class YamlCommand extends Command
                         $output->write($processOutput->process(ProcessOutput::STATUS_CODE_OK));
                     } else {
                         $results[] = new Result($pathToYamlFile, $inlineCheckResult, Result::RESULT_CODE_INVALID_SORT);
+                        $output->write($processOutput->process(ProcessOutput::STATUS_CODE_INVALID_SORT));
+                    }
+                }
+
+                if ($levelForCheckSpacesBetweenGroups !== null) {
+                    $spacesBetweenGroupsCheckResult = $yamlSpacesBetweenGroupsChecker->getCorrectDataWithSpacesBetweenGroups($pathToYamlFile, $levelForCheckSpacesBetweenGroups);
+
+                    if ($spacesBetweenGroupsCheckResult === null) {
+                        $output->write($processOutput->process(ProcessOutput::STATUS_CODE_OK));
+                    } else {
+                        $results[] = new Result($pathToYamlFile, $spacesBetweenGroupsCheckResult, Result::RESULT_CODE_INVALID_SORT);
                         $output->write($processOutput->process(ProcessOutput::STATUS_CODE_INVALID_SORT));
                     }
                 }
