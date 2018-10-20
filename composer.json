@@ -1,9 +1,9 @@
 {
-    "name": "sspooky13/yaml-alphabetical-checker",
+    "name": "sspooky13/yaml-standards",
     "type": "library",
-    "description": "YAML alphabetical checker",
-    "keywords": ["yaml", "alphabetical", "checker"],
-    "homepage": "https://github.com/sspooky13/yaml-alphabetical-checker",
+    "description": "YAML standards checker",
+    "keywords": ["yaml", "standards", "indent", "alphabetical", "inline", "checker"],
+    "homepage": "https://github.com/sspooky13/yaml-standards",
     "license": "MIT",
     "authors": [
         {
@@ -13,7 +13,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "YamlAlphabeticalChecker\\": [
+            "YamlStandards\\": [
                 "src"
             ]
         },
@@ -23,7 +23,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "YamlAlphabeticalChecker\\": [
+            "YamlStandards\\": [
                 "tests"
             ]
         },
@@ -43,6 +43,6 @@
         "shopsys/coding-standards": "3.1.*"
     },
     "bin": [
-        "bin/yaml-alphabetical-checker"
+        "bin/yaml-standards"
     ]
 }

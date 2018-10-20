@@ -1,10 +1,10 @@
 <?php
 
-namespace YamlAlphabeticalChecker\Checker;
+namespace YamlStandards\Checker;
 
 use SebastianBergmann\Diff\Differ;
 use Symfony\Component\Yaml\Yaml;
-use YamlAlphabeticalChecker\Result;
+use YamlStandards\Result;
 
 /**
  * Check yaml file complies inline standards
@@ -14,7 +14,7 @@ class YamlInlineChecker
     /**
      * @param string $pathToYamlFile
      * @throws \Symfony\Component\Yaml\Exception\ParseException
-     * @return \YamlAlphabeticalChecker\Result
+     * @return \YamlStandards\Result
      */
     public function getRightCompilesData($pathToYamlFile)
     {

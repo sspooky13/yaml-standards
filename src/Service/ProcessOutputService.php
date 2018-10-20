@@ -1,13 +1,13 @@
 <?php
 
-namespace YamlAlphabeticalChecker\Service;
+namespace YamlStandards\Service;
 
-use YamlAlphabeticalChecker\ProcessOutput;
+use YamlStandards\ProcessOutput;
 
 class ProcessOutputService
 {
     /**
-     * @param \YamlAlphabeticalChecker\Result[] $results
+     * @param \YamlStandards\Result[] $results
      * @return int
      */
     public static function getWorstStatusCodeByResults(array $results)

@@ -1,6 +1,6 @@
 <?php
 
-namespace YamlAlphabeticalChecker;
+namespace YamlStandards;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -9,13 +9,13 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
-use YamlAlphabeticalChecker\Checker\YamlAlphabeticalChecker;
-use YamlAlphabeticalChecker\Checker\YamlIndentChecker;
-use YamlAlphabeticalChecker\Checker\YamlInlineChecker;
-use YamlAlphabeticalChecker\Checker\YamlSpacesBetweenGroupsChecker;
-use YamlAlphabeticalChecker\Service\ProcessOutputService;
-use YamlAlphabeticalChecker\Service\ResultService;
-use YamlAlphabeticalChecker\Service\YamlFilesPathService;
+use YamlStandards\Checker\YamlAlphabeticalChecker;
+use YamlStandards\Checker\YamlIndentChecker;
+use YamlStandards\Checker\YamlInlineChecker;
+use YamlStandards\Checker\YamlSpacesBetweenGroupsChecker;
+use YamlStandards\Service\ProcessOutputService;
+use YamlStandards\Service\ResultService;
+use YamlStandards\Service\YamlFilesPathService;
 
 class YamlCommand extends Command
 {
@@ -27,7 +27,7 @@ class YamlCommand extends Command
         OPTION_CHECK_INLINE = 'check-inline',
         OPTION_CHECK_LEVEL_FOR_SPACES_BETWEEN_GROUPS = 'check-spaces-between-groups-to-level';
 
-    protected static $defaultName = 'yaml-alphabetical-check';
+    protected static $defaultName = 'yaml-standards';
 
     protected function configure()
     {
@@ -112,7 +112,7 @@ class YamlCommand extends Command
 
     /**
      * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param \YamlAlphabeticalChecker\Result[] $results
+     * @param \YamlStandards\Result[] $results
      * @return int
      */
     private function printOutput(OutputInterface $output, array $results)

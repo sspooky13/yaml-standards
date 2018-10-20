@@ -1,9 +1,9 @@
 <?php
 
-namespace YamlAlphabeticalChecker\Checker;
+namespace YamlStandards\Checker;
 
 use SebastianBergmann\Diff\Differ;
-use YamlAlphabeticalChecker\Result;
+use YamlStandards\Result;
 
 /**
  * Check yaml file have space between groups
@@ -13,7 +13,7 @@ class YamlSpacesBetweenGroupsChecker
     /**
      * @param string $pathToYamlFile
      * @param int $level
-     * @return \YamlAlphabeticalChecker\Result
+     * @return \YamlStandards\Result
      */
     public function getCorrectDataWithSpacesBetweenGroups($pathToYamlFile, $level)
     {

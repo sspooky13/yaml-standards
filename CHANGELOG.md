@@ -19,6 +19,7 @@
 - change yaml dump inline to highest in alphabetical checker
 - command is now lazy loaded
 - remove unnecessary indent from alphabetical checker
+- rename project from yaml-alphabetical-checker to yaml-standards
 
 ### Fixed
 - if file is not readable, then continue to next file
@@ -43,6 +44,6 @@
 - create base command to check yaml sort
 - create `--diff` mode
 
-[Unreleased]: https://github.com/sspooky13/yaml-alphabetical-checker/compare/2.0.0...HEAD
-[2.0.0]: https://github.com/sspooky13/yaml-alphabetical-checker/compare/1.0.1...2.0.0
-[1.0.1]: https://github.com/sspooky13/yaml-alphabetical-checker/compare/1.0.0...1.0.1
+[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/2.0.0...HEAD
+[2.0.0]: https://github.com/sspooky13/yaml-standards/compare/1.0.1...2.0.0
+[1.0.1]: https://github.com/sspooky13/yaml-standards/compare/1.0.0...1.0.1

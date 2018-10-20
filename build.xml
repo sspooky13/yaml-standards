@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Yaml alphabetical checker" default="build">
+<project name="Yaml standards" default="build">
 
     <property name="path.bin" value="${path.root}/vendor/bin"/>
     <property name="path.composer.executable" value="composer"/>

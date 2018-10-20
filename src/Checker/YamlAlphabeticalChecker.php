@@ -1,10 +1,10 @@
 <?php
 
-namespace YamlAlphabeticalChecker\Checker;
+namespace YamlStandards\Checker;
 
 use SebastianBergmann\Diff\Differ;
 use Symfony\Component\Yaml\Yaml;
-use YamlAlphabeticalChecker\Result;
+use YamlStandards\Result;
 
 /**
  * Check yaml file is alphabetical sorted
@@ -15,7 +15,7 @@ class YamlAlphabeticalChecker
      * @param string $pathToYamlFile
      * @param int $depth
      * @throws \Symfony\Component\Yaml\Exception\ParseException
-     * @return \YamlAlphabeticalChecker\Result
+     * @return \YamlStandards\Result
      */
     public function getRightSortedData($pathToYamlFile, $depth)
     {

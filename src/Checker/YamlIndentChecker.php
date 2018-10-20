@@ -1,9 +1,9 @@
 <?php
 
-namespace YamlAlphabeticalChecker\Checker;
+namespace YamlStandards\Checker;
 
 use SebastianBergmann\Diff\Differ;
-use YamlAlphabeticalChecker\Result;
+use YamlStandards\Result;
 
 /**
  * Check yaml file complies right count of indent
@@ -23,7 +23,7 @@ class YamlIndentChecker
     /**
      * @param string $pathToYamlFile
      * @param int $countOfIndents
-     * @return \YamlAlphabeticalChecker\Result
+     * @return \YamlStandards\Result
      */
     public function getCorrectIndentsInFile($pathToYamlFile, $countOfIndents)
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace YamlAlphabeticalChecker;
+namespace YamlStandards;
 
 class Reporting
 {

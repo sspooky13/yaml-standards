@@ -1,11 +1,11 @@
 <?php
 
-namespace YamlAlphabeticalChecker\Service;
+namespace YamlStandards\Service;
 
 class ResultService
 {
     /**
-     * @param \YamlAlphabeticalChecker\Result[] $results
+     * @param \YamlStandards\Result[] $results
      * @return int
      */
     public static function getResultCodeByResults(array $results)

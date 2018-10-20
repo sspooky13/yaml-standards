@@ -2,7 +2,7 @@ build: off
 platform:
   - x86
   - x64
-clone_folder: c:\projects\yaml-alphabetical-checker
+clone_folder: c:\projects\yaml-standards
 
 environment:
   matrix:
@@ -46,7 +46,7 @@ install:
   - IF %PHP%==1 echo extension=php_fileinfo.dll >> php.ini
   - IF %PHP%==1 echo @php %%~dp0composer.phar %%* > composer.bat
   - appveyor-retry appveyor DownloadFile https://getcomposer.org/composer.phar
-  - cd c:\projects\yaml-alphabetical-checker
+  - cd c:\projects\yaml-standards
   - composer self-update
   - IF %dependencies%==lowest appveyor-retry composer update --prefer-lowest --prefer-dist --no-interaction --no-progress
   - IF %dependencies%==highest appveyor-retry composer update --prefer-dist --no-interaction --no-progress
