@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Exception\ParseException;
+use Symfony\Component\Yaml\Yaml;
 use YamlAlphabeticalChecker\Checker\YamlAlphabeticalChecker;
 use YamlAlphabeticalChecker\Checker\YamlIndentChecker;
 use YamlAlphabeticalChecker\Checker\YamlInlineChecker;
@@ -79,6 +80,9 @@ class YamlCommand extends Command
             }
 
             try {
+                // check yaml is valid
+                Yaml::parse(file_get_contents($pathToYamlFile), Yaml::PARSE_CUSTOM_TAGS);
+
                 if ($checkAlphabeticalSortDepth !== null) {
                     $results[] = $yamlAlphabeticalChecker->getRightSortedData($pathToYamlFile, $checkAlphabeticalSortDepth);
                 }
