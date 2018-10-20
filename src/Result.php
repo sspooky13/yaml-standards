@@ -6,44 +6,41 @@ class Result
 {
     const
         RESULT_CODE_OK = 0,
-        RESULT_CODE_INVALID_SORT = 1,
+        RESULT_CODE_INVALID_FILE_SYNTAX = 1,
         RESULT_CODE_GENERAL_ERROR = 2;
 
     /**
-     * string|null
+     * string
      */
     private $pathToFile;
 
     /**
-     * @var string
+     * int
+     */
+    private $resultCode;
+
+    /**
+     * @var string|null
      */
     private $message;
 
     /**
-     * int|null
+     * @param string $pathToFile
+     * @param int $resultCode
+     * @param string|null $message
      */
-    private $resultCode;
-
     public function __construct(
         $pathToFile,
-        $message,
-        $resultCode = self::RESULT_CODE_OK
+        $resultCode,
+        $message = null
     ) {
         $this->pathToFile = $pathToFile;
-        $this->message = $message;
         $this->resultCode = $resultCode;
+        $this->message = $message;
     }
 
     /**
      * @return string
-     */
-    public function getMessage()
-    {
-        return $this->message;
-    }
-
-    /**
-     * @return string|null
      */
     public function getPathToFile()
     {
@@ -51,10 +48,18 @@ class Result
     }
 
     /**
-     * @return int|null
+     * @return int
      */
     public function getResultCode()
     {
         return $this->resultCode;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getMessage()
+    {
+        return $this->message;
     }
 }

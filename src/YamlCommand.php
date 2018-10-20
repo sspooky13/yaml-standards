@@ -8,12 +8,24 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Exception\ParseException;
+use Symfony\Component\Yaml\Yaml;
+use YamlAlphabeticalChecker\Checker\YamlAlphabeticalChecker;
+use YamlAlphabeticalChecker\Checker\YamlIndentChecker;
+use YamlAlphabeticalChecker\Checker\YamlInlineChecker;
+use YamlAlphabeticalChecker\Checker\YamlSpacesBetweenGroupsChecker;
+use YamlAlphabeticalChecker\Service\ProcessOutputService;
+use YamlAlphabeticalChecker\Service\ResultService;
+use YamlAlphabeticalChecker\Service\YamlFilesPathService;
 
 class YamlCommand extends Command
 {
     const
         ARGUMENT_DIRS_OR_FILES = 'dirsOrFiles',
-        OPTION_EXCLUDE = 'exclude';
+        OPTION_EXCLUDE = 'exclude',
+        OPTION_CHECK_ALPHABETICAL_SORT_DEPTH = 'check-alphabetical-sort-depth',
+        OPTION_CHECK_YAML_COUNT_OF_INDENTS = 'check-indents-count-of-indents',
+        OPTION_CHECK_INLINE = 'check-inline',
+        OPTION_CHECK_LEVEL_FOR_SPACES_BETWEEN_GROUPS = 'check-spaces-between-groups-to-level';
 
     protected static $defaultName = 'yaml-alphabetical-check';
 
@@ -22,7 +34,11 @@ class YamlCommand extends Command
         $this
             ->setDescription('Check if yaml files is alphabetically sorted')
             ->addArgument(self::ARGUMENT_DIRS_OR_FILES, InputArgument::REQUIRED | InputArgument::IS_ARRAY, 'Paths to directories or files to check')
-            ->addOption(self::OPTION_EXCLUDE, null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Exclude file mask from check');
+            ->addOption(self::OPTION_EXCLUDE, null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Exclude file mask from check')
+            ->addOption(self::OPTION_CHECK_ALPHABETICAL_SORT_DEPTH, null, InputOption::VALUE_REQUIRED, 'Check yaml file is right sorted in set depth')
+            ->addOption(self::OPTION_CHECK_YAML_COUNT_OF_INDENTS, null, InputOption::VALUE_REQUIRED, 'Check count of indents in yaml file')
+            ->addOption(self::OPTION_CHECK_INLINE, null, InputOption::VALUE_NONE, 'Check yaml file complies inline standards')
+            ->addOption(self::OPTION_CHECK_LEVEL_FOR_SPACES_BETWEEN_GROUPS, null, InputOption::VALUE_REQUIRED, 'Check yaml file have correct space between groups for set level');
     }
 
     /**
@@ -36,10 +52,18 @@ class YamlCommand extends Command
 
         $dirsOrFiles = $input->getArgument(self::ARGUMENT_DIRS_OR_FILES);
         $excludedFileMasks = $input->getOption(self::OPTION_EXCLUDE);
+        $checkAlphabeticalSortDepth = $input->getOption(self::OPTION_CHECK_ALPHABETICAL_SORT_DEPTH);
+        $countOfIndents = $input->getOption(self::OPTION_CHECK_YAML_COUNT_OF_INDENTS);
+        $checkInlineStandard = $input->getOption(self::OPTION_CHECK_INLINE);
+        $levelForCheckSpacesBetweenGroups = $input->getOption(self::OPTION_CHECK_LEVEL_FOR_SPACES_BETWEEN_GROUPS);
+
         $pathToYamlFiles = YamlFilesPathService::getPathToYamlFiles($dirsOrFiles);
         $processOutput = new ProcessOutput(count($pathToYamlFiles));
 
         $yamlAlphabeticalChecker = new YamlAlphabeticalChecker();
+        $yamlIndentChecker = new YamlIndentChecker();
+        $yamlInlineChecker = new YamlInlineChecker();
+        $yamlSpacesBetweenGroupsChecker = new YamlSpacesBetweenGroupsChecker();
         $results = [];
 
         foreach ($pathToYamlFiles as $pathToYamlFile) {
@@ -50,26 +74,36 @@ class YamlCommand extends Command
 
             if (is_readable($pathToYamlFile) === false) {
                 $message = 'File is not readable.';
-                $results[] = new Result($pathToYamlFile, $message, Result::RESULT_CODE_GENERAL_ERROR);
+                $results[] = new Result($pathToYamlFile, Result::RESULT_CODE_GENERAL_ERROR, $message);
                 $output->write($processOutput->process(ProcessOutput::STATUS_CODE_ERROR));
                 continue;
             }
 
             try {
-                $sortCheckResult = $yamlAlphabeticalChecker->isDataSorted($pathToYamlFile);
+                // check yaml is valid
+                Yaml::parse(file_get_contents($pathToYamlFile), Yaml::PARSE_CUSTOM_TAGS);
 
-                if ($sortCheckResult) {
-                    $output->write($processOutput->process(ProcessOutput::STATUS_CODE_OK));
-                } else {
-                    $diff = $yamlAlphabeticalChecker->getDifference($pathToYamlFile);
-                    $results[] = new Result($pathToYamlFile, $diff, Result::RESULT_CODE_INVALID_SORT);
-                    $output->write($processOutput->process(ProcessOutput::STATUS_CODE_INVALID_SORT));
+                if ($checkAlphabeticalSortDepth !== null) {
+                    $results[] = $yamlAlphabeticalChecker->getRightSortedData($pathToYamlFile, $checkAlphabeticalSortDepth);
+                }
+
+                if ($countOfIndents !== null) {
+                    $results[] = $yamlIndentChecker->getCorrectIndentsInFile($pathToYamlFile, $countOfIndents);
+                }
+
+                if ($checkInlineStandard === true) {
+                    $results[] = $yamlInlineChecker->getRightCompilesData($pathToYamlFile);
+                }
+
+                if ($levelForCheckSpacesBetweenGroups !== null) {
+                    $results[] = $yamlSpacesBetweenGroupsChecker->getCorrectDataWithSpacesBetweenGroups($pathToYamlFile, $levelForCheckSpacesBetweenGroups);
                 }
             } catch (ParseException $e) {
                 $message = sprintf('Unable to parse the YAML string: %s', $e->getMessage());
-                $results[] = new Result($pathToYamlFile, $message, Result::RESULT_CODE_GENERAL_ERROR);
-                $output->write($processOutput->process(ProcessOutput::STATUS_CODE_ERROR));
+                $results[] = new Result($pathToYamlFile, Result::RESULT_CODE_GENERAL_ERROR, $message);
             }
+
+            $output->write($processOutput->process(ProcessOutputService::getWorstStatusCodeByResults($results)));
         }
         $output->writeln($processOutput->getLegend());
 
@@ -83,18 +117,17 @@ class YamlCommand extends Command
      */
     private function printOutput(OutputInterface $output, array $results)
     {
-        $resultCode = 0;
-
         foreach ($results as $result) {
-            $resultCode = $result->getResultCode() > $resultCode ? $result->getResultCode() : $resultCode;
-            $output->writeln(sprintf('FILE: %s', $result->getPathToFile()));
-            $output->writeln('-------------------------------------------------');
-            $output->writeln($result->getMessage() . PHP_EOL);
+            if ($result->getResultCode() !== Result::RESULT_CODE_OK) {
+                $output->writeln(sprintf('FILE: %s', $result->getPathToFile()));
+                $output->writeln('-------------------------------------------------');
+                $output->writeln($result->getMessage() . PHP_EOL);
+            }
         }
 
         $output->writeln(Reporting::printRunTime());
 
-        return $resultCode;
+        return ResultService::getResultCodeByResults($results);
     }
 
     /**

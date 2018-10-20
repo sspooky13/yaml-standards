@@ -1,6 +1,6 @@
 <?php
 
-namespace YamlAlphabeticalChecker;
+namespace YamlAlphabeticalChecker\Service;
 
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;

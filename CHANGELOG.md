@@ -3,6 +3,17 @@
 ## [Unreleased]
 ### Added
 - add `.yaml` file support
+- Indent checker:
+    - create new checker to check right count of intents
+    - add new option, e.g. `--check-indents-count-of-indents=4`
+- Inline checker:
+    - create new checker to check correct style of yaml file
+    - add new option, e.g. `--check-inline`
+- Spaces between groups checker:
+    - create new checker to check space between groups
+    - add new option, e.g. `--check-spaces-between-groups-to-level=2`
+- Alphabetical checker:
+    - add new option for check depth correct alphabetically sort, e.g. `--check-alphabetical-sort-depth=2`
 
 ### Changed
 - change yaml dump inline to highest in alphabetical checker
