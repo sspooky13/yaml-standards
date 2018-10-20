@@ -9,7 +9,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Exception\ParseException;
 
-class YamlCheckCommand extends Command
+class YamlCommand extends Command
 {
     const
         ARGUMENT_DIRS_OR_FILES = 'dirsOrFiles',

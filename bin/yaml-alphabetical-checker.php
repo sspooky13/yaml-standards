@@ -1,6 +1,6 @@
 <?php
 
-use YamlAlphabeticalChecker\YamlCheckCommand;
+use YamlAlphabeticalChecker\YamlCommand;
 use Symfony\Component\Console\Application;
 
 $files = [
@@ -24,6 +24,6 @@ if (!$autoloadFileFound) {
 
 $application = new Application('YAML alphabetical checker');
 $application->setCatchExceptions(false);
-$application->add(new YamlCheckCommand());
+$application->add(new YamlCommand());
 $application->setDefaultCommand('yaml-alphabetical-check', true);
 $application->run();
