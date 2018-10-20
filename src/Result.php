@@ -6,7 +6,7 @@ class Result
 {
     const
         RESULT_CODE_OK = 0,
-        RESULT_CODE_INVALID_SORT = 1,
+        RESULT_CODE_INVALID_FILE_SYNTAX = 1,
         RESULT_CODE_GENERAL_ERROR = 2;
 
     /**

@@ -32,7 +32,7 @@ class YamlAlphabeticalChecker
         $differ = new Differ();
         $diffBetweenStrings = $differ->diff($yamlStringData, $yamlStringDataSorted);
 
-        return new Result($pathToYamlFile, Result::RESULT_CODE_INVALID_SORT, $diffBetweenStrings);
+        return new Result($pathToYamlFile, Result::RESULT_CODE_INVALID_FILE_SYNTAX, $diffBetweenStrings);
     }
 
     /**

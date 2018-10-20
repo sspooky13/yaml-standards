@@ -6,20 +6,20 @@ class ProcessOutput
 {
     const
         STATUS_CODE_OK = 0,
-        STATUS_CODE_INVALID_SORT = 1,
+        STATUS_CODE_INVALID_FILE_SYNTAX = 1,
         STATUS_CODE_SKIPP = 2,
         STATUS_CODE_ERROR = 3;
 
     private static $statusMap = [
         self::STATUS_CODE_OK => ['symbol' => '.', 'format' => '%s', 'description' => 'OK'],
-        self::STATUS_CODE_INVALID_SORT => ['symbol' => 'I', 'format' => '<fg=red>%s</fg=red>', 'description' => 'Invalid file sort'],
+        self::STATUS_CODE_INVALID_FILE_SYNTAX => ['symbol' => 'I', 'format' => '<fg=red>%s</fg=red>', 'description' => 'Invalid file syntax'],
         self::STATUS_CODE_SKIPP => ['symbol' => 'S', 'format' => '<fg=cyan>%s</fg=cyan>', 'description' => 'Skipped'],
         self::STATUS_CODE_ERROR => ['symbol' => 'E', 'format' => '<bg=red>%s</bg=red>', 'description' => 'Error'],
     ];
 
     public static $statusCodeByResultCode = [
         Result::RESULT_CODE_OK => self::STATUS_CODE_OK,
-        Result::RESULT_CODE_INVALID_SORT => self::STATUS_CODE_INVALID_SORT,
+        Result::RESULT_CODE_INVALID_FILE_SYNTAX => self::STATUS_CODE_INVALID_FILE_SYNTAX,
         Result::RESULT_CODE_GENERAL_ERROR => self::STATUS_CODE_ERROR,
     ];
 

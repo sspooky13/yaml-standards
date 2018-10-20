@@ -46,7 +46,7 @@ class YamlIndentChecker
         $differ = new Differ();
         $diffBetweenStrings = $differ->diff($fileLines, $rightFileLines);
 
-        return new Result($pathToYamlFile, Result::RESULT_CODE_INVALID_SORT, $diffBetweenStrings);
+        return new Result($pathToYamlFile, Result::RESULT_CODE_INVALID_FILE_SYNTAX, $diffBetweenStrings);
     }
 
     /**

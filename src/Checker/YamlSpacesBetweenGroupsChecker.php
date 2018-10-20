@@ -34,7 +34,7 @@ class YamlSpacesBetweenGroupsChecker
         $differ = new Differ();
         $diffBetweenStrings = $differ->diff($yamlContent, $correctYamlContent);
 
-        return new Result($pathToYamlFile, Result::RESULT_CODE_INVALID_SORT, $diffBetweenStrings);
+        return new Result($pathToYamlFile, Result::RESULT_CODE_INVALID_FILE_SYNTAX, $diffBetweenStrings);
     }
 
     /**
