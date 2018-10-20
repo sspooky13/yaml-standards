@@ -14,6 +14,7 @@ use YamlAlphabeticalChecker\Checker\YamlInlineChecker;
 use YamlAlphabeticalChecker\Checker\YamlSpacesBetweenGroupsChecker;
 use YamlAlphabeticalChecker\Service\ProcessOutputService;
 use YamlAlphabeticalChecker\Service\ResultService;
+use YamlAlphabeticalChecker\Service\YamlFilesPathService;
 
 class YamlCommand extends Command
 {
