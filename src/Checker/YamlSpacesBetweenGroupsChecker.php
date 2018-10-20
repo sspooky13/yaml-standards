@@ -3,6 +3,7 @@
 namespace YamlAlphabeticalChecker\Checker;
 
 use SebastianBergmann\Diff\Differ;
+use YamlAlphabeticalChecker\Result;
 
 /**
  * Check yaml file have space between groups
@@ -12,7 +13,7 @@ class YamlSpacesBetweenGroupsChecker
     /**
      * @param string $pathToYamlFile
      * @param int $level
-     * @return string|null
+     * @return \YamlAlphabeticalChecker\Result
      */
     public function getCorrectDataWithSpacesBetweenGroups($pathToYamlFile, $level)
     {
@@ -27,11 +28,13 @@ class YamlSpacesBetweenGroupsChecker
         }
 
         if ($yamlContent === $correctYamlContent) {
-            return null;
+            return new Result($pathToYamlFile, Result::RESULT_CODE_OK);
         }
 
         $differ = new Differ();
-        return $differ->diff($yamlContent, $correctYamlContent);
+        $diffBetweenStrings = $differ->diff($yamlContent, $correctYamlContent);
+
+        return new Result($pathToYamlFile, Result::RESULT_CODE_INVALID_SORT, $diffBetweenStrings);
     }
 
     /**

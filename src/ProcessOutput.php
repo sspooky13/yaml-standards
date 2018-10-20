@@ -17,6 +17,12 @@ class ProcessOutput
         self::STATUS_CODE_ERROR => ['symbol' => 'E', 'format' => '<bg=red>%s</bg=red>', 'description' => 'Error'],
     ];
 
+    public static $statusCodeByResultCode = [
+        Result::RESULT_CODE_OK => self::STATUS_CODE_OK,
+        Result::RESULT_CODE_INVALID_SORT => self::STATUS_CODE_INVALID_SORT,
+        Result::RESULT_CODE_GENERAL_ERROR => self::STATUS_CODE_ERROR,
+    ];
+
     private $currentPosition = 0;
     private $progressLine;
     private $countOfFiles;

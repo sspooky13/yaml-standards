@@ -12,6 +12,7 @@ use YamlAlphabeticalChecker\Checker\YamlAlphabeticalChecker;
 use YamlAlphabeticalChecker\Checker\YamlIndentChecker;
 use YamlAlphabeticalChecker\Checker\YamlInlineChecker;
 use YamlAlphabeticalChecker\Checker\YamlSpacesBetweenGroupsChecker;
+use YamlAlphabeticalChecker\Service\ProcessOutputService;
 
 class YamlCommand extends Command
 {
@@ -70,60 +71,33 @@ class YamlCommand extends Command
 
             if (is_readable($pathToYamlFile) === false) {
                 $message = 'File is not readable.';
-                $results[] = new Result($pathToYamlFile, $message, Result::RESULT_CODE_GENERAL_ERROR);
+                $results[] = new Result($pathToYamlFile, Result::RESULT_CODE_GENERAL_ERROR, $message);
                 $output->write($processOutput->process(ProcessOutput::STATUS_CODE_ERROR));
                 continue;
             }
 
             try {
                 if ($checkAlphabeticalSortDepth !== null) {
-                    $rightSortedData = $yamlAlphabeticalChecker->getRightSortedData($pathToYamlFile, $checkAlphabeticalSortDepth);
-
-                    if ($rightSortedData === null) {
-                        $output->write($processOutput->process(ProcessOutput::STATUS_CODE_OK));
-                    } else {
-                        $results[] = new Result($pathToYamlFile, $rightSortedData, Result::RESULT_CODE_INVALID_SORT);
-                        $output->write($processOutput->process(ProcessOutput::STATUS_CODE_INVALID_SORT));
-                    }
+                    $results[] = $yamlAlphabeticalChecker->getRightSortedData($pathToYamlFile, $checkAlphabeticalSortDepth);
                 }
 
                 if ($countOfIndents !== null) {
-                    $indentCheckResult = $yamlIndentChecker->getCorrectIndentsInFile($pathToYamlFile, $countOfIndents);
-
-                    if ($indentCheckResult === null) {
-                        $output->write($processOutput->process(ProcessOutput::STATUS_CODE_OK));
-                    } else {
-                        $results[] = new Result($pathToYamlFile, $indentCheckResult, Result::RESULT_CODE_INVALID_SORT);
-                        $output->write($processOutput->process(ProcessOutput::STATUS_CODE_INVALID_SORT));
-                    }
+                    $results[] = $yamlIndentChecker->getCorrectIndentsInFile($pathToYamlFile, $countOfIndents);
                 }
 
                 if ($checkInlineStandard === true) {
-                    $inlineCheckResult = $yamlInlineChecker->getRightCompilesData($pathToYamlFile);
-
-                    if ($inlineCheckResult === null) {
-                        $output->write($processOutput->process(ProcessOutput::STATUS_CODE_OK));
-                    } else {
-                        $results[] = new Result($pathToYamlFile, $inlineCheckResult, Result::RESULT_CODE_INVALID_SORT);
-                        $output->write($processOutput->process(ProcessOutput::STATUS_CODE_INVALID_SORT));
-                    }
+                    $results[] = $yamlInlineChecker->getRightCompilesData($pathToYamlFile);
                 }
 
                 if ($levelForCheckSpacesBetweenGroups !== null) {
-                    $spacesBetweenGroupsCheckResult = $yamlSpacesBetweenGroupsChecker->getCorrectDataWithSpacesBetweenGroups($pathToYamlFile, $levelForCheckSpacesBetweenGroups);
-
-                    if ($spacesBetweenGroupsCheckResult === null) {
-                        $output->write($processOutput->process(ProcessOutput::STATUS_CODE_OK));
-                    } else {
-                        $results[] = new Result($pathToYamlFile, $spacesBetweenGroupsCheckResult, Result::RESULT_CODE_INVALID_SORT);
-                        $output->write($processOutput->process(ProcessOutput::STATUS_CODE_INVALID_SORT));
-                    }
+                    $results[] = $yamlSpacesBetweenGroupsChecker->getCorrectDataWithSpacesBetweenGroups($pathToYamlFile, $levelForCheckSpacesBetweenGroups);
                 }
             } catch (ParseException $e) {
                 $message = sprintf('Unable to parse the YAML string: %s', $e->getMessage());
-                $results[] = new Result($pathToYamlFile, $message, Result::RESULT_CODE_GENERAL_ERROR);
-                $output->write($processOutput->process(ProcessOutput::STATUS_CODE_ERROR));
+                $results[] = new Result($pathToYamlFile, Result::RESULT_CODE_GENERAL_ERROR, $message);
             }
+
+            $output->write($processOutput->process(ProcessOutputService::getWorstStatusCodeByResults($results)));
         }
         $output->writeln($processOutput->getLegend());
 
@@ -141,9 +115,12 @@ class YamlCommand extends Command
 
         foreach ($results as $result) {
             $resultCode = $result->getResultCode() > $resultCode ? $result->getResultCode() : $resultCode;
-            $output->writeln(sprintf('FILE: %s', $result->getPathToFile()));
-            $output->writeln('-------------------------------------------------');
-            $output->writeln($result->getMessage() . PHP_EOL);
+
+            if ($result->getResultCode() !== Result::RESULT_CODE_OK) {
+                $output->writeln(sprintf('FILE: %s', $result->getPathToFile()));
+                $output->writeln('-------------------------------------------------');
+                $output->writeln($result->getMessage() . PHP_EOL);
+            }
         }
 
         $output->writeln(Reporting::printRunTime());

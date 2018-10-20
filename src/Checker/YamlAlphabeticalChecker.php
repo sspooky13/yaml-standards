@@ -4,6 +4,7 @@ namespace YamlAlphabeticalChecker\Checker;
 
 use SebastianBergmann\Diff\Differ;
 use Symfony\Component\Yaml\Yaml;
+use YamlAlphabeticalChecker\Result;
 
 /**
  * Check yaml file is alphabetical sorted
@@ -14,7 +15,7 @@ class YamlAlphabeticalChecker
      * @param string $pathToYamlFile
      * @param int $depth
      * @throws \Symfony\Component\Yaml\Exception\ParseException
-     * @return string|null
+     * @return \YamlAlphabeticalChecker\Result
      */
     public function getRightSortedData($pathToYamlFile, $depth)
     {
@@ -25,11 +26,13 @@ class YamlAlphabeticalChecker
         $yamlStringDataSorted = Yaml::dump($yamlArrayDataSorted, PHP_INT_MAX);
 
         if ($yamlStringData === $yamlStringDataSorted) {
-            return null;
+            return new Result($pathToYamlFile, Result::RESULT_CODE_OK);
         }
 
         $differ = new Differ();
-        return $differ->diff($yamlStringData, $yamlStringDataSorted);
+        $diffBetweenStrings = $differ->diff($yamlStringData, $yamlStringDataSorted);
+
+        return new Result($pathToYamlFile, Result::RESULT_CODE_INVALID_SORT, $diffBetweenStrings);
     }
 
     /**

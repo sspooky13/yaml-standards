@@ -3,6 +3,7 @@
 namespace YamlAlphabeticalChecker\Checker;
 
 use SebastianBergmann\Diff\Differ;
+use YamlAlphabeticalChecker\Result;
 
 /**
  * Check yaml file complies right count of indent
@@ -22,7 +23,7 @@ class YamlIndentChecker
     /**
      * @param string $pathToYamlFile
      * @param int $countOfIndents
-     * @return string|null
+     * @return \YamlAlphabeticalChecker\Result
      */
     public function getCorrectIndentsInFile($pathToYamlFile, $countOfIndents)
     {
@@ -39,11 +40,13 @@ class YamlIndentChecker
         }
 
         if ($fileLines === $rightFileLines) {
-            return null;
+            return new Result($pathToYamlFile, Result::RESULT_CODE_OK);
         }
 
         $differ = new Differ();
-        return $differ->diff($fileLines, $rightFileLines);
+        $diffBetweenStrings = $differ->diff($fileLines, $rightFileLines);
+
+        return new Result($pathToYamlFile, Result::RESULT_CODE_INVALID_SORT, $diffBetweenStrings);
     }
 
     /**

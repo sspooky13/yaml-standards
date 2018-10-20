@@ -4,6 +4,7 @@ namespace YamlAlphabeticalChecker\Checker;
 
 use SebastianBergmann\Diff\Differ;
 use Symfony\Component\Yaml\Yaml;
+use YamlAlphabeticalChecker\Result;
 
 /**
  * Check yaml file complies inline standards
@@ -13,7 +14,7 @@ class YamlInlineChecker
     /**
      * @param string $pathToYamlFile
      * @throws \Symfony\Component\Yaml\Exception\ParseException
-     * @return string|null
+     * @return \YamlAlphabeticalChecker\Result
      */
     public function getRightCompilesData($pathToYamlFile)
     {
@@ -33,11 +34,13 @@ class YamlInlineChecker
         $filteredYamlFile = implode("\n", $filteredYamlLines);
 
         if ($yamlStringData === $filteredYamlFile) {
-            return null;
+            return new Result($pathToYamlFile, Result::RESULT_CODE_OK);
         }
 
         $differ = new Differ();
-        return $differ->diff($yamlStringData, $filteredYamlFile);
+        $diffBetweenStrings = $differ->diff($yamlStringData, $filteredYamlFile);
+
+        return new Result($pathToYamlFile, Result::RESULT_CODE_INVALID_SORT, $diffBetweenStrings);
     }
 
     /**
