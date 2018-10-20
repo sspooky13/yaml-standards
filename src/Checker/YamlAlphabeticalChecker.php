@@ -107,6 +107,8 @@ class YamlAlphabeticalChecker
     /**
      * @param string $key
      * @return bool
+     *
+     * @SuppressWarnings("UnusedPrivateMethod") Method is used but PHPMD report he is not
      */
     private function hasArrayKeyUnderscoreAsFirstCharacter($key)
     {
@@ -116,6 +118,8 @@ class YamlAlphabeticalChecker
     /**
      * @param string $key
      * @return bool
+     *
+     * @SuppressWarnings("UnusedPrivateMethod") Method is used but PHPMD report he is not
      */
     private function hasNotArrayKeyUnderscoreAsFirstCharacter($key)
     {

@@ -78,6 +78,8 @@ class YamlSpacesBetweenGroupsChecker
     /**
      * @param string $yamlLine
      * @return bool
+     *
+     * @SuppressWarnings("UnusedPrivateMethod") Method is used but PHPMD report he is not
      */
     private function removeBlankLine($yamlLine)
     {

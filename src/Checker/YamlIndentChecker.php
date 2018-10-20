@@ -143,12 +143,12 @@ class YamlIndentChecker
      */
     protected function getCorrectIndents($countOfIndents)
     {
-        $i = 1;
+        $currentNumberOfIndents = 1;
         $indents = '';
 
-        while ($i <= $countOfIndents) {
+        while ($currentNumberOfIndents <= $countOfIndents) {
             $indents .= ' ';
-            $i++;
+            $currentNumberOfIndents++;
         }
 
         return $indents;

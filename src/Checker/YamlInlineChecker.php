@@ -56,6 +56,8 @@ class YamlInlineChecker
     /**
      * @param string $yamlLine
      * @return bool
+     *
+     * @SuppressWarnings("UnusedPrivateMethod") Method is used but PHPMD report he is not
      */
     private function removeBlankLine($yamlLine)
     {
@@ -65,6 +67,8 @@ class YamlInlineChecker
     /**
      * @param string $yamlLine
      * @return bool
+     *
+     * @SuppressWarnings("UnusedPrivateMethod") Method is used but PHPMD report he is not
      */
     private function removeCommentLine($yamlLine)
     {
@@ -74,6 +78,8 @@ class YamlInlineChecker
     /**
      * @param string $yamlLine
      * @return string
+     *
+     * @SuppressWarnings("UnusedPrivateMethod") Method is used but PHPMD report he is not
      */
     private function removeComments($yamlLine)
     {
