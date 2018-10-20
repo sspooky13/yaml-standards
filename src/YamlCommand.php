@@ -13,6 +13,7 @@ use YamlAlphabeticalChecker\Checker\YamlIndentChecker;
 use YamlAlphabeticalChecker\Checker\YamlInlineChecker;
 use YamlAlphabeticalChecker\Checker\YamlSpacesBetweenGroupsChecker;
 use YamlAlphabeticalChecker\Service\ProcessOutputService;
+use YamlAlphabeticalChecker\Service\ResultService;
 
 class YamlCommand extends Command
 {
@@ -111,11 +112,7 @@ class YamlCommand extends Command
      */
     private function printOutput(OutputInterface $output, array $results)
     {
-        $resultCode = 0;
-
         foreach ($results as $result) {
-            $resultCode = $result->getResultCode() > $resultCode ? $result->getResultCode() : $resultCode;
-
             if ($result->getResultCode() !== Result::RESULT_CODE_OK) {
                 $output->writeln(sprintf('FILE: %s', $result->getPathToFile()));
                 $output->writeln('-------------------------------------------------');
@@ -125,7 +122,7 @@ class YamlCommand extends Command
 
         $output->writeln(Reporting::printRunTime());
 
-        return $resultCode;
+        return ResultService::getResultCodeByResults($results);
     }
 
     /**
