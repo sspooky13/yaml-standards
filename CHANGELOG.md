@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [3.0.0] - 2018-10-21
 ### Added
 - add `.yaml` file support
 - Indent checker:
@@ -45,5 +47,6 @@
 - create `--diff` mode
 
 [Unreleased]: https://github.com/sspooky13/yaml-standards/compare/2.0.0...HEAD
+[3.0.0]: https://github.com/sspooky13/yaml-standards/compare/2.0.0...3.0.0
 [2.0.0]: https://github.com/sspooky13/yaml-standards/compare/1.0.1...2.0.0
 [1.0.1]: https://github.com/sspooky13/yaml-standards/compare/1.0.0...1.0.1
