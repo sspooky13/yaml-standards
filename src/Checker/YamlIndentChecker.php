@@ -39,12 +39,14 @@ class YamlIndentChecker
             $rightFileLines[] = $indents . $trimmedFileLine;
         }
 
-        if ($fileLines === $rightFileLines) {
+        $rightFileContent = implode("\n", $rightFileLines);
+
+        if ($fileContent === $rightFileContent) {
             return new Result($pathToYamlFile, Result::RESULT_CODE_OK);
         }
 
         $differ = new Differ();
-        $diffBetweenStrings = $differ->diff($fileLines, $rightFileLines);
+        $diffBetweenStrings = $differ->diff($fileContent, $rightFileContent);
 
         return new Result($pathToYamlFile, Result::RESULT_CODE_INVALID_FILE_SYNTAX, $diffBetweenStrings);
     }
