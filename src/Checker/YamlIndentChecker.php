@@ -107,7 +107,7 @@ class YamlIndentChecker
         $trimmedLineValue = trim($lineValue);
 
         // parent, not comment line
-        if ($trimmedLineValue === '' && $isCommentLine === false) {
+        if ($isCommentLine === false && ($trimmedLineValue === '' || $this->isValueReuseVariable($trimmedLineValue))) {
             $nextLine = $fileLines[$key + 1];
             $countOfNextRowIndents = strlen($nextLine) - strlen(ltrim($nextLine));
             if ($countOfNextRowIndents > $countOfRowIndents) {
@@ -154,5 +154,14 @@ class YamlIndentChecker
         }
 
         return $indents;
+    }
+
+    /**
+     * @param string $value
+     * @return bool
+     */
+    private function isValueReuseVariable($value)
+    {
+        return strpos($value, '&') === 0;
     }
 }
