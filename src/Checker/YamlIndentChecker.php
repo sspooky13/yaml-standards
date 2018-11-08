@@ -82,6 +82,13 @@ class YamlIndentChecker
             return $this->getCorrectIndents($countOfRowIndents);
         }
 
+        // next block
+        if ($countOfRowIndents < $this->countOfParents * $countOfIndents) {
+            while ($countOfRowIndents < $this->countOfParents * $countOfIndents) {
+                $this->countOfParents--;
+            }
+        }
+
         // line without ':', e.g. array or string
         if (array_key_exists(1, $explodedLine) === false) {
             // is multidimensional array?
@@ -94,13 +101,6 @@ class YamlIndentChecker
 
             // is array or string?
             return $this->getCorrectIndents($this->countOfParents * $countOfIndents);
-        }
-
-        // next block
-        if ($countOfRowIndents < $this->countOfParents * $countOfIndents) {
-            while ($countOfRowIndents < $this->countOfParents * $countOfIndents) {
-                $this->countOfParents--;
-            }
         }
 
         $lineValue = $explodedLine[1];
