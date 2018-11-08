@@ -52,9 +52,12 @@ class YamlIndentChecker
      * @param string[] $fileLines
      * @param int $key
      * @param int $countOfIndents
-     * @param string $fileLine
+     * @param string $fileLine current checked line in loop
      * @param bool $isCommentLine
      * @return string
+     *
+     * @SuppressWarnings("CyclomaticComplexity")
+     * @SuppressWarnings("ExcessiveMethodLength")
      */
     private function getRightFileLines(array $fileLines, $key, $countOfIndents, $fileLine, $isCommentLine = false)
     {
@@ -80,18 +83,37 @@ class YamlIndentChecker
         if ($countOfRowIndents === 0) {
             $this->countOfParents = 1;
 
+            // parent start as array, e.g. "- foo: bar"
+            if ($this->isLineStartOfArrayWithKeyAndValue($trimmedLine)) {
+                $removedDashFromLine = ltrim($trimmedLine, '-');
+                $correctIndentsOnStartOfLine = $this->getCorrectIndents($countOfRowIndents);
+                $trimmedLineWithoutDash = trim($removedDashFromLine);
+                $correctIndentsBetweenDashAndKey = $this->getCorrectIndentsBetweenDashAndKey($countOfIndents);
+
+                return $correctIndentsOnStartOfLine . '-' . $correctIndentsBetweenDashAndKey . $trimmedLineWithoutDash;
+            }
+
             $correctIndents = $this->getCorrectIndents($countOfRowIndents);
             $trimmedFileLine = trim($fileLine);
 
             return $correctIndents . $trimmedFileLine;
         }
 
-        // next block
-        if ($countOfRowIndents < $this->countOfParents * $countOfIndents) {
-            while ($countOfRowIndents < $this->countOfParents * $countOfIndents) {
-                $this->countOfParents--;
-            }
+        // line start of array, e.g. "- foo: bar" or "- foo" or "- { foo: bar }"
+        if ($this->isLineStartOfArrayWithKeyAndValue($trimmedLine)) {
+            return $this->getCorrectLineForArrayWithKeyAndValue($line, $countOfIndents, $fileLine, $isCommentLine);
         }
+
+        // children of array, description over name of function
+        if ($this->belongLineToArray($fileLines, $key)) {
+            $correctIndents = $this->getCorrectIndents($this->countOfParents * $countOfIndents);
+            $trimmedFileLine = trim($fileLine);
+
+            return $correctIndents . $trimmedFileLine;
+        }
+
+        // next block
+        $this->goBackInHierarchy($countOfRowIndents, $countOfIndents);
 
         // line without ':', e.g. array or string
         if (array_key_exists(1, $explodedLine) === false) {
@@ -179,5 +201,133 @@ class YamlIndentChecker
     private function isValueReuseVariable($value)
     {
         return strpos($value, '&') === 0;
+    }
+
+    /**
+     * @param string $value
+     * @return bool
+     */
+    private function hasLineDashOnStartOfLine($value)
+    {
+        return strpos($value, '-') === 0;
+    }
+
+    /**
+     * @param string $value
+     * @return bool
+     */
+    private function isCurlyBracketInStartOfString($value)
+    {
+        return strpos($value, '{') === 0;
+    }
+
+    /**
+     * line start of array, e.g. "- foo: bar" or "- foo" or "- { foo: bar }"
+     *
+     * @param string $trimmedLine
+     * @return bool
+     */
+    private function isLineStartOfArrayWithKeyAndValue($trimmedLine)
+    {
+        return $trimmedLine !== '-' && $this->hasLineDashOnStartOfLine($trimmedLine);
+    }
+
+    /**
+     * @param int $countOfIndents
+     * @return string
+     */
+    private function getCorrectIndentsBetweenDashAndKey($countOfIndents)
+    {
+        return $this->getCorrectIndents($countOfIndents - 1); // 1 space is dash, dash is as indent
+    }
+
+    /**
+     * Belong line to children of array, e.g.
+     * - foo: bar
+     *   baz: qux
+     *   quux: quuz
+     *   etc.: etc.
+     *
+     * @param string[] $fileLines
+     * @param int $key
+     * @return bool
+     */
+    private function belongLineToArray(array $fileLines, $key)
+    {
+        while ($key >= 0) {
+            $line = $fileLines[$key];
+            $countOfRowIndents = strlen($line) - strlen(ltrim($line));
+
+            $key--;
+            $prevLine = $fileLines[$key];
+            $trimmedPrevLine = trim($prevLine);
+
+            if ($this->hasLineDashOnStartOfLine($trimmedPrevLine)) {
+                $prevLine = preg_replace('/-/', ' ', $prevLine, 1); // replace '-' for space
+            }
+
+            $countOfPrevRowIndents = strlen($prevLine) - strlen(ltrim($prevLine));
+
+            if ($countOfPrevRowIndents === $countOfRowIndents) {
+                if ($this->isLineStartOfArrayWithKeyAndValue($trimmedPrevLine)) {
+                    return true;
+                }
+            } else {
+                break;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * line start of array, e.g. "- foo: bar" or "- foo" or "- { foo: bar }"
+     *
+     * @param string $line
+     * @param int $countOfIndents
+     * @param string $fileLine current checked line in loop
+     * @param bool $isCommentLine
+     * @return string
+     */
+    private function getCorrectLineForArrayWithKeyAndValue($line, $countOfIndents, $fileLine, $isCommentLine)
+    {
+        $lineWithReplacedDashToSpace = preg_replace('/-/', ' ', $line, 1);
+        $trimmedLineWithoutDash = trim($lineWithReplacedDashToSpace);
+        $countOfRowIndents = strlen($line) - strlen(ltrim($line));
+
+        $this->countOfParents++;
+        $this->goBackInHierarchy($countOfRowIndents, $countOfIndents);
+
+        $correctIndentsOnStartOfLine = $this->getCorrectIndents($this->countOfParents * $countOfIndents);
+        $trimmedFileLine = trim($fileLine);
+        if ($isCommentLine) {
+            return $correctIndentsOnStartOfLine . $trimmedFileLine;
+        }
+
+        // solution "- { foo: bar }"
+        if ($this->isCurlyBracketInStartOfString($trimmedLineWithoutDash)) {
+            $correctIndentsBetweenDashAndBracket = $this->getCorrectIndents(1);
+
+            return $correctIndentsOnStartOfLine . '-' . $correctIndentsBetweenDashAndBracket . $trimmedLineWithoutDash;
+        }
+
+        // solution "- foo: bar" or "- foo"
+        $this->countOfParents++;
+        $correctIndentsBetweenDashAndKey = $this->getCorrectIndentsBetweenDashAndKey($countOfIndents);
+
+        return $correctIndentsOnStartOfLine . '-' . $correctIndentsBetweenDashAndKey . $trimmedLineWithoutDash;
+    }
+
+    /**
+     * @param int $countOfRowIndents
+     * @param int $countOfIndents
+     */
+    private function goBackInHierarchy($countOfRowIndents, $countOfIndents)
+    {
+        if ($countOfRowIndents < $this->countOfParents * $countOfIndents) {
+            while ($countOfRowIndents < $this->countOfParents * $countOfIndents) {
+                $this->countOfParents--;
+            }
+        }
     }
 }
