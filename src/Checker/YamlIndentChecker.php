@@ -33,10 +33,7 @@ class YamlIndentChecker
         $rightFileLines = [];
 
         foreach ($fileLines as $key => $fileLine) {
-            $trimmedFileLine = trim($fileLine);
-            $indents = $this->getCorrectCountOfIndentsForLine($fileLines, $key, $countOfIndents);
-
-            $rightFileLines[] = $indents . $trimmedFileLine;
+            $rightFileLines[] = $this->getRightFileLines($fileLines, $key, $countOfIndents, $fileLine);
         }
 
         $rightFileContent = implode("\n", $rightFileLines);
@@ -55,14 +52,15 @@ class YamlIndentChecker
      * @param string[] $fileLines
      * @param int $key
      * @param int $countOfIndents
+     * @param string $fileLine
      * @param bool $isCommentLine
      * @return string
      */
-    private function getCorrectCountOfIndentsForLine(array $fileLines, $key, $countOfIndents, $isCommentLine = false)
+    private function getRightFileLines(array $fileLines, $key, $countOfIndents, $fileLine, $isCommentLine = false)
     {
         if ($this->isCommentLine($fileLines[$key])) {
             $key++;
-            $this->getCorrectCountOfIndentsForLine($fileLines, $key, $countOfIndents, true);
+            $this->getRightFileLines($fileLines, $key, $countOfIndents, $fileLine, true);
         }
 
         $line = $fileLines[$key];
@@ -72,14 +70,20 @@ class YamlIndentChecker
 
         // empty line
         if ($trimmedLine === '') {
-            return $this->getCorrectIndents(0);
+            $correctIndents = $this->getCorrectIndents(0);
+            $trimmedFileLine = trim($fileLine);
+
+            return $correctIndents . $trimmedFileLine;
         }
 
         // the highest parent
         if ($countOfRowIndents === 0) {
             $this->countOfParents = 1;
 
-            return $this->getCorrectIndents($countOfRowIndents);
+            $correctIndents = $this->getCorrectIndents($countOfRowIndents);
+            $trimmedFileLine = trim($fileLine);
+
+            return $correctIndents . $trimmedFileLine;
         }
 
         // next block
@@ -96,11 +100,17 @@ class YamlIndentChecker
                 $countOfParents = $this->countOfParents;
                 $this->countOfParents++;
 
-                return $this->getCorrectIndents($countOfParents * $countOfIndents);
+                $correctIndents = $this->getCorrectIndents($countOfParents * $countOfIndents);
+                $trimmedFileLine = trim($fileLine);
+
+                return $correctIndents . $trimmedFileLine;
             }
 
             // is array or string?
-            return $this->getCorrectIndents($this->countOfParents * $countOfIndents);
+            $correctIndents = $this->getCorrectIndents($this->countOfParents * $countOfIndents);
+            $trimmedFileLine = trim($fileLine);
+
+            return $correctIndents . $trimmedFileLine;
         }
 
         $lineValue = $explodedLine[1];
@@ -114,11 +124,17 @@ class YamlIndentChecker
                 $countOfParents = $this->countOfParents;
                 $this->countOfParents++;
 
-                return $this->getCorrectIndents($countOfParents * $countOfIndents);
+                $correctIndents = $this->getCorrectIndents($countOfParents * $countOfIndents);
+                $trimmedFileLine = trim($fileLine);
+
+                return $correctIndents . $trimmedFileLine;
             }
         }
 
-        return $this->getCorrectIndents($this->countOfParents * $countOfIndents);
+        $correctIndents = $this->getCorrectIndents($this->countOfParents * $countOfIndents);
+        $trimmedFileLine = trim($fileLine);
+
+        return $correctIndents . $trimmedFileLine;
     }
 
     /**
