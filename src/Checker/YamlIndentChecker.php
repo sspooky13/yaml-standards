@@ -101,7 +101,8 @@ class YamlIndentChecker
 
         // line start of array, e.g. "- foo: bar" or "- foo" or "- { foo: bar }"
         if ($this->isLineStartOfArrayWithKeyAndValue($trimmedLine)) {
-            return $this->getCorrectLineForArrayWithKeyAndValue($line, $countOfIndents, $fileLine, $isCommentLine);
+            $nextLine = $fileLines[$key + 1];
+            return $this->getCorrectLineForArrayWithKeyAndValue($line, $nextLine, $countOfIndents, $fileLine, $isCommentLine);
         }
 
         // children of array, description over name of function
@@ -284,12 +285,13 @@ class YamlIndentChecker
      * line start of array, e.g. "- foo: bar" or "- foo" or "- { foo: bar }"
      *
      * @param string $line
+     * @param string $nextLine
      * @param int $countOfIndents
      * @param string $fileLine current checked line in loop
      * @param bool $isCommentLine
      * @return string
      */
-    private function getCorrectLineForArrayWithKeyAndValue($line, $countOfIndents, $fileLine, $isCommentLine)
+    private function getCorrectLineForArrayWithKeyAndValue($line, $nextLine, $countOfIndents, $fileLine, $isCommentLine)
     {
         $lineWithReplacedDashToSpace = preg_replace('/-/', ' ', $line, 1);
         $trimmedLineWithoutDash = trim($lineWithReplacedDashToSpace);
@@ -311,9 +313,20 @@ class YamlIndentChecker
             return $correctIndentsOnStartOfLine . '-' . $correctIndentsBetweenDashAndBracket . $trimmedLineWithoutDash;
         }
 
-        // solution "- foo: bar" or "- foo"
-        $this->countOfParents++;
-        $correctIndentsBetweenDashAndKey = $this->getCorrectIndentsBetweenDashAndKey($countOfIndents);
+        /**
+         * solution for more values in array
+         * "- foo: bar"
+         * "  baz: qux:
+         */
+        if ($this->isNextLineKeyAndValueOfArray($lineWithReplacedDashToSpace, $nextLine)) {
+            $this->countOfParents++;
+            $correctIndentsBetweenDashAndKey = $this->getCorrectIndentsBetweenDashAndKey($countOfIndents);
+
+            return $correctIndentsOnStartOfLine . '-' . $correctIndentsBetweenDashAndKey . $trimmedLineWithoutDash;
+        }
+
+        // solution for one value in array "- foo: bar" or "- foo"
+        $correctIndentsBetweenDashAndKey = $this->getCorrectIndents(1);
 
         return $correctIndentsOnStartOfLine . '-' . $correctIndentsBetweenDashAndKey . $trimmedLineWithoutDash;
     }
@@ -329,5 +342,18 @@ class YamlIndentChecker
                 $this->countOfParents--;
             }
         }
+    }
+
+    /**
+     * @param string $currentLine
+     * @param string $nextLine
+     * @return bool
+     */
+    private function isNextLineKeyAndValueOfArray($currentLine, $nextLine)
+    {
+        $countOfCurrentRowIndents = strlen($currentLine) - strlen(ltrim($currentLine));
+        $countOfNextRowIndents = strlen($nextLine) - strlen(ltrim($nextLine));
+
+        return $countOfCurrentRowIndents === $countOfNextRowIndents;
     }
 }
