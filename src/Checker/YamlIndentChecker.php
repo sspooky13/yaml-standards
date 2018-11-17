@@ -63,7 +63,7 @@ class YamlIndentChecker
     {
         if ($this->isCommentLine($fileLines[$key])) {
             $key++;
-            $this->getRightFileLines($fileLines, $key, $countOfIndents, $fileLine, true);
+            return $this->getRightFileLines($fileLines, $key, $countOfIndents, $fileLine, true);
         }
 
         $line = $fileLines[$key];
