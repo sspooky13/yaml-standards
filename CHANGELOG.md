@@ -2,6 +2,15 @@
 
 ## [Unreleased]
 
+## [3.1.0] - 2018-11-17
+### Added pre nové funkcie.
+- Yaml indent checker: check also correct indent between dash and text in one line array
+
+### Fixed pre opravy chýb.
+- fix showing code status for current checked file
+- Yaml indent checker: fix correct indent for reused variable
+- Yaml indent checker: fix correct indent for array in one line, e.g. `- foo: bar` or `- { foo: bar }` and their children
+
 ## [3.0.0] - 2018-10-21
 ### Added
 - add `.yaml` file support
@@ -46,7 +55,8 @@
 - create base command to check yaml sort
 - create `--diff` mode
 
-[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/2.0.0...HEAD
+[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/3.1.0...HEAD
+[3.1.0]: https://github.com/sspooky13/yaml-standards/compare/3.0.0...3.1.0
 [3.0.0]: https://github.com/sspooky13/yaml-standards/compare/2.0.0...3.0.0
 [2.0.0]: https://github.com/sspooky13/yaml-standards/compare/1.0.1...2.0.0
 [1.0.1]: https://github.com/sspooky13/yaml-standards/compare/1.0.0...1.0.1
