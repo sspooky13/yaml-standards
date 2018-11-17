@@ -88,7 +88,7 @@ class YamlIndentChecker
                 $removedDashFromLine = ltrim($trimmedLine, '-');
                 $correctIndentsOnStartOfLine = $this->getCorrectIndents($countOfRowIndents);
                 $trimmedLineWithoutDash = trim($removedDashFromLine);
-                $correctIndentsBetweenDashAndKey = $this->getCorrectIndentsBetweenDashAndKey($countOfIndents);
+                $correctIndentsBetweenDashAndKey = $this->getCorrectIndents($countOfIndents - 1); // 1 space is dash, dash is as indent
 
                 return $correctIndentsOnStartOfLine . '-' . $correctIndentsBetweenDashAndKey . $trimmedLineWithoutDash;
             }
@@ -234,15 +234,6 @@ class YamlIndentChecker
     }
 
     /**
-     * @param int $countOfIndents
-     * @return string
-     */
-    private function getCorrectIndentsBetweenDashAndKey($countOfIndents)
-    {
-        return $this->getCorrectIndents($countOfIndents - 1); // 1 space is dash, dash is as indent
-    }
-
-    /**
      * Belong line to children of array, e.g.
      * - foo: bar
      *   baz: qux
@@ -320,7 +311,7 @@ class YamlIndentChecker
          */
         if ($this->isNextLineKeyAndValueOfArray($lineWithReplacedDashToSpace, $nextLine)) {
             $this->countOfParents++;
-            $correctIndentsBetweenDashAndKey = $this->getCorrectIndentsBetweenDashAndKey($countOfIndents);
+            $correctIndentsBetweenDashAndKey = $this->getCorrectIndents($countOfIndents - 1); // 1 space is dash, dash is as indent
 
             return $correctIndentsOnStartOfLine . '-' . $correctIndentsBetweenDashAndKey . $trimmedLineWithoutDash;
         }
