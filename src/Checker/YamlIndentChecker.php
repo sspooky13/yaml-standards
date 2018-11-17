@@ -113,6 +113,7 @@ class YamlIndentChecker
             return $correctIndents . $trimmedFileLine;
         }
 
+        $this->countOfParents++;
         // next block
         $this->goBackInHierarchy($countOfRowIndents, $countOfIndents);
 
