@@ -3,10 +3,10 @@
 ## [Unreleased]
 
 ## [3.1.0] - 2018-11-17
-### Added pre nové funkcie.
+### Added
 - Yaml indent checker: check also correct indent between dash and text in one line array
 
-### Fixed pre opravy chýb.
+### Fixed
 - fix showing code status for current checked file
 - Yaml indent checker: fix correct indent for reused variable
 - Yaml indent checker: fix correct indent for array in one line, e.g. `- foo: bar` or `- { foo: bar }` and their children
