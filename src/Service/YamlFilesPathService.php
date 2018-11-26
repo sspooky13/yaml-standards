@@ -24,7 +24,7 @@ class YamlFilesPathService
 
             $recursiveDirectoryIterator = new RecursiveDirectoryIterator($pathToDirOrFile);
             $recursiveIteratorIterator = new RecursiveIteratorIterator($recursiveDirectoryIterator);
-            $regexIterator = new RegexIterator($recursiveIteratorIterator, '/^.+\.(yml|yaml|yaml\.dist|yml\.dist)$/i', RecursiveRegexIterator::GET_MATCH);
+            $regexIterator = new RegexIterator($recursiveIteratorIterator, '/^.+\.(ya?ml(\.dist)?)$/i', RecursiveRegexIterator::GET_MATCH);
 
             foreach ($regexIterator as $pathToFile) {
                 $pathToFiles[] = reset($pathToFile);
