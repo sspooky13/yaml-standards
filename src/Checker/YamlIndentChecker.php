@@ -11,16 +11,6 @@ use YamlStandards\Result;
 class YamlIndentChecker
 {
     /**
-     * @var int
-     */
-    private $countOfParents;
-
-    public function __construct()
-    {
-        $this->countOfParents = 0;
-    }
-
-    /**
      * @param string $pathToYamlFile
      * @param int $countOfIndents
      * @return \YamlStandards\Result
@@ -81,8 +71,6 @@ class YamlIndentChecker
 
         // the highest parent
         if ($countOfRowIndents === 0) {
-            $this->countOfParents = 1;
-
             // parent start as array, e.g. "- foo: bar"
             if ($this->isLineStartOfArrayWithKeyAndValue($trimmedLine)) {
                 $removedDashFromLine = ltrim($trimmedLine, '-');
@@ -101,28 +89,23 @@ class YamlIndentChecker
 
         // line start of array, e.g. "- foo: bar" or "- foo" or "- { foo: bar }"
         if ($this->isLineStartOfArrayWithKeyAndValue($trimmedLine)) {
-            $nextLine = $fileLines[$key + 1];
-            return $this->getCorrectLineForArrayWithKeyAndValue($line, $nextLine, $countOfIndents, $fileLine, $isCommentLine);
+            return $this->getCorrectLineForArrayWithKeyAndValue($line, $fileLines, $key, $countOfIndents, $fileLine, $isCommentLine);
         }
 
         // children of array, description over name of function
         if ($this->belongLineToArray($fileLines, $key)) {
-            $correctIndents = $this->getCorrectIndents($this->countOfParents * $countOfIndents);
+            $countOfParents = $this->getCountOfParentsForLine($fileLines, $key);
+            $correctIndents = $this->getCorrectIndents($countOfParents * $countOfIndents);
             $trimmedFileLine = trim($fileLine);
 
             return $correctIndents . $trimmedFileLine;
         }
 
-        $this->countOfParents++;
-        // next block
-        $this->goBackInHierarchy($countOfRowIndents, $countOfIndents);
-
         // line without ':', e.g. array or string
         if (array_key_exists(1, $explodedLine) === false) {
             // is multidimensional array?
             if ($trimmedLine === '-') {
-                $countOfParents = $this->countOfParents;
-                $this->countOfParents++;
+                $countOfParents = $this->getCountOfParentsForLine($fileLines, $key);
 
                 $correctIndents = $this->getCorrectIndents($countOfParents * $countOfIndents);
                 $trimmedFileLine = trim($fileLine);
@@ -131,7 +114,8 @@ class YamlIndentChecker
             }
 
             // is array or string?
-            $correctIndents = $this->getCorrectIndents($this->countOfParents * $countOfIndents);
+            $countOfParents = $this->getCountOfParentsForLine($fileLines, $key);
+            $correctIndents = $this->getCorrectIndents($countOfParents * $countOfIndents);
             $trimmedFileLine = trim($fileLine);
 
             return $correctIndents . $trimmedFileLine;
@@ -145,8 +129,7 @@ class YamlIndentChecker
             $nextLine = $fileLines[$key + 1];
             $countOfNextRowIndents = strlen($nextLine) - strlen(ltrim($nextLine));
             if ($countOfNextRowIndents > $countOfRowIndents) {
-                $countOfParents = $this->countOfParents;
-                $this->countOfParents++;
+                $countOfParents = $this->getCountOfParentsForLine($fileLines, $key);
 
                 $correctIndents = $this->getCorrectIndents($countOfParents * $countOfIndents);
                 $trimmedFileLine = trim($fileLine);
@@ -155,7 +138,8 @@ class YamlIndentChecker
             }
         }
 
-        $correctIndents = $this->getCorrectIndents($this->countOfParents * $countOfIndents);
+        $countOfParents = $this->getCountOfParentsForLine($fileLines, $key);
+        $correctIndents = $this->getCorrectIndents($countOfParents * $countOfIndents);
         $trimmedFileLine = trim($fileLine);
 
         return $correctIndents . $trimmedFileLine;
@@ -277,22 +261,21 @@ class YamlIndentChecker
      * line start of array, e.g. "- foo: bar" or "- foo" or "- { foo: bar }"
      *
      * @param string $line
-     * @param string $nextLine
+     * @param string[] $fileLines
+     * @param int $key
      * @param int $countOfIndents
      * @param string $fileLine current checked line in loop
      * @param bool $isCommentLine
      * @return string
      */
-    private function getCorrectLineForArrayWithKeyAndValue($line, $nextLine, $countOfIndents, $fileLine, $isCommentLine)
+    private function getCorrectLineForArrayWithKeyAndValue($line, array $fileLines, $key, $countOfIndents, $fileLine, $isCommentLine)
     {
         $lineWithReplacedDashToSpace = preg_replace('/-/', ' ', $line, 1);
         $trimmedLineWithoutDash = trim($lineWithReplacedDashToSpace);
-        $countOfRowIndents = strlen($line) - strlen(ltrim($line));
 
-        $this->countOfParents++;
-        $this->goBackInHierarchy($countOfRowIndents, $countOfIndents);
+        $countOfParents = $this->getCountOfParentsForLine($fileLines, $key);
+        $correctIndentsOnStartOfLine = $this->getCorrectIndents($countOfParents * $countOfIndents);
 
-        $correctIndentsOnStartOfLine = $this->getCorrectIndents($this->countOfParents * $countOfIndents);
         $trimmedFileLine = trim($fileLine);
         if ($isCommentLine) {
             return $correctIndentsOnStartOfLine . $trimmedFileLine;
@@ -310,8 +293,7 @@ class YamlIndentChecker
          * "- foo: bar"
          * "  baz: qux:
          */
-        if ($this->isNextLineKeyAndValueOfArray($lineWithReplacedDashToSpace, $nextLine)) {
-            $this->countOfParents++;
+        if (array_key_exists($key + 1, $fileLines) && $this->isNextLineKeyAndValueOfArray($lineWithReplacedDashToSpace, $fileLines[$key + 1])) {
             $correctIndentsBetweenDashAndKey = $this->getCorrectIndents($countOfIndents - 1); // 1 space is dash, dash is as indent
 
             return $correctIndentsOnStartOfLine . '-' . $correctIndentsBetweenDashAndKey . $trimmedLineWithoutDash;
@@ -321,19 +303,6 @@ class YamlIndentChecker
         $correctIndentsBetweenDashAndKey = $this->getCorrectIndents(1);
 
         return $correctIndentsOnStartOfLine . '-' . $correctIndentsBetweenDashAndKey . $trimmedLineWithoutDash;
-    }
-
-    /**
-     * @param int $countOfRowIndents
-     * @param int $countOfIndents
-     */
-    private function goBackInHierarchy($countOfRowIndents, $countOfIndents)
-    {
-        if ($countOfRowIndents < $this->countOfParents * $countOfIndents) {
-            while ($countOfRowIndents < $this->countOfParents * $countOfIndents) {
-                $this->countOfParents--;
-            }
-        }
     }
 
     /**
@@ -347,5 +316,61 @@ class YamlIndentChecker
         $countOfNextRowIndents = strlen($nextLine) - strlen(ltrim($nextLine));
 
         return $countOfCurrentRowIndents === $countOfNextRowIndents;
+    }
+
+    /**
+     * Go back until deepest parent and count them
+     *
+     * @param string[] $fileLines
+     * @param int $key
+     * @return int
+     */
+    private function getCountOfParentsForLine(array $fileLines, $key)
+    {
+        $countOfParents = 0;
+        $line = $fileLines[$key];
+        $countOfRowIndents = strlen($line) - strlen(ltrim($line));
+        $trimmedLine = trim($line);
+        $isArrayLine = $this->hasLineDashOnStartOfLine($trimmedLine);
+
+        while ($countOfRowIndents !== 0) {
+            $key--;
+            $prevLine = $fileLines[$key];
+            $trimmedPrevLine = trim($prevLine);
+            $isPrevLineArrayLine = $this->hasLineDashOnStartOfLine($trimmedPrevLine);
+            $countOfPrevRowIndents = strlen($prevLine) - strlen(ltrim($prevLine));
+
+            // ignore comment line and empty line
+            if ($trimmedPrevLine === '' || $this->isCommentLine($prevLine)) {
+                continue;
+            }
+
+            if (/* is start of array in array, e.g.
+                   foo:
+                     - bar:
+                       - 'any text'
+                */
+                ($isArrayLine && $countOfPrevRowIndents < $countOfRowIndents && $isPrevLineArrayLine) ||
+                /* is start of array, e.g.
+                   foo:
+                     - bar: baz
+                */
+                ($isArrayLine && $countOfPrevRowIndents <= $countOfRowIndents && $isPrevLineArrayLine === false) ||
+                /* is classic hierarchy, e.g.
+                   foo:
+                     bar: baz
+                */
+                ($isArrayLine === false && $countOfPrevRowIndents < $countOfRowIndents)
+            ) {
+                $line = $fileLines[$key];
+                $countOfRowIndents = strlen($line) - strlen(ltrim($line));
+                $trimmedLine = trim($line);
+                $isArrayLine = $this->hasLineDashOnStartOfLine($trimmedLine);
+
+                $countOfParents++;
+            }
+        }
+
+        return $countOfParents;
     }
 }
