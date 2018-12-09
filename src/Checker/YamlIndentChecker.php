@@ -345,21 +345,23 @@ class YamlIndentChecker
                 continue;
             }
 
-            if ($isArrayLine && $countOfPrevRowIndents < $countOfRowIndents && $isPrevLineArrayLine) {
-                $line = $fileLines[$key];
-                $countOfRowIndents = strlen($line) - strlen(ltrim($line));
-                $trimmedLine = trim($line);
-                $isArrayLine = $this->hasLineDashOnStartOfLine($trimmedLine);
-
-                $countOfParents++;
-            } elseif ($isArrayLine && $countOfPrevRowIndents <= $countOfRowIndents && $isPrevLineArrayLine === false) {
-                $line = $fileLines[$key];
-                $countOfRowIndents = strlen($line) - strlen(ltrim($line));
-                $trimmedLine = trim($line);
-                $isArrayLine = $this->hasLineDashOnStartOfLine($trimmedLine);
-
-                $countOfParents++;
-            } elseif ($isArrayLine === false && $countOfPrevRowIndents < $countOfRowIndents) {
+            if (/* is start of array in array, e.g.
+                   foo:
+                     - bar:
+                       - 'any text'
+                */
+                ($isArrayLine && $countOfPrevRowIndents < $countOfRowIndents && $isPrevLineArrayLine) ||
+                /* is start of array, e.g.
+                   foo:
+                     - bar: baz
+                */
+                ($isArrayLine && $countOfPrevRowIndents <= $countOfRowIndents && $isPrevLineArrayLine === false) ||
+                /* is classic hierarchy, e.g.
+                   foo:
+                     bar: baz
+                */
+                ($isArrayLine === false && $countOfPrevRowIndents < $countOfRowIndents)
+            ) {
                 $line = $fileLines[$key];
                 $countOfRowIndents = strlen($line) - strlen(ltrim($line));
                 $trimmedLine = trim($line);
