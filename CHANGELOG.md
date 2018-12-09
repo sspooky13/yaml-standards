@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## [3.1.1]- 2018-12-09
+### Fixed
+- Yaml indent checker: fix check correct indent
+
 ## [3.1.0] - 2018-11-17
 ### Added
 - Yaml indent checker: check also correct indent between dash and text in one line array
@@ -55,7 +59,8 @@
 - create base command to check yaml sort
 - create `--diff` mode
 
-[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/3.1.0...HEAD
+[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/3.1.1...HEAD
+[3.1.1]: https://github.com/sspooky13/yaml-standards/compare/3.1.0...3.1.1
 [3.1.0]: https://github.com/sspooky13/yaml-standards/compare/3.0.0...3.1.0
 [3.0.0]: https://github.com/sspooky13/yaml-standards/compare/2.0.0...3.0.0
 [2.0.0]: https://github.com/sspooky13/yaml-standards/compare/1.0.1...2.0.0
