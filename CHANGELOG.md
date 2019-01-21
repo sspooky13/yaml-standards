@@ -1,13 +1,15 @@
 # Changelog
 
 ## [Unreleased]
+
+## [4.0.0] - 2019-01-21
 ### Added
 - add option `exclude-dir` for exclude dirs for check
 
 ### Changed
 - rename option from `exclude` to `exclude-by-name`
 
-## [3.1.1]- 2018-12-09
+## [3.1.1] - 2018-12-09
 ### Fixed
 - Yaml indent checker: fix check correct indent
 
@@ -64,7 +66,8 @@
 - create base command to check yaml sort
 - create `--diff` mode
 
-[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/3.1.1...HEAD
+[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/4.0.0...HEAD
+[4.0.0]: https://github.com/sspooky13/yaml-standards/compare/3.1.1...4.0.0
 [3.1.1]: https://github.com/sspooky13/yaml-standards/compare/3.1.0...3.1.1
 [3.1.0]: https://github.com/sspooky13/yaml-standards/compare/3.0.0...3.1.0
 [3.0.0]: https://github.com/sspooky13/yaml-standards/compare/2.0.0...3.0.0
