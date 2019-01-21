@@ -2,6 +2,7 @@
 
 namespace YamlStandards\Service;
 
+use JakubOnderka\PhpParallelLint\RecursiveDirectoryFilterIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RecursiveRegexIterator;
@@ -11,9 +12,10 @@ class YamlFilesPathService
 {
     /**
      * @param string[] $pathToDirsOrFiles
+     * @param string[] $excludedDirs
      * @return string[]
      */
-    public static function getPathToYamlFiles(array $pathToDirsOrFiles)
+    public static function getPathToYamlFiles(array $pathToDirsOrFiles, array $excludedDirs)
     {
         $pathToFiles = [];
         foreach ($pathToDirsOrFiles as $pathToDirOrFile) {
@@ -23,7 +25,8 @@ class YamlFilesPathService
             }
 
             $recursiveDirectoryIterator = new RecursiveDirectoryIterator($pathToDirOrFile);
-            $recursiveIteratorIterator = new RecursiveIteratorIterator($recursiveDirectoryIterator);
+            $recursiveDirectoryFilterIterator = new RecursiveDirectoryFilterIterator($recursiveDirectoryIterator, $excludedDirs);
+            $recursiveIteratorIterator = new RecursiveIteratorIterator($recursiveDirectoryFilterIterator);
             $regexIterator = new RegexIterator($recursiveIteratorIterator, '/^.+\.(ya?ml(\.dist)?)$/i', RecursiveRegexIterator::GET_MATCH);
 
             foreach ($regexIterator as $pathToFile) {

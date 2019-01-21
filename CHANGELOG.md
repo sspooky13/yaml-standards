@@ -1,6 +1,11 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- add option `exclude-dir` for exclude dirs for check
+
+### Changed
+- rename option from `exclude` to `exclude-by-name`
 
 ## [3.1.1]- 2018-12-09
 ### Fixed
