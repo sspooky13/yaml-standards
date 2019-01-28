@@ -2,6 +2,8 @@
 
 namespace YamlStandards;
 
+use Symfony\Component\Console\Terminal;
+
 class ProcessOutput
 {
     const
@@ -23,9 +25,25 @@ class ProcessOutput
         Result::RESULT_CODE_GENERAL_ERROR => self::STATUS_CODE_ERROR,
     ];
 
-    private $currentPosition = 0;
-    private $progressLine;
+    /**
+     * @var int
+     */
     private $countOfFiles;
+
+    /**
+     * @var int
+     */
+    private $maxLineWidth;
+
+    /**
+     * @var int
+     */
+    private $progressLength;
+
+    /**
+     * @var string[]
+     */
+    private $progressLine;
 
     /**
      * @param int $countOfFiles
@@ -33,14 +51,9 @@ class ProcessOutput
     public function __construct($countOfFiles)
     {
         $this->countOfFiles = $countOfFiles;
-
-        $progressLine = [];
-
-        // create empty spaces for summary in end
-        for ($i = 0; $i <= $countOfFiles + 10; $i++) {
-            $progressLine[] = ' ';
-        }
-        $this->progressLine = $progressLine;
+        $this->progressLine = [];
+        $this->progressLength = strlen(sprintf('%d/%1$d (%3d%%)', $this->countOfFiles, 100)) + 2;
+        $this->maxLineWidth = (new Terminal())->getWidth() - $this->progressLength;
     }
 
     /**
@@ -50,17 +63,19 @@ class ProcessOutput
     public function process($statusCode)
     {
         $symbol = sprintf(self::$statusMap[$statusCode]['format'], self::$statusMap[$statusCode]['symbol']);
-        $this->progressLine[$this->currentPosition] = $symbol;
-        $this->currentPosition++;
+        $this->progressLine[] = $symbol;
+        $currentPosition = count($this->progressLine);
 
-        $percentOfComplete = $this->currentPosition * 100 / $this->countOfFiles;
+        $percentOfComplete = $currentPosition * 100 / $this->countOfFiles;
 
-        end($this->progressLine);
-        $lastKey = key($this->progressLine);
-        $this->progressLine[$lastKey] = sprintf('%d/%d (%d%%)', $this->currentPosition, $this->countOfFiles, $percentOfComplete);
-        $progressLine = implode('', $this->progressLine);
+        $progress = sprintf('%d/%d (%3d%%)', $currentPosition, $this->countOfFiles, $percentOfComplete);
+        $wrappedProgressLines = array_chunk($this->progressLine, $this->maxLineWidth);
+        $wrapLine = ($currentPosition % $this->maxLineWidth) === 0 ? PHP_EOL : '';
+        $currentLineResults = end($wrappedProgressLines);
+        $spaceForSymbols = str_repeat(' ', $this->maxLineWidth - count($currentLineResults));
+        $progressLineFormat = "\r%-s%-s%+" . $this->progressLength . 's%s';
 
-        return "\r" . $progressLine;
+        return sprintf($progressLineFormat, implode('', $currentLineResults), $spaceForSymbols, $progress, $wrapLine);
     }
 
     /**
