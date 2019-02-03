@@ -63,6 +63,19 @@ class YamlIndentChecker
 
         // empty line
         if ($trimmedLine === '') {
+            $fileRows = array_keys($fileLines);
+            $lastFileRow = end($fileRows);
+            /* set comment line indents by next non-empty line, e.g
+                (empty line)
+                # comment line
+                (empty line)
+                foo: bar
+            */
+            if ($isCommentLine && $lastFileRow !== $key) {
+                $key++;
+                return $this->getRightFileLines($fileLines, $key, $countOfIndents, $fileLine, true);
+            }
+
             $correctIndents = $this->getCorrectIndents(0);
             $trimmedFileLine = trim($fileLine);
 
@@ -72,7 +85,8 @@ class YamlIndentChecker
         // the highest parent
         if ($countOfRowIndents === 0) {
             // parent start as array, e.g. "- foo: bar"
-            if ($this->isLineStartOfArrayWithKeyAndValue($trimmedLine)) {
+            // skip comment line because we want result after this condition
+            if ($isCommentLine === false && $this->isLineStartOfArrayWithKeyAndValue($trimmedLine)) {
                 $removedDashFromLine = ltrim($trimmedLine, '-');
                 $correctIndentsOnStartOfLine = $this->getCorrectIndents($countOfRowIndents);
                 $trimmedLineWithoutDash = trim($removedDashFromLine);

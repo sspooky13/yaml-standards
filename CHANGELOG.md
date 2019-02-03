@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Fixed
+- [#14] Yaml indent checker: add right indents for comment line without in bottom, Thanks to [@DavidOstrozlik]
 
 ## [4.0.0] - 2019-01-21
 ### Added
@@ -65,6 +67,10 @@
 ### Added
 - create base command to check yaml sort
 - create `--diff` mode
+
+[@DavidOstrozlik]: https://github.com/DavidOstrozlik
+
+[#14]: https://github.com/sspooky13/yaml-standards/issues/14
 
 [Unreleased]: https://github.com/sspooky13/yaml-standards/compare/4.0.0...HEAD
 [4.0.0]: https://github.com/sspooky13/yaml-standards/compare/3.1.1...4.0.0
