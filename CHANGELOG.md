@@ -1,6 +1,9 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- [#13] Output result: output now adapts to the actual window width of the terminal, Thanks to [@boris-brtan]
+
 ### Fixed
 - [#14] Yaml indent checker: add right indents for comment line without in bottom, Thanks to [@DavidOstrozlik]
 
@@ -68,9 +71,11 @@
 - create base command to check yaml sort
 - create `--diff` mode
 
+[@boris-brtan]: https://github.com/boris-brtan
 [@DavidOstrozlik]: https://github.com/DavidOstrozlik
 
 [#14]: https://github.com/sspooky13/yaml-standards/issues/14
+[#13]: https://github.com/sspooky13/yaml-standards/pull/13
 
 [Unreleased]: https://github.com/sspooky13/yaml-standards/compare/4.0.0...HEAD
 [4.0.0]: https://github.com/sspooky13/yaml-standards/compare/3.1.1...4.0.0
