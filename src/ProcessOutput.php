@@ -53,7 +53,7 @@ class ProcessOutput
         $this->countOfFiles = $countOfFiles;
         $this->progressLine = [];
         $this->progressLength = strlen(sprintf('%d/%1$d (%3d%%)', $this->countOfFiles, 100)) + 2;
-        $this->maxLineWidth = (new Terminal())->getWidth() - $this->progressLength;
+        $this->maxLineWidth = (new Terminal())->getWidth() - $this->progressLength - 1; // -1 because result is escaped after every file in windows
     }
 
     /**
