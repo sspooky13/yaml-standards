@@ -73,7 +73,7 @@ class ProcessOutput
         $wrapLine = ($currentPosition % $this->maxLineWidth) === 0 ? PHP_EOL : '';
         $currentLineResults = end($wrappedProgressLines);
         $spaceForSymbols = str_repeat(' ', $this->maxLineWidth - count($currentLineResults));
-        $progressLineFormat = "\r%-s%-s%+" . $this->progressLength . 's%s';
+        $progressLineFormat = "\r%-{$currentPosition}s%-s%+" . $this->progressLength . 's%s';
 
         return sprintf($progressLineFormat, implode('', $currentLineResults), $spaceForSymbols, $progress, $wrapLine);
     }
