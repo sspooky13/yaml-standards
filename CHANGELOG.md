@@ -6,6 +6,7 @@
 
 ### Fixed
 - [#14] Yaml indent checker: add right indents for comment line without in bottom, Thanks to [@DavidOstrozlik]
+- [#18] Add missing necessary `jakub-onderka/php-parallel-lint` to composer require, Thanks to [@ChrisDBrown]
 
 ## [4.0.0] - 2019-01-21
 ### Added
@@ -71,9 +72,11 @@
 - create base command to check yaml sort
 - create `--diff` mode
 
+[@ChrisDBrown]: https://github.com/ChrisDBrown
 [@boris-brtan]: https://github.com/boris-brtan
 [@DavidOstrozlik]: https://github.com/DavidOstrozlik
 
+[#18]: https://github.com/sspooky13/yaml-standards/pull/18
 [#14]: https://github.com/sspooky13/yaml-standards/issues/14
 [#13]: https://github.com/sspooky13/yaml-standards/pull/13
 
