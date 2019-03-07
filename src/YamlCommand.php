@@ -23,6 +23,7 @@ class YamlCommand extends Command
         ARGUMENT_DIRS_OR_FILES = 'dirsOrFiles',
         OPTION_EXCLUDE_BY_NAME = 'exclude-by-name',
         OPTION_EXCLUDE_DIR = 'exclude-dir',
+        OPTION_EXCLUDE_FILE = 'exclude-file',
         OPTION_CHECK_ALPHABETICAL_SORT_DEPTH = 'check-alphabetical-sort-depth',
         OPTION_CHECK_YAML_COUNT_OF_INDENTS = 'check-indents-count-of-indents',
         OPTION_CHECK_INLINE = 'check-inline',
@@ -36,7 +37,8 @@ class YamlCommand extends Command
             ->setDescription('Check if yaml files is alphabetically sorted')
             ->addArgument(self::ARGUMENT_DIRS_OR_FILES, InputArgument::REQUIRED | InputArgument::IS_ARRAY, 'Paths to directories or files to check')
             ->addOption(self::OPTION_EXCLUDE_BY_NAME, null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Exclude file mask from check')
-            ->addOption(self::OPTION_EXCLUDE_DIR, null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Exclude dirs from check')
+            ->addOption(self::OPTION_EXCLUDE_DIR, null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Exclude path to dirs from check')
+            ->addOption(self::OPTION_EXCLUDE_FILE, null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Exclude path to files from check')
             ->addOption(self::OPTION_CHECK_ALPHABETICAL_SORT_DEPTH, null, InputOption::VALUE_REQUIRED, 'Check yaml file is right sorted in set depth')
             ->addOption(self::OPTION_CHECK_YAML_COUNT_OF_INDENTS, null, InputOption::VALUE_REQUIRED, 'Check count of indents in yaml file')
             ->addOption(self::OPTION_CHECK_INLINE, null, InputOption::VALUE_NONE, 'Check yaml file complies inline standards')
@@ -56,13 +58,15 @@ class YamlCommand extends Command
 
         $dirsOrFiles = $input->getArgument(self::ARGUMENT_DIRS_OR_FILES);
         $excludedFileMasks = $input->getOption(self::OPTION_EXCLUDE_BY_NAME);
-        $excludedDirs = $input->getOption(self::OPTION_EXCLUDE_DIR);
+        $excludedPathToDirs = $input->getOption(self::OPTION_EXCLUDE_DIR);
+        $excludedPathToFiles = $input->getOption(self::OPTION_EXCLUDE_FILE);
+        $excludedPaths = array_merge($excludedPathToDirs, $excludedPathToFiles);
         $checkAlphabeticalSortDepth = $input->getOption(self::OPTION_CHECK_ALPHABETICAL_SORT_DEPTH);
         $countOfIndents = $input->getOption(self::OPTION_CHECK_YAML_COUNT_OF_INDENTS);
         $checkInlineStandard = $input->getOption(self::OPTION_CHECK_INLINE);
         $levelForCheckSpacesBetweenGroups = $input->getOption(self::OPTION_CHECK_LEVEL_FOR_SPACES_BETWEEN_GROUPS);
 
-        $pathToYamlFiles = YamlFilesPathService::getPathToYamlFiles($dirsOrFiles, $excludedDirs);
+        $pathToYamlFiles = YamlFilesPathService::getPathToYamlFiles($dirsOrFiles, $excludedPaths);
         $processOutput = new ProcessOutput(count($pathToYamlFiles));
 
         $yamlAlphabeticalChecker = new YamlAlphabeticalChecker();

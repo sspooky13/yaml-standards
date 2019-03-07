@@ -14,7 +14,7 @@ class YamlFilesPathServiceTest extends TestCase
         $this->assertCount(6, $yamlFiles);
     }
 
-    public function testFindAllYamlFilesInDirExceptOfExcluded()
+    public function testFindAllYamlFilesInDirExceptOfExcludedDirs()
     {
         $testsDir = ['./tests/yamlFiles/'];
         $yamlFiles = YamlFilesPathService::getPathToYamlFiles($testsDir, [
@@ -23,6 +23,30 @@ class YamlFilesPathServiceTest extends TestCase
         ]);
 
         $this->assertCount(9, $yamlFiles);
+    }
+
+    public function testFindAllYamlFilesInDirExceptOfExcludedFiles()
+    {
+        $testsDir = ['./tests/yamlFiles/'];
+        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($testsDir, [
+            './tests/yamlFiles/sorted/config/symfony-config.yml',
+            './tests/yamlFiles/unSorted/service/shopsys-service.yml',
+        ]);
+
+        $this->assertCount(10, $yamlFiles);
+    }
+
+    public function testFindAllYamlFilesInDirExceptOfExcludedDirsAndFiles()
+    {
+        $testsDir = ['./tests/yamlFiles/'];
+        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($testsDir, [
+            './tests/yamlFiles/sorted/config',
+            './tests/yamlFiles/unSorted/route',
+            './tests/yamlFiles/unSorted/service/shopsys-service.yml',
+            './tests/yamlFiles/unSorted/yaml-getting-started.yml',
+        ]);
+
+        $this->assertCount(7, $yamlFiles);
     }
 
     public function testFindFile()

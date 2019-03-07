@@ -12,10 +12,10 @@ class YamlFilesPathService
 {
     /**
      * @param string[] $pathToDirsOrFiles
-     * @param string[] $excludedDirs
+     * @param string[] $excludedPaths
      * @return string[]
      */
-    public static function getPathToYamlFiles(array $pathToDirsOrFiles, array $excludedDirs)
+    public static function getPathToYamlFiles(array $pathToDirsOrFiles, array $excludedPaths)
     {
         $pathToFiles = [];
         foreach ($pathToDirsOrFiles as $pathToDirOrFile) {
@@ -25,7 +25,7 @@ class YamlFilesPathService
             }
 
             $recursiveDirectoryIterator = new RecursiveDirectoryIterator($pathToDirOrFile);
-            $recursiveDirectoryFilterIterator = new RecursiveDirectoryFilterIterator($recursiveDirectoryIterator, $excludedDirs);
+            $recursiveDirectoryFilterIterator = new RecursiveDirectoryFilterIterator($recursiveDirectoryIterator, $excludedPaths);
             $recursiveIteratorIterator = new RecursiveIteratorIterator($recursiveDirectoryFilterIterator);
             $regexIterator = new RegexIterator($recursiveIteratorIterator, '/^.+\.(ya?ml(\.dist)?)$/i', RecursiveRegexIterator::GET_MATCH);
 

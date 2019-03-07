@@ -23,6 +23,7 @@ Or alternatively, include a dependency for sspooky13/yaml-standards in your comp
 ## Options for run
 - `--exclude-by-name=text` Exclude file contains the `text` in name. Can be used more times.
 - `--exclude-dir=path/to/excluded/dir` Exclude dir from check. Can be used more times.
+- `--exclude-file=path/to/excluded/file.yaml` Exclude file from check. Can be used more times.
 - `--check-alphabetical-sort-depth=2` Check yaml file is alphabetically sorted to selected level.
 - `--check-indents-count-of-indents=4` Check yaml has multiple of selected indent
 - `--check-inline` Check yaml file observe standards by symfony yaml parser.
@@ -52,6 +53,8 @@ or setting for ANT:
         <arg value="./src/path/to/config/file.yml" />
         <arg value="./src" />
         <arg value="--exclude=service" />
+        <arg value="--exclude-dirs=path/to/excluded/dir" />
+        <arg value="--exclude-file=path/to/excluded/file.yaml" />
         <arg value="--check-alphabetical-sort-depth=2" />
         <arg value="--check-indents-count-of-indents=4" />
         <arg value="--check-spaces-between-groups-to-level=2" />

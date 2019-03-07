@@ -3,6 +3,7 @@
 ## [Unreleased]
 ### Added
 - [#13] Output result: output now adapts to the actual window width of the terminal, Thanks to [@boris-brtan]
+- add option `exclude-file` for exclude files for check
 
 ### Fixed
 - [#14] Yaml indent checker: add right indents for comment line without in bottom, Thanks to [@DavidOstrozlik]
