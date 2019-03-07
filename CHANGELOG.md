@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [4.1.0] - 2019-03-07
 ### Added
 - [#13] Output result: output now adapts to the actual window width of the terminal, Thanks to [@boris-brtan]
 - add option `exclude-file` for exclude files for check
@@ -81,7 +83,8 @@
 [#14]: https://github.com/sspooky13/yaml-standards/issues/14
 [#13]: https://github.com/sspooky13/yaml-standards/pull/13
 
-[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/4.0.0...HEAD
+[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/4.1.0...HEAD
+[4.1.0]: https://github.com/sspooky13/yaml-standards/compare/4.0.0...4.1.0
 [4.0.0]: https://github.com/sspooky13/yaml-standards/compare/3.1.1...4.0.0
 [3.1.1]: https://github.com/sspooky13/yaml-standards/compare/3.1.0...3.1.1
 [3.1.0]: https://github.com/sspooky13/yaml-standards/compare/3.0.0...3.1.0
