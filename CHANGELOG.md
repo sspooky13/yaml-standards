@@ -1,6 +1,9 @@
 # Changelog
 
 ## [Unreleased]
+### Fixed
+- Yaml indent checker: fix get correct indents between dash and key if line belong to array and has zero indents
+- Yaml indent checker: fix counting of parents if line belong to array and has bad zero indents and simultaneously is child of higher parent
 
 ## [4.1.0] - 2019-03-07
 ### Added

@@ -87,12 +87,7 @@ class YamlIndentChecker
             // parent start as array, e.g. "- foo: bar"
             // skip comment line because we want result after this condition
             if ($isCommentLine === false && $this->isLineStartOfArrayWithKeyAndValue($trimmedLine)) {
-                $removedDashFromLine = ltrim($trimmedLine, '-');
-                $correctIndentsOnStartOfLine = $this->getCorrectIndents($countOfRowIndents);
-                $trimmedLineWithoutDash = trim($removedDashFromLine);
-                $correctIndentsBetweenDashAndKey = $this->getCorrectIndents($countOfIndents - 1); // 1 space is dash, dash is as indent
-
-                return $correctIndentsOnStartOfLine . '-' . $correctIndentsBetweenDashAndKey . $trimmedLineWithoutDash;
+                return $this->getCorrectLineForArrayWithKeyAndValue($line, $fileLines, $key, $countOfIndents, $fileLine, $isCommentLine);
             }
 
             $correctIndents = $this->getCorrectIndents($countOfRowIndents);
@@ -338,6 +333,8 @@ class YamlIndentChecker
      * @param string[] $fileLines
      * @param int $key
      * @return int
+     *
+     * @SuppressWarnings("CyclomaticComplexity")
      */
     private function getCountOfParentsForLine(array $fileLines, $key)
     {
@@ -347,7 +344,7 @@ class YamlIndentChecker
         $trimmedLine = trim($line);
         $isArrayLine = $this->hasLineDashOnStartOfLine($trimmedLine);
 
-        while ($countOfRowIndents !== 0) {
+        while ($key > 0) {
             $key--;
             $prevLine = $fileLines[$key];
             $trimmedPrevLine = trim($prevLine);
@@ -382,6 +379,31 @@ class YamlIndentChecker
                 $isArrayLine = $this->hasLineDashOnStartOfLine($trimmedLine);
 
                 $countOfParents++;
+            }
+
+            // if line has zero counts of indents then it's highest parent and should be ended
+            if ($countOfRowIndents === 0) {
+                // find parent if line belong to array, if it exists then add one parent to count of parents variable
+                if ($this->isLineStartOfArrayWithKeyAndValue($trimmedLine)) {
+                    while ($key > 0) {
+                        $key--;
+                        $prevLine = $fileLines[$key];
+                        $trimmedPrevLine = trim($prevLine);
+                        if ($trimmedPrevLine === '' || $this->isCommentLine($prevLine)) {
+                            continue;
+                        }
+
+                        $countOfRowIndents = strlen($prevLine) - strlen(ltrim($prevLine));
+                        $explodedPrevLine = explode(':', $prevLine);
+                        if ($countOfRowIndents === 0 && array_key_exists(1, $explodedPrevLine) && trim($explodedPrevLine[1]) === '') {
+                            $countOfParents++;
+
+                            break;
+                        }
+                    }
+                }
+
+                break;
             }
         }
 
