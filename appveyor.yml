@@ -26,6 +26,11 @@ environment:
   - php_version: 7.2
     dependencies: highest
 
+  - php_version: 7.3
+    dependencies: lowest
+  - php_version: 7.3
+    dependencies: highest
+
 cache:
   - C:\ProgramData\chocolatey\bin -> .appveyor.yml
   - C:\ProgramData\chocolatey\lib -> .appveyor.yml

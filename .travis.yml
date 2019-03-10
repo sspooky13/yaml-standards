@@ -22,6 +22,11 @@ matrix:
     - php: 7.2
       env: DEPENDENCIES=highest
 
+    - php: 7.3
+      env: DEPENDENCIES=lowest
+    - php: 7.3
+      env: DEPENDENCIES=highest
+
 before_script:
   - composer self-update
   - if [ "${DEPENDENCIES}" = "lowest" ]; then composer update --prefer-lowest --prefer-dist --no-interaction --no-progress; fi;
