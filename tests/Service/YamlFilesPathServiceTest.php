@@ -25,6 +25,16 @@ class YamlFilesPathServiceTest extends TestCase
         $this->assertCount(9, $yamlFiles);
     }
 
+    public function testFindAllYamlFilesInDirAndExcludedFilesToo()
+    {
+        $testsDir = ['./tests/yamlFiles/unSorted/'];
+        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($testsDir, [
+            './tests/yamlFiles/unSorted/route',
+        ], true);
+
+        $this->assertCount(6, $yamlFiles);
+    }
+
     public function testFindAllYamlFilesInDirExceptOfExcludedFiles()
     {
         $testsDir = ['./tests/yamlFiles/'];

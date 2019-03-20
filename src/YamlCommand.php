@@ -66,8 +66,9 @@ class YamlCommand extends Command
         $checkInlineStandard = $input->getOption(self::OPTION_CHECK_INLINE);
         $levelForCheckSpacesBetweenGroups = $input->getOption(self::OPTION_CHECK_LEVEL_FOR_SPACES_BETWEEN_GROUPS);
 
-        $pathToYamlFiles = YamlFilesPathService::getPathToYamlFiles($dirsOrFiles, $excludedPaths);
-        $processOutput = new ProcessOutput(count($pathToYamlFiles));
+        $pathToYamlFilesWithSkippedFiles = YamlFilesPathService::getPathToYamlFiles($dirsOrFiles, $excludedPaths, true);
+        $pathToYamlFilesWithoutSkippedFiles = YamlFilesPathService::getPathToYamlFiles($dirsOrFiles, $excludedPaths);
+        $processOutput = new ProcessOutput(count($pathToYamlFilesWithSkippedFiles));
 
         $yamlAlphabeticalChecker = new YamlAlphabeticalChecker();
         $yamlIndentChecker = new YamlIndentChecker();
@@ -75,9 +76,9 @@ class YamlCommand extends Command
         $yamlSpacesBetweenGroupsChecker = new YamlSpacesBetweenGroupsChecker();
         $results = [[]];
 
-        foreach ($pathToYamlFiles as $pathToYamlFile) {
+        foreach ($pathToYamlFilesWithSkippedFiles as $pathToYamlFile) {
             $fileResults = [];
-            if ($this->isFileSkipped($pathToYamlFile, $excludedFileMasks)) {
+            if ($this->isFileSkipped($pathToYamlFile, $pathToYamlFilesWithoutSkippedFiles, $excludedFileMasks)) {
                 $output->write($processOutput->process(ProcessOutput::STATUS_CODE_SKIPP));
                 continue;
             }
@@ -144,11 +145,16 @@ class YamlCommand extends Command
 
     /**
      * @param string $pathToFile
+     * @param string[] $pathToYamlFilesWithoutSkippedFiles
      * @param string[] $excludedFileMasks
      * @return bool
      */
-    private function isFileSkipped($pathToFile, array $excludedFileMasks = [])
+    private function isFileSkipped($pathToFile, $pathToYamlFilesWithoutSkippedFiles, array $excludedFileMasks = [])
     {
+        if (in_array($pathToFile, $pathToYamlFilesWithoutSkippedFiles, true) === false) {
+            return true;
+        }
+
         foreach ($excludedFileMasks as $excludedFileMask) {
             if (strpos($pathToFile, $excludedFileMask) !== false) {
                 return true;
