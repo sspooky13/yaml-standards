@@ -76,4 +76,18 @@ class YamlFilesPathServiceTest extends TestCase
 
         $this->assertEquals($pathToFile, $foundFile);
     }
+
+    public function testReturnFullPathToFilesFromDir()
+    {
+        $pathToFile = ['./tests/yamlFiles/unSorted/config/', './tests/yamlFiles/unSorted/route/'];
+        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($pathToFile, []);
+
+        $expectedYamlFiles = [
+            './tests/yamlFiles/unSorted/config/symfony-config.yml',
+            './tests/yamlFiles/unSorted/config/symfony-security.yml',
+            './tests/yamlFiles/unSorted/route/symfony-route.yml',
+        ];
+
+        $this->assertEquals($expectedYamlFiles, $yamlFiles);
+    }
 }
