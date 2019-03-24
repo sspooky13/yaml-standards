@@ -18,6 +18,7 @@ class YamlSpacesBetweenGroupsChecker
     public function getCorrectDataWithSpacesBetweenGroups($pathToYamlFile, $level)
     {
         $yamlContent = file_get_contents($pathToYamlFile);
+        $yamlContent = str_replace("\r", '', $yamlContent); // remove carriage returns
         $yamlLines = explode("\n", $yamlContent);
         $lastYamlElement = end($yamlLines);
         $filteredYamlLines = array_values(array_filter($yamlLines, ['self', 'removeBlankLine']));

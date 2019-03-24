@@ -22,6 +22,7 @@ class YamlInlineChecker
         $yamlStringData = Yaml::dump($yamlArrayData, 3);
 
         $yamlContent = file_get_contents($pathToYamlFile);
+        $yamlContent = str_replace("\r", '', $yamlContent); // remove carriage returns
         $yamlLines = explode("\n", $yamlContent);
         $lastYamlElement = end($yamlLines);
         $filteredYamlLines = array_filter($yamlLines, ['self', 'removeBlankLine']);
@@ -38,7 +39,7 @@ class YamlInlineChecker
         }
 
         $differ = new Differ();
-        $diffBetweenStrings = $differ->diff($yamlStringData, $filteredYamlFile);
+        $diffBetweenStrings = $differ->diff($filteredYamlFile, $yamlStringData);
 
         return new Result($pathToYamlFile, Result::RESULT_CODE_INVALID_FILE_SYNTAX, $diffBetweenStrings);
     }
