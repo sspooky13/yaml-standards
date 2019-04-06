@@ -18,8 +18,8 @@ class YamlIndentChecker
     public function getCorrectIndentsInFile($pathToYamlFile, $countOfIndents)
     {
         $fileContent = file_get_contents($pathToYamlFile);
+        $fileContent = str_replace("\r", '', $fileContent); // remove carriage returns
         $fileLines = explode("\n", $fileContent);
-        $fileLines = array_map(['self', 'trimCarriageReturn'], $fileLines);
         $rightFileLines = [];
 
         foreach ($fileLines as $key => $fileLine) {
@@ -161,15 +161,6 @@ class YamlIndentChecker
     protected function isCommentLine($fileLine)
     {
         return preg_match('/^\s*#/', $fileLine) === 1;
-    }
-
-    /**
-     * @param string $value
-     * @return string
-     */
-    protected function trimCarriageReturn($value)
-    {
-        return trim($value, "\r");
     }
 
     /**

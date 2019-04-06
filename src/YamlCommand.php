@@ -19,6 +19,8 @@ use YamlStandards\Service\YamlFilesPathService;
 
 class YamlCommand extends Command
 {
+    const COMMAND_NAME = 'yaml-standards';
+
     const
         ARGUMENT_DIRS_OR_FILES = 'dirsOrFiles',
         OPTION_EXCLUDE_BY_NAME = 'exclude-by-name',
@@ -29,11 +31,12 @@ class YamlCommand extends Command
         OPTION_CHECK_INLINE = 'check-inline',
         OPTION_CHECK_LEVEL_FOR_SPACES_BETWEEN_GROUPS = 'check-spaces-between-groups-to-level';
 
-    protected static $defaultName = 'yaml-standards';
+    protected static $defaultName = self::COMMAND_NAME;
 
     protected function configure()
     {
         $this
+            ->setName(self::COMMAND_NAME) // set command name for symfony/console lower version as 3.4
             ->setDescription('Check if yaml files is alphabetically sorted')
             ->addArgument(self::ARGUMENT_DIRS_OR_FILES, InputArgument::REQUIRED | InputArgument::IS_ARRAY, 'Paths to directories or files to check')
             ->addOption(self::OPTION_EXCLUDE_BY_NAME, null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Exclude file mask from check')

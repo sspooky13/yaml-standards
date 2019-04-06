@@ -2,11 +2,23 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     app.notifications.email_sender: anonymous@example.com
+
     # This parameter defines the codes of the locales (languages) enabled in the application
     app_locales: en|fr|de|es|cs|nl|ru|uk|ro|pt_BR|pl|it|ja|id|ca|sl|hr|zh_CN
-    locale: 'en'
+
+    locale: en
 
 services:
+    # default configuration for services in *this* file
+    _defaults:
+        # automatically registers your services as commands, event subscribers, etc.
+        autoconfigure: true
+        # automatically injects dependencies in your services
+        autowire: true
+        # this means you cannot fetch services directly from the container via $container->get()
+        # if you need to do this, you can override this setting on individual services
+        public: false
+
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:
@@ -24,7 +36,7 @@ services:
     # and have a tag that allows actions to type-hint services
     App\Controller\:
         resource: '../src/Controller'
-        tags: ['controller.service_arguments']
+        tags: [controller.service_arguments]
 
     App\EventSubscriber\CommentNotificationSubscriber:
         $sender: '%app.notifications.email_sender%'
@@ -39,14 +51,4 @@ services:
         $locales: '%app_locales%'
 
     # needed for the 'localizeddate' Twig filter
-    Twig\Extensions\IntlExtension: ~
-
-    # default configuration for services in *this* file
-    _defaults:
-        # automatically registers your services as commands, event subscribers, etc.
-        autoconfigure: true
-        # automatically injects dependencies in your services
-        autowire: true
-        # this means you cannot fetch services directly from the container via $container->get()
-        # if you need to do this, you can override this setting on individual services
-        public: false
+    Twig\Extensions\IntlExtension: null
