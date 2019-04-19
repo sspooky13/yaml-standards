@@ -1,6 +1,6 @@
 <?php
 
-namespace YamlStandards;
+namespace YamlStandards\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -13,6 +13,9 @@ use YamlStandards\Checker\YamlAlphabeticalChecker;
 use YamlStandards\Checker\YamlIndentChecker;
 use YamlStandards\Checker\YamlInlineChecker;
 use YamlStandards\Checker\YamlSpacesBetweenGroupsChecker;
+use YamlStandards\ProcessOutput;
+use YamlStandards\Reporting;
+use YamlStandards\Result;
 use YamlStandards\Service\ProcessOutputService;
 use YamlStandards\Service\ResultService;
 use YamlStandards\Service\YamlFilesPathService;
