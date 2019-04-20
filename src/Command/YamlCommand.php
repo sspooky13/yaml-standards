@@ -112,7 +112,7 @@ class YamlCommand extends Command
             $output->write($processOutput->process(ProcessOutputService::getWorstStatusCodeByResults($fileResults)));
         }
         $output->writeln($processOutput->getLegend());
-        $results = array_merge(...$results); // show all file results
+        $results = array_merge(...$results); // add all results to one array instead of multidimensional array with results for every file
 
         return $this->printOutput($output, $results);
     }
