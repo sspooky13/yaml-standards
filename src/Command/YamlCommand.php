@@ -40,7 +40,7 @@ class YamlCommand extends Command
     {
         $this
             ->setName(self::COMMAND_NAME) // set command name for symfony/console lower version as 3.4
-            ->setDescription('Check if yaml files is alphabetically sorted')
+            ->setDescription('Check yaml files respect standards')
             ->addArgument(self::ARGUMENT_DIRS_OR_FILES, InputArgument::REQUIRED | InputArgument::IS_ARRAY, 'Paths to directories or files to check')
             ->addOption(self::OPTION_EXCLUDE_BY_NAME, null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Exclude file mask from check')
             ->addOption(self::OPTION_EXCLUDE_DIR, null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Exclude path to dirs from check')
