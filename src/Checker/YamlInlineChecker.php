@@ -4,6 +4,7 @@ namespace YamlStandards\Checker;
 
 use SebastianBergmann\Diff\Differ;
 use Symfony\Component\Yaml\Yaml;
+use YamlStandards\Command\InputSettingData;
 use YamlStandards\Result;
 
 /**
@@ -13,10 +14,10 @@ class YamlInlineChecker
 {
     /**
      * @param string $pathToYamlFile
-     * @throws \Symfony\Component\Yaml\Exception\ParseException
+     * @param \YamlStandards\Command\InputSettingData $inputSettingData
      * @return \YamlStandards\Result
      */
-    public function getRightCompilesData($pathToYamlFile)
+    public function getRightCompilesData($pathToYamlFile, InputSettingData $inputSettingData)
     {
         $yamlArrayData = $this->parseData($pathToYamlFile);
         $yamlStringData = Yaml::dump($yamlArrayData, 3);

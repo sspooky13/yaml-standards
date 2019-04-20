@@ -3,6 +3,7 @@
 namespace YamlStandards\Checker;
 
 use SebastianBergmann\Diff\Differ;
+use YamlStandards\Command\InputSettingData;
 use YamlStandards\Result;
 
 /**
@@ -12,10 +13,10 @@ class YamlIndentChecker
 {
     /**
      * @param string $pathToYamlFile
-     * @param int $countOfIndents
+     * @param \YamlStandards\Command\InputSettingData $inputSettingData
      * @return \YamlStandards\Result
      */
-    public function getCorrectIndentsInFile($pathToYamlFile, $countOfIndents)
+    public function getCorrectIndentsInFile($pathToYamlFile, InputSettingData $inputSettingData)
     {
         $fileContent = file_get_contents($pathToYamlFile);
         $fileContent = str_replace("\r", '', $fileContent); // remove carriage returns
@@ -23,7 +24,7 @@ class YamlIndentChecker
         $rightFileLines = [];
 
         foreach ($fileLines as $key => $fileLine) {
-            $rightFileLines[] = $this->getRightFileLines($fileLines, $key, $countOfIndents, $fileLine);
+            $rightFileLines[] = $this->getRightFileLines($fileLines, $key, $inputSettingData->getCountOfIndents(), $fileLine);
         }
 
         $rightFileContent = implode("\n", $rightFileLines);

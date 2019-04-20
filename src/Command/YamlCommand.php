@@ -52,28 +52,16 @@ class YamlCommand extends Command
     }
 
     /**
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @return int
-     *
-     * @SuppressWarnings("ExcessiveMethodLength")
+     * @inheritDoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         Reporting::startTiming();
 
-        $dirsOrFiles = $input->getArgument(self::ARGUMENT_DIRS_OR_FILES);
-        $excludedFileMasks = $input->getOption(self::OPTION_EXCLUDE_BY_NAME);
-        $excludedPathToDirs = $input->getOption(self::OPTION_EXCLUDE_DIR);
-        $excludedPathToFiles = $input->getOption(self::OPTION_EXCLUDE_FILE);
-        $excludedPaths = array_merge($excludedPathToDirs, $excludedPathToFiles);
-        $checkAlphabeticalSortDepth = $input->getOption(self::OPTION_CHECK_ALPHABETICAL_SORT_DEPTH);
-        $countOfIndents = $input->getOption(self::OPTION_CHECK_YAML_COUNT_OF_INDENTS);
-        $checkInlineStandard = $input->getOption(self::OPTION_CHECK_INLINE);
-        $levelForCheckSpacesBetweenGroups = $input->getOption(self::OPTION_CHECK_LEVEL_FOR_SPACES_BETWEEN_GROUPS);
+        $inputSettingData = new InputSettingData($input);
 
-        $pathToYamlFilesWithSkippedFiles = YamlFilesPathService::getPathToYamlFiles($dirsOrFiles, $excludedPaths, true);
-        $pathToYamlFilesWithoutSkippedFiles = YamlFilesPathService::getPathToYamlFiles($dirsOrFiles, $excludedPaths);
+        $pathToYamlFilesWithSkippedFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData, true);
+        $pathToYamlFilesWithoutSkippedFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData);
         $processOutput = new ProcessOutput(count($pathToYamlFilesWithSkippedFiles));
 
         $yamlAlphabeticalChecker = new YamlAlphabeticalChecker();
@@ -84,7 +72,7 @@ class YamlCommand extends Command
 
         foreach ($pathToYamlFilesWithSkippedFiles as $pathToYamlFile) {
             $fileResults = [];
-            if ($this->isFileSkipped($pathToYamlFile, $pathToYamlFilesWithoutSkippedFiles, $excludedFileMasks)) {
+            if ($this->isFileSkipped($pathToYamlFile, $pathToYamlFilesWithoutSkippedFiles, $inputSettingData->getExcludedFileMasks())) {
                 $output->write($processOutput->process(ProcessOutput::STATUS_CODE_SKIPP));
                 continue;
             }
@@ -100,20 +88,20 @@ class YamlCommand extends Command
                 // check yaml is valid
                 Yaml::parse(file_get_contents($pathToYamlFile), Yaml::PARSE_CUSTOM_TAGS);
 
-                if ($checkAlphabeticalSortDepth !== null) {
-                    $fileResults[] = $yamlAlphabeticalChecker->getRightSortedData($pathToYamlFile, $checkAlphabeticalSortDepth);
+                if ($inputSettingData->getAlphabeticalSortDepth() !== null) {
+                    $fileResults[] = $yamlAlphabeticalChecker->getRightSortedData($pathToYamlFile, $inputSettingData);
                 }
 
-                if ($countOfIndents !== null) {
-                    $fileResults[] = $yamlIndentChecker->getCorrectIndentsInFile($pathToYamlFile, $countOfIndents);
+                if ($inputSettingData->getCountOfIndents() !== null) {
+                    $fileResults[] = $yamlIndentChecker->getCorrectIndentsInFile($pathToYamlFile, $inputSettingData);
                 }
 
-                if ($checkInlineStandard === true) {
-                    $fileResults[] = $yamlInlineChecker->getRightCompilesData($pathToYamlFile);
+                if ($inputSettingData->checkInlineStandard() === true) {
+                    $fileResults[] = $yamlInlineChecker->getRightCompilesData($pathToYamlFile, $inputSettingData);
                 }
 
-                if ($levelForCheckSpacesBetweenGroups !== null) {
-                    $fileResults[] = $yamlSpacesBetweenGroupsChecker->getCorrectDataWithSpacesBetweenGroups($pathToYamlFile, $levelForCheckSpacesBetweenGroups);
+                if ($inputSettingData->getLevelForCheckSpacesBetweenGroups() !== null) {
+                    $fileResults[] = $yamlSpacesBetweenGroupsChecker->getCorrectDataWithSpacesBetweenGroups($pathToYamlFile, $inputSettingData);
                 }
             } catch (ParseException $e) {
                 $message = sprintf('Unable to parse the YAML string: %s', $e->getMessage());
