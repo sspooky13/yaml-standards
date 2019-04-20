@@ -36,11 +36,11 @@
         "symfony/console": "~3.0 || ~4.0.10",
         "symfony/yaml": "~3.3 || ~4.0.10",
         "sebastian/diff": "~1.4 || ~2.0 || ~3.0",
-        "jakub-onderka/php-parallel-lint": "^0.9"
+        "jakub-onderka/php-parallel-lint": "~0.9"
     },
     "require-dev": {
         "phing/phing": "2.16.*",
-        "phpunit/phpunit": "5.7.* || 6.4.*",
+        "phpunit/phpunit": "~5.7.27 || 6.4.*",
         "shopsys/coding-standards": "3.1.*",
         "friendsofphp/php-cs-fixer": "~2.13",
         "phpmd/phpmd": "~2.6"
