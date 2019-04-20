@@ -4,19 +4,18 @@ namespace YamlStandards\Checker;
 
 use SebastianBergmann\Diff\Differ;
 use Symfony\Component\Yaml\Yaml;
+use YamlStandards\Command\InputSettingData;
 use YamlStandards\Result;
 
 /**
  * Check yaml file complies inline standards
  */
-class YamlInlineChecker
+class YamlInlineChecker implements CheckerInterface
 {
     /**
-     * @param string $pathToYamlFile
-     * @throws \Symfony\Component\Yaml\Exception\ParseException
-     * @return \YamlStandards\Result
+     * @inheritDoc
      */
-    public function getRightCompilesData($pathToYamlFile)
+    public function check($pathToYamlFile, InputSettingData $inputSettingData)
     {
         $yamlArrayData = $this->parseData($pathToYamlFile);
         $yamlStringData = Yaml::dump($yamlArrayData, 3);

@@ -4,23 +4,21 @@ namespace YamlStandards\Checker;
 
 use SebastianBergmann\Diff\Differ;
 use Symfony\Component\Yaml\Yaml;
+use YamlStandards\Command\InputSettingData;
 use YamlStandards\Result;
 
 /**
  * Check yaml file is alphabetical sorted
  */
-class YamlAlphabeticalChecker
+class YamlAlphabeticalChecker implements CheckerInterface
 {
     /**
-     * @param string $pathToYamlFile
-     * @param int $depth
-     * @throws \Symfony\Component\Yaml\Exception\ParseException
-     * @return \YamlStandards\Result
+     * @inheritDoc
      */
-    public function getRightSortedData($pathToYamlFile, $depth)
+    public function check($pathToYamlFile, InputSettingData $inputSettingData)
     {
         $yamlArrayData = $this->parseData($pathToYamlFile);
-        $yamlArrayDataSorted = $this->sortArray($yamlArrayData, $depth);
+        $yamlArrayDataSorted = $this->sortArray($yamlArrayData, $inputSettingData->getAlphabeticalSortDepth());
 
         $yamlStringData = Yaml::dump($yamlArrayData, PHP_INT_MAX);
         $yamlStringDataSorted = Yaml::dump($yamlArrayDataSorted, PHP_INT_MAX);

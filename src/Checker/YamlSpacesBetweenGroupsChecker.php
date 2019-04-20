@@ -3,26 +3,25 @@
 namespace YamlStandards\Checker;
 
 use SebastianBergmann\Diff\Differ;
+use YamlStandards\Command\InputSettingData;
 use YamlStandards\Result;
 
 /**
  * Check yaml file have space between groups
  */
-class YamlSpacesBetweenGroupsChecker
+class YamlSpacesBetweenGroupsChecker implements CheckerInterface
 {
     /**
-     * @param string $pathToYamlFile
-     * @param int $level
-     * @return \YamlStandards\Result
+     * @inheritDoc
      */
-    public function getCorrectDataWithSpacesBetweenGroups($pathToYamlFile, $level)
+    public function check($pathToYamlFile, InputSettingData $inputSettingData)
     {
         $yamlContent = file_get_contents($pathToYamlFile);
         $yamlContent = str_replace("\r", '', $yamlContent); // remove carriage returns
         $yamlLines = explode("\n", $yamlContent);
         $lastYamlElement = end($yamlLines);
         $filteredYamlLines = array_values(array_filter($yamlLines, ['self', 'removeBlankLine']));
-        $correctYamlContent = $this->getCorrectYamlContentWithSpacesBetweeenGroups($filteredYamlLines, $level);
+        $correctYamlContent = $this->getCorrectYamlContentWithSpacesBetweeenGroups($filteredYamlLines, $inputSettingData->getLevelForCheckSpacesBetweenGroups());
 
         if (trim($lastYamlElement) === '') {
             $correctYamlContent .= "\n";

@@ -7,28 +7,27 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RecursiveRegexIterator;
 use RegexIterator;
+use YamlStandards\Command\InputSettingData;
 
 class YamlFilesPathService
 {
     /**
-     * @param string[] $pathToDirsOrFiles
-     * @param string[] $excludedPaths
+     * @param \YamlStandards\Command\InputSettingData $inputSettingData
      * @param bool $includeSkippedFilesToPath
      * @return string[]
      */
     public static function getPathToYamlFiles(
-        array $pathToDirsOrFiles,
-        array $excludedPaths,
+        InputSettingData $inputSettingData,
         $includeSkippedFilesToPath = false
     ) {
         $pathToFiles = [];
-        foreach ($pathToDirsOrFiles as $pathToDirOrFile) {
+        foreach ($inputSettingData->getPathToDirsOrFiles() as $pathToDirOrFile) {
             if (is_file($pathToDirOrFile)) {
                 $pathToFiles[] = $pathToDirOrFile;
                 continue;
             }
 
-            $recursiveIteratorIterator = self::getRecursiveIteratorIterator($pathToDirOrFile, $excludedPaths, $includeSkippedFilesToPath);
+            $recursiveIteratorIterator = self::getRecursiveIteratorIterator($pathToDirOrFile, $inputSettingData->getExcludedPaths(), $includeSkippedFilesToPath);
             $regexIterator = new RegexIterator($recursiveIteratorIterator, '/^.+\.(ya?ml(\.dist)?)$/i', RecursiveRegexIterator::GET_MATCH);
 
             foreach ($regexIterator as $pathToFile) {

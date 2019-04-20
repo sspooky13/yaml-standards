@@ -1,6 +1,6 @@
 <?php
 
-namespace YamlStandards;
+namespace YamlStandards\Command;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;

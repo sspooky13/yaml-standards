@@ -1,6 +1,6 @@
 <?php
 
-use YamlStandards\YamlCommand;
+use YamlStandards\Command\YamlCommand;
 use Symfony\Component\Console\Application;
 
 $files = [

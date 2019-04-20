@@ -3,19 +3,18 @@
 namespace YamlStandards\Checker;
 
 use SebastianBergmann\Diff\Differ;
+use YamlStandards\Command\InputSettingData;
 use YamlStandards\Result;
 
 /**
  * Check yaml file complies right count of indent
  */
-class YamlIndentChecker
+class YamlIndentChecker implements CheckerInterface
 {
     /**
-     * @param string $pathToYamlFile
-     * @param int $countOfIndents
-     * @return \YamlStandards\Result
+     * @inheritDoc
      */
-    public function getCorrectIndentsInFile($pathToYamlFile, $countOfIndents)
+    public function check($pathToYamlFile, InputSettingData $inputSettingData)
     {
         $fileContent = file_get_contents($pathToYamlFile);
         $fileContent = str_replace("\r", '', $fileContent); // remove carriage returns
@@ -23,7 +22,7 @@ class YamlIndentChecker
         $rightFileLines = [];
 
         foreach ($fileLines as $key => $fileLine) {
-            $rightFileLines[] = $this->getRightFileLines($fileLines, $key, $countOfIndents, $fileLine);
+            $rightFileLines[] = $this->getRightFileLines($fileLines, $key, $inputSettingData->getCountOfIndents(), $fileLine);
         }
 
         $rightFileContent = implode("\n", $rightFileLines);
