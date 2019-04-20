@@ -10,14 +10,12 @@ use YamlStandards\Result;
 /**
  * Check yaml file complies inline standards
  */
-class YamlInlineChecker
+class YamlInlineChecker implements CheckerInterface
 {
     /**
-     * @param string $pathToYamlFile
-     * @param \YamlStandards\Command\InputSettingData $inputSettingData
-     * @return \YamlStandards\Result
+     * @inheritDoc
      */
-    public function getRightCompilesData($pathToYamlFile, InputSettingData $inputSettingData)
+    public function check($pathToYamlFile, InputSettingData $inputSettingData)
     {
         $yamlArrayData = $this->parseData($pathToYamlFile);
         $yamlStringData = Yaml::dump($yamlArrayData, 3);

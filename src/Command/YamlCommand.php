@@ -89,19 +89,19 @@ class YamlCommand extends Command
                 Yaml::parse(file_get_contents($pathToYamlFile), Yaml::PARSE_CUSTOM_TAGS);
 
                 if ($inputSettingData->getAlphabeticalSortDepth() !== null) {
-                    $fileResults[] = $yamlAlphabeticalChecker->getRightSortedData($pathToYamlFile, $inputSettingData);
+                    $fileResults[] = $yamlAlphabeticalChecker->check($pathToYamlFile, $inputSettingData);
                 }
 
                 if ($inputSettingData->getCountOfIndents() !== null) {
-                    $fileResults[] = $yamlIndentChecker->getCorrectIndentsInFile($pathToYamlFile, $inputSettingData);
+                    $fileResults[] = $yamlIndentChecker->check($pathToYamlFile, $inputSettingData);
                 }
 
                 if ($inputSettingData->checkInlineStandard() === true) {
-                    $fileResults[] = $yamlInlineChecker->getRightCompilesData($pathToYamlFile, $inputSettingData);
+                    $fileResults[] = $yamlInlineChecker->check($pathToYamlFile, $inputSettingData);
                 }
 
                 if ($inputSettingData->getLevelForCheckSpacesBetweenGroups() !== null) {
-                    $fileResults[] = $yamlSpacesBetweenGroupsChecker->getCorrectDataWithSpacesBetweenGroups($pathToYamlFile, $inputSettingData);
+                    $fileResults[] = $yamlSpacesBetweenGroupsChecker->check($pathToYamlFile, $inputSettingData);
                 }
             } catch (ParseException $e) {
                 $message = sprintf('Unable to parse the YAML string: %s', $e->getMessage());

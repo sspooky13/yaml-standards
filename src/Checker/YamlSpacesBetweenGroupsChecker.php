@@ -9,14 +9,12 @@ use YamlStandards\Result;
 /**
  * Check yaml file have space between groups
  */
-class YamlSpacesBetweenGroupsChecker
+class YamlSpacesBetweenGroupsChecker implements CheckerInterface
 {
     /**
-     * @param string $pathToYamlFile
-     * @param \YamlStandards\Command\InputSettingData $inputSettingData
-     * @return \YamlStandards\Result
+     * @inheritDoc
      */
-    public function getCorrectDataWithSpacesBetweenGroups($pathToYamlFile, InputSettingData $inputSettingData)
+    public function check($pathToYamlFile, InputSettingData $inputSettingData)
     {
         $yamlContent = file_get_contents($pathToYamlFile);
         $yamlContent = str_replace("\r", '', $yamlContent); // remove carriage returns

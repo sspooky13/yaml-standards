@@ -10,14 +10,12 @@ use YamlStandards\Result;
 /**
  * Check yaml file is alphabetical sorted
  */
-class YamlAlphabeticalChecker
+class YamlAlphabeticalChecker implements CheckerInterface
 {
     /**
-     * @param string $pathToYamlFile
-     * @param \YamlStandards\Command\InputSettingData $inputSettingData
-     * @return \YamlStandards\Result
+     * @inheritDoc
      */
-    public function getRightSortedData($pathToYamlFile, InputSettingData $inputSettingData)
+    public function check($pathToYamlFile, InputSettingData $inputSettingData)
     {
         $yamlArrayData = $this->parseData($pathToYamlFile);
         $yamlArrayDataSorted = $this->sortArray($yamlArrayData, $inputSettingData->getAlphabeticalSortDepth());
