@@ -50,7 +50,7 @@ class YamlInlineChecker implements CheckerInterface
      */
     private function parseData($pathToYamlFile)
     {
-        return Yaml::parse(file_get_contents($pathToYamlFile), Yaml::PARSE_CUSTOM_TAGS);
+        return (array)Yaml::parse(file_get_contents($pathToYamlFile), Yaml::PARSE_CUSTOM_TAGS);
     }
 
     /**
