@@ -1,5 +1,6 @@
 # YAML standards
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/a68bdd7e00ad40a7a8a67c1377689ba3)](https://app.codacy.com/app/sspooky13/yaml-standards?utm_source=github.com&utm_medium=referral&utm_content=sspooky13/yaml-standards&utm_campaign=Badge_Grade_Settings)
 [![Total Downloads](https://poser.pugx.org/sspooky13/yaml-standards/downloads)](https://packagist.org/packages/sspooky13/yaml-standards)
 [![Build Status](https://travis-ci.org/sspooky13/yaml-standards.svg?branch=master)](https://travis-ci.org/sspooky13/yaml-standards)
 [![Build status](https://ci.appveyor.com/api/projects/status/gqcvrvg1hb0g6r0c/branch/master?svg=true)](https://ci.appveyor.com/project/sspooky13/yaml-standards/branch/master)
