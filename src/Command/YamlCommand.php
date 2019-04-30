@@ -9,15 +9,12 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
-use YamlStandards\Checker\YamlAlphabeticalChecker;
-use YamlStandards\Checker\YamlIndentChecker;
-use YamlStandards\Checker\YamlInlineChecker;
-use YamlStandards\Checker\YamlSpacesBetweenGroupsChecker;
 use YamlStandards\ProcessOutput;
 use YamlStandards\Reporting;
 use YamlStandards\Result;
 use YamlStandards\Service\ProcessOutputService;
 use YamlStandards\Service\ResultService;
+use YamlStandards\Service\StandardClassesLoaderService;
 use YamlStandards\Service\YamlFilesPathService;
 
 class YamlCommand extends Command
@@ -64,10 +61,7 @@ class YamlCommand extends Command
         $pathToYamlFilesWithoutSkippedFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData);
         $processOutput = new ProcessOutput(count($pathToYamlFilesWithSkippedFiles));
 
-        $yamlAlphabeticalChecker = new YamlAlphabeticalChecker();
-        $yamlIndentChecker = new YamlIndentChecker();
-        $yamlInlineChecker = new YamlInlineChecker();
-        $yamlSpacesBetweenGroupsChecker = new YamlSpacesBetweenGroupsChecker();
+        $checkerInterfaces = StandardClassesLoaderService::getCheckerClassesByInputSettingData($inputSettingData);
         $results = [[]];
 
         foreach ($pathToYamlFilesWithSkippedFiles as $pathToYamlFile) {
@@ -88,20 +82,8 @@ class YamlCommand extends Command
                 // check yaml is valid
                 Yaml::parse(file_get_contents($pathToYamlFile), Yaml::PARSE_CUSTOM_TAGS);
 
-                if ($inputSettingData->getAlphabeticalSortDepth() !== null) {
-                    $fileResults[] = $yamlAlphabeticalChecker->check($pathToYamlFile, $inputSettingData);
-                }
-
-                if ($inputSettingData->getCountOfIndents() !== null) {
-                    $fileResults[] = $yamlIndentChecker->check($pathToYamlFile, $inputSettingData);
-                }
-
-                if ($inputSettingData->checkInlineStandard() === true) {
-                    $fileResults[] = $yamlInlineChecker->check($pathToYamlFile, $inputSettingData);
-                }
-
-                if ($inputSettingData->getLevelForCheckSpacesBetweenGroups() !== null) {
-                    $fileResults[] = $yamlSpacesBetweenGroupsChecker->check($pathToYamlFile, $inputSettingData);
+                foreach ($checkerInterfaces as $checkerInterface) {
+                    $fileResults[] = $checkerInterface->check($pathToYamlFile, $inputSettingData);
                 }
             } catch (ParseException $e) {
                 $message = sprintf('Unable to parse the YAML string: %s', $e->getMessage());
