@@ -111,7 +111,7 @@ class YamlFilesPathServiceTest extends TestCase
             './tests/yamlFiles/unSorted/route/symfony-route.yml',
         ];
 
-        $this->assertEquals($expectedYamlFiles, $yamlFiles);
+        $this->assertCount(count(array_intersect($yamlFiles, $expectedYamlFiles)), $yamlFiles); // assert two arrays are equal, but order of elements not important
     }
 
     /**
