@@ -1,6 +1,6 @@
 <?php
 
-namespace YamlStandards\Service;
+namespace YamlStandards\Command\Service;
 
 use YamlStandards\Model\YamlAlphabetical\YamlAlphabeticalChecker;
 use YamlStandards\Model\YamlIndent\YamlIndentChecker;

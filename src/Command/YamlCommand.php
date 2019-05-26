@@ -9,13 +9,11 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
-use YamlStandards\ProcessOutput;
-use YamlStandards\Reporting;
 use YamlStandards\Result;
-use YamlStandards\Service\ProcessOutputService;
-use YamlStandards\Service\ResultService;
-use YamlStandards\Service\StandardClassesLoaderService;
-use YamlStandards\Service\YamlFilesPathService;
+use YamlStandards\Command\Service\ProcessOutputService;
+use YamlStandards\Command\Service\ResultService;
+use YamlStandards\Command\Service\StandardClassesLoaderService;
+use YamlStandards\Command\Service\YamlFilesPathService;
 
 class YamlCommand extends Command
 {

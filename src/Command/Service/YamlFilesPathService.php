@@ -1,6 +1,6 @@
 <?php
 
-namespace YamlStandards\Service;
+namespace YamlStandards\Command\Service;
 
 use JakubOnderka\PhpParallelLint\RecursiveDirectoryFilterIterator;
 use RecursiveDirectoryIterator;

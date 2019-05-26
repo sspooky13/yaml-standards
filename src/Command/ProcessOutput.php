@@ -1,8 +1,9 @@
 <?php
 
-namespace YamlStandards;
+namespace YamlStandards\Command;
 
 use Symfony\Component\Console\Terminal;
+use YamlStandards\Result;
 
 class ProcessOutput
 {

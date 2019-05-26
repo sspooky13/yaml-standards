@@ -1,6 +1,6 @@
 <?php
 
-namespace YamlStandards\Service;
+namespace YamlStandards\Command\Service;
 
 use PHPUnit\Framework\TestCase;
 use YamlStandards\Result;

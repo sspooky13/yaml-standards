@@ -1,8 +1,8 @@
 <?php
 
-namespace YamlStandards\Service;
+namespace YamlStandards\Command\Service;
 
-use YamlStandards\ProcessOutput;
+use YamlStandards\Command\ProcessOutput;
 
 class ProcessOutputService
 {
