@@ -3,7 +3,7 @@
 namespace YamlStandards\Command\Service;
 
 use PHPUnit\Framework\TestCase;
-use YamlStandards\Result;
+use YamlStandards\Result\Result;
 
 class ResultServiceTest extends TestCase
 {

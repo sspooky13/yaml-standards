@@ -6,7 +6,7 @@ use SebastianBergmann\Diff\Differ;
 use Symfony\Component\Yaml\Yaml;
 use YamlStandards\Command\InputSettingData;
 use YamlStandards\Model\CheckerInterface;
-use YamlStandards\Result;
+use YamlStandards\Result\Result;
 
 /**
  * Check yaml file complies inline standards

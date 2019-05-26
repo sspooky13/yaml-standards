@@ -7,7 +7,7 @@ use YamlStandards\Command\ProcessOutput;
 class ProcessOutputService
 {
     /**
-     * @param \YamlStandards\Result[] $results
+     * @param \YamlStandards\Result\Result[] $results
      * @return int
      */
     public static function getWorstStatusCodeByResults(array $results)

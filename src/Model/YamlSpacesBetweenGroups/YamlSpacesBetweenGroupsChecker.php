@@ -5,7 +5,7 @@ namespace YamlStandards\Model\YamlSpacesBetweenGroups;
 use SebastianBergmann\Diff\Differ;
 use YamlStandards\Command\InputSettingData;
 use YamlStandards\Model\CheckerInterface;
-use YamlStandards\Result;
+use YamlStandards\Result\Result;
 
 /**
  * Check yaml file have space between groups

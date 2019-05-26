@@ -3,7 +3,7 @@
 namespace YamlStandards\Command;
 
 use Symfony\Component\Console\Terminal;
-use YamlStandards\Result;
+use YamlStandards\Result\Result;
 
 class ProcessOutput
 {

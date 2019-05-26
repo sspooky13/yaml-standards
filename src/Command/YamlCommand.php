@@ -9,11 +9,11 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
-use YamlStandards\Result;
 use YamlStandards\Command\Service\ProcessOutputService;
 use YamlStandards\Command\Service\ResultService;
 use YamlStandards\Command\Service\StandardClassesLoaderService;
 use YamlStandards\Command\Service\YamlFilesPathService;
+use YamlStandards\Result\Result;
 
 class YamlCommand extends Command
 {
@@ -99,7 +99,7 @@ class YamlCommand extends Command
 
     /**
      * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param \YamlStandards\Result[] $results
+     * @param \YamlStandards\Result\Result[] $results
      * @return int
      */
     private function printOutput(OutputInterface $output, array $results)

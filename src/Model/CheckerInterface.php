@@ -9,7 +9,7 @@ interface CheckerInterface
     /**
      * @param string $pathToYamlFile
      * @param \YamlStandards\Command\InputSettingData $inputSettingData
-     * @return \YamlStandards\Result
+     * @return \YamlStandards\Result\Result
      */
     public function check($pathToYamlFile, InputSettingData $inputSettingData);
 }
