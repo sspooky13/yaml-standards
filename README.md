@@ -9,19 +9,10 @@
 This library helps you to keep YAML files alphabetically sorted, observe symfony yaml standards, observe indent and observe spaces between groups.
 
 ## Installation
-If you prefer using [Composer](http://getcomposer.org/) you can easily install with the following command:
+Install the latest version with [Composer](http://getcomposer.org/) command:
 
     composer require --dev sspooky13/yaml-standards
-    
-Or alternatively, include a dependency for sspooky13/yaml-standards in your composer.json file. For example:
 
-```json
-{
-    "require-dev": {
-        "sspooky13/yaml-standards": "~3.0"
-    }
-}
-```
 ## Options for run
 - `--exclude-by-name=text` Exclude file contains the `text` in name. Can be used more times.
 - `--exclude-dir=path/to/excluded/dir` Exclude dir from check. Can be used more times.
@@ -34,10 +25,7 @@ Or alternatively, include a dependency for sspooky13/yaml-standards in your comp
 ## Usage
 For run from command line:
 
-    php bin/yaml-standards ./app ./src/path/to/config/file.yml ./src --exclude=service --check-alphabetical-sort-depth=2 --check-indents-count-of-indents=4 --check-spaces-between-groups-to-level=2 --check-inline
-
-
-If you need exclude a files from check, you can print command `--exclude=NAME` how much you want.
+    vendor/bin/yaml-standards ./app ./src/path/to/config/file.yml ./src --exclude-by-name=service --exclude-dirs=path/to/excluded/dir --exclude-file=path/to/excluded/file.yaml --check-alphabetical-sort-depth=2 --check-indents-count-of-indents=4 --check-spaces-between-groups-to-level=2 --check-inline
 
 or setting for ANT:
 
@@ -54,7 +42,7 @@ or setting for ANT:
         <arg value="./app" />
         <arg value="./src/path/to/config/file.yml" />
         <arg value="./src" />
-        <arg value="--exclude=service" />
+        <arg value="--exclude-by-name=service" />
         <arg value="--exclude-dirs=path/to/excluded/dir" />
         <arg value="--exclude-file=path/to/excluded/file.yaml" />
         <arg value="--check-alphabetical-sort-depth=2" />
