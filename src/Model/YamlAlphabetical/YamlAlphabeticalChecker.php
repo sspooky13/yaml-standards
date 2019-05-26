@@ -1,10 +1,11 @@
 <?php
 
-namespace YamlStandards\Checker;
+namespace YamlStandards\Model\YamlAlphabetical;
 
 use SebastianBergmann\Diff\Differ;
 use Symfony\Component\Yaml\Yaml;
 use YamlStandards\Command\InputSettingData;
+use YamlStandards\Model\CheckerInterface;
 use YamlStandards\Result;
 
 /**

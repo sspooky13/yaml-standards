@@ -1,6 +1,6 @@
 <?php
 
-namespace YamlStandards\Checker;
+namespace YamlStandards\Model;
 
 use YamlStandards\Command\InputSettingData;
 

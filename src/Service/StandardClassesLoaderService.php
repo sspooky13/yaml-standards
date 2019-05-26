@@ -2,17 +2,17 @@
 
 namespace YamlStandards\Service;
 
-use YamlStandards\Checker\YamlAlphabeticalChecker;
-use YamlStandards\Checker\YamlIndentChecker;
-use YamlStandards\Checker\YamlInlineChecker;
-use YamlStandards\Checker\YamlSpacesBetweenGroupsChecker;
+use YamlStandards\Model\YamlAlphabetical\YamlAlphabeticalChecker;
+use YamlStandards\Model\YamlIndent\YamlIndentChecker;
+use YamlStandards\Model\YamlInline\YamlInlineChecker;
+use YamlStandards\Model\YamlSpacesBetweenGroups\YamlSpacesBetweenGroupsChecker;
 use YamlStandards\Command\InputSettingData;
 
 class StandardClassesLoaderService
 {
     /**
      * @param \YamlStandards\Command\InputSettingData $inputSettingData
-     * @return \YamlStandards\Checker\CheckerInterface[]
+     * @return \YamlStandards\Model\CheckerInterface[]
      */
     public static function getCheckerClassesByInputSettingData(InputSettingData $inputSettingData)
     {
