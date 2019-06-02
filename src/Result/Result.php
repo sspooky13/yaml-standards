@@ -20,6 +20,11 @@ class Result
     private $resultCode;
 
     /**
+     * @var int
+     */
+    private $statusCode;
+
+    /**
      * @var string|null
      */
     private $message;
@@ -27,15 +32,18 @@ class Result
     /**
      * @param string $pathToFile
      * @param int $resultCode
+     * @param int $statusCode
      * @param string|null $message
      */
     public function __construct(
         $pathToFile,
         $resultCode,
+        $statusCode,
         $message = null
     ) {
         $this->pathToFile = $pathToFile;
         $this->resultCode = $resultCode;
+        $this->statusCode = $statusCode;
         $this->message = $message;
     }
 
@@ -53,6 +61,14 @@ class Result
     public function getResultCode()
     {
         return $this->resultCode;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatusCode()
+    {
+        return $this->statusCode;
     }
 
     /**

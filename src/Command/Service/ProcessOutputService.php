@@ -15,7 +15,7 @@ class ProcessOutputService
         $resultCode = ProcessOutput::STATUS_CODE_OK;
 
         foreach ($results as $result) {
-            $statusCode = ProcessOutput::$statusCodeByResultCode[$result->getResultCode()];
+            $statusCode = $result->getStatusCode();
             $resultCode = $statusCode > $resultCode ? $statusCode : $resultCode;
         }
 

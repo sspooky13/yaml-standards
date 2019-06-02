@@ -71,7 +71,7 @@ class YamlCommand extends Command
 
             if (is_readable($pathToYamlFile) === false) {
                 $message = 'File is not readable.';
-                $fileResults[] = new Result($pathToYamlFile, Result::RESULT_CODE_GENERAL_ERROR, $message);
+                $fileResults[] = new Result($pathToYamlFile, Result::RESULT_CODE_GENERAL_ERROR, ProcessOutput::STATUS_CODE_ERROR, $message);
                 $output->write($processOutput->process(ProcessOutput::STATUS_CODE_ERROR));
                 continue;
             }
@@ -85,7 +85,7 @@ class YamlCommand extends Command
                 }
             } catch (ParseException $e) {
                 $message = sprintf('Unable to parse the YAML string: %s', $e->getMessage());
-                $fileResults[] = new Result($pathToYamlFile, Result::RESULT_CODE_GENERAL_ERROR, $message);
+                $fileResults[] = new Result($pathToYamlFile, Result::RESULT_CODE_GENERAL_ERROR, ProcessOutput::STATUS_CODE_ERROR, $message);
             }
 
             $results[] = $fileResults;
@@ -105,7 +105,7 @@ class YamlCommand extends Command
     private function printOutput(OutputInterface $output, array $results)
     {
         foreach ($results as $result) {
-            if ($result->getResultCode() !== Result::RESULT_CODE_OK) {
+            if ($result->getStatusCode() !== ProcessOutput::STATUS_CODE_OK) {
                 $output->writeln(sprintf('FILE: %s', $result->getPathToFile()));
                 $output->writeln('-------------------------------------------------');
                 $output->writeln($result->getMessage() . PHP_EOL);
