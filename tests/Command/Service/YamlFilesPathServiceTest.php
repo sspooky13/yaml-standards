@@ -4,6 +4,7 @@ namespace YamlStandards\Command\Service;
 
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
+use Symfony\Component\Console\Output\NullOutput;
 use YamlStandards\Command\InputSettingData;
 
 class YamlFilesPathServiceTest extends TestCase
@@ -14,7 +15,7 @@ class YamlFilesPathServiceTest extends TestCase
         $excludedPaths = [];
         $inputSettingData = $this->getInputSettingDataMock($pathToDir, $excludedPaths);
 
-        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData);
+        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData, new NullOutput());
 
         $this->assertCount(6, $yamlFiles);
     }
@@ -28,7 +29,7 @@ class YamlFilesPathServiceTest extends TestCase
         ];
         $inputSettingData = $this->getInputSettingDataMock($pathToDir, $excludedPaths);
 
-        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData);
+        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData, new NullOutput());
 
         $this->assertCount(9, $yamlFiles);
     }
@@ -39,7 +40,7 @@ class YamlFilesPathServiceTest extends TestCase
         $excludedPaths = ['./tests/yamlFiles/unSorted/route'];
         $inputSettingData = $this->getInputSettingDataMock($pathToDir, $excludedPaths);
 
-        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData, true);
+        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData, new NullOutput(), true);
 
         $this->assertCount(6, $yamlFiles);
     }
@@ -53,7 +54,7 @@ class YamlFilesPathServiceTest extends TestCase
         ];
         $inputSettingData = $this->getInputSettingDataMock($pathToDir, $excludedPaths);
 
-        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData);
+        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData, new NullOutput());
 
         $this->assertCount(10, $yamlFiles);
     }
@@ -69,7 +70,7 @@ class YamlFilesPathServiceTest extends TestCase
         ];
         $inputSettingData = $this->getInputSettingDataMock($pathToDir, $excludedPaths);
 
-        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData);
+        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData, new NullOutput());
 
         $this->assertCount(7, $yamlFiles);
     }
@@ -80,7 +81,7 @@ class YamlFilesPathServiceTest extends TestCase
         $excludedPaths = [];
         $inputSettingData = $this->getInputSettingDataMock($pathToFile, $excludedPaths);
 
-        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData);
+        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData, new NullOutput());
 
         $this->assertCount(1, $yamlFiles);
     }
@@ -91,7 +92,7 @@ class YamlFilesPathServiceTest extends TestCase
         $excludedPaths = [];
         $inputSettingData = $this->getInputSettingDataMock([$pathToFile], $excludedPaths);
 
-        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData);
+        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData, new NullOutput());
         $foundFile = reset($yamlFiles);
 
         $this->assertEquals($pathToFile, $foundFile);
@@ -103,7 +104,7 @@ class YamlFilesPathServiceTest extends TestCase
         $excludedPaths = [];
         $inputSettingData = $this->getInputSettingDataMock($pathToFile, $excludedPaths);
 
-        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData);
+        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData, new NullOutput());
 
         $expectedYamlFiles = [
             './tests/yamlFiles/unSorted/config/symfony-config.yml',

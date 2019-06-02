@@ -7,17 +7,21 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RecursiveRegexIterator;
 use RegexIterator;
+use Symfony\Component\Console\Output\OutputInterface;
+use UnexpectedValueException;
 use YamlStandards\Command\InputSettingData;
 
 class YamlFilesPathService
 {
     /**
      * @param \YamlStandards\Command\InputSettingData $inputSettingData
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @param bool $includeSkippedFilesToPath
      * @return string[]
      */
     public static function getPathToYamlFiles(
         InputSettingData $inputSettingData,
+        OutputInterface $output,
         $includeSkippedFilesToPath = false
     ) {
         $pathToFiles = [];
@@ -27,11 +31,15 @@ class YamlFilesPathService
                 continue;
             }
 
-            $recursiveIteratorIterator = self::getRecursiveIteratorIterator($pathToDirOrFile, $inputSettingData->getExcludedPaths(), $includeSkippedFilesToPath);
-            $regexIterator = new RegexIterator($recursiveIteratorIterator, '/^.+\.(ya?ml(\.dist)?)$/i', RecursiveRegexIterator::GET_MATCH);
+            try {
+                $recursiveIteratorIterator = self::getRecursiveIteratorIterator($pathToDirOrFile, $inputSettingData->getExcludedPaths(), $includeSkippedFilesToPath);
+                $regexIterator = new RegexIterator($recursiveIteratorIterator, '/^.+\.(ya?ml(\.dist)?)$/i', RecursiveRegexIterator::GET_MATCH);
 
-            foreach ($regexIterator as $pathToFile) {
-                $pathToFiles[] = reset($pathToFile);
+                foreach ($regexIterator as $pathToFile) {
+                    $pathToFiles[] = reset($pathToFile);
+                }
+            } catch (UnexpectedValueException $exception) {
+                $output->writeln(sprintf('Error was caught: %s' . PHP_EOL, $exception->getMessage()));
             }
         }
 

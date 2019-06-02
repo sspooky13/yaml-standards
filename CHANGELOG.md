@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## [4.2.1] - 2019-06-02
+### Fixed
+- caught exception thrown while loading directories by recursion 
+
 ## [4.2.0] - 2019-06-02
 ### Added
 - show skipped files in terminal
@@ -96,7 +100,8 @@
 [#14]: https://github.com/sspooky13/yaml-standards/issues/14
 [#13]: https://github.com/sspooky13/yaml-standards/pull/13
 
-[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/4.2.0...HEAD
+[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/4.2.1...HEAD
+[4.2.1]: https://github.com/sspooky13/yaml-standards/compare/4.2.0...4.2.1
 [4.2.0]: https://github.com/sspooky13/yaml-standards/compare/4.1.0...4.2.0
 [4.1.0]: https://github.com/sspooky13/yaml-standards/compare/4.0.0...4.1.0
 [4.0.0]: https://github.com/sspooky13/yaml-standards/compare/3.1.1...4.0.0
