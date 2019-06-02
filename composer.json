@@ -1,8 +1,8 @@
 {
     "name": "sspooky13/yaml-standards",
     "type": "library",
-    "description": "YAML standards checker",
-    "keywords": ["yaml", "standards", "indent", "alphabetical", "inline", "checker"],
+    "description": "Standards for yaml files ",
+    "keywords": ["yaml", "standards", "indent", "alphabetical", "inline", "checker", "yaml-standards", "fixer"],
     "homepage": "https://github.com/sspooky13/yaml-standards",
     "license": "MIT",
     "authors": [
