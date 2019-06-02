@@ -30,21 +30,29 @@ class Result
     private $message;
 
     /**
+     * @var bool
+     */
+    private $canBeFixedByFixer;
+
+    /**
      * @param string $pathToFile
      * @param int $resultCode
      * @param int $statusCode
      * @param string|null $message
+     * @param bool $canBeFixedByFixer
      */
     public function __construct(
         $pathToFile,
         $resultCode,
         $statusCode,
-        $message = null
+        $message = null,
+        $canBeFixedByFixer = false
     ) {
         $this->pathToFile = $pathToFile;
         $this->resultCode = $resultCode;
         $this->statusCode = $statusCode;
         $this->message = $message;
+        $this->canBeFixedByFixer = $canBeFixedByFixer;
     }
 
     /**
@@ -77,5 +85,13 @@ class Result
     public function getMessage()
     {
         return $this->message;
+    }
+
+    /**
+     * @return bool
+     */
+    public function canBeFixedByFixer()
+    {
+        return $this->canBeFixedByFixer;
     }
 }

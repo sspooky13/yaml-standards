@@ -37,6 +37,6 @@ class YamlIndentChecker implements CheckerInterface
         $differ = new Differ();
         $diffBetweenStrings = $differ->diff($fileContent, $rightFileContent);
 
-        return new Result($pathToYamlFile, Result::RESULT_CODE_INVALID_FILE_SYNTAX, ProcessOutput::STATUS_CODE_INVALID_FILE_SYNTAX, $diffBetweenStrings);
+        return new Result($pathToYamlFile, Result::RESULT_CODE_INVALID_FILE_SYNTAX, ProcessOutput::STATUS_CODE_INVALID_FILE_SYNTAX, $diffBetweenStrings, true);
     }
 }

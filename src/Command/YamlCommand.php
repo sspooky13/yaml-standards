@@ -115,6 +115,10 @@ class YamlCommand extends Command
                 $output->writeln(sprintf('FILE: %s', $result->getPathToFile()));
                 $output->writeln('-------------------------------------------------');
                 $output->writeln($result->getMessage() . PHP_EOL);
+
+                if ($result->canBeFixedByFixer()) {
+                    $output->writeln('<fg=red>This can be fixed by `--fix` option</fg=red>' . PHP_EOL);
+                }
             }
         }
 
