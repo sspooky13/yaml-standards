@@ -21,6 +21,7 @@ Install the latest version with [Composer](http://getcomposer.org/) command:
 - `--check-indents-count-of-indents=4` Check yaml has multiple of selected indent
 - `--check-inline` Check yaml file observe standards by symfony yaml parser.
 - `--check-spaces-between-groups-to-level=2` Check yaml file has empty line between every group to slected level.
+- `--fix` Automatically fix allowed standards problems.
 
 ## Usage
 For run from command line:
