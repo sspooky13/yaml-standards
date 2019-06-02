@@ -27,7 +27,8 @@ class YamlCommand extends Command
         OPTION_CHECK_ALPHABETICAL_SORT_DEPTH = 'check-alphabetical-sort-depth',
         OPTION_CHECK_YAML_COUNT_OF_INDENTS = 'check-indents-count-of-indents',
         OPTION_CHECK_INLINE = 'check-inline',
-        OPTION_CHECK_LEVEL_FOR_SPACES_BETWEEN_GROUPS = 'check-spaces-between-groups-to-level';
+        OPTION_CHECK_LEVEL_FOR_SPACES_BETWEEN_GROUPS = 'check-spaces-between-groups-to-level',
+        OPTION_FIX = 'fix';
 
     protected static $defaultName = self::COMMAND_NAME;
 
@@ -43,7 +44,8 @@ class YamlCommand extends Command
             ->addOption(self::OPTION_CHECK_ALPHABETICAL_SORT_DEPTH, null, InputOption::VALUE_REQUIRED, 'Check yaml file is right sorted in set depth')
             ->addOption(self::OPTION_CHECK_YAML_COUNT_OF_INDENTS, null, InputOption::VALUE_REQUIRED, 'Check count of indents in yaml file')
             ->addOption(self::OPTION_CHECK_INLINE, null, InputOption::VALUE_NONE, 'Check yaml file complies inline standards')
-            ->addOption(self::OPTION_CHECK_LEVEL_FOR_SPACES_BETWEEN_GROUPS, null, InputOption::VALUE_REQUIRED, 'Check yaml file have correct space between groups for set level');
+            ->addOption(self::OPTION_CHECK_LEVEL_FOR_SPACES_BETWEEN_GROUPS, null, InputOption::VALUE_REQUIRED, 'Check yaml file have correct space between groups for set level')
+            ->addOption(self::OPTION_FIX, null, InputOption::VALUE_NONE, 'Automatically fix problems');
     }
 
     /**
@@ -59,6 +61,7 @@ class YamlCommand extends Command
         $pathToYamlFilesWithoutSkippedFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData);
         $processOutput = new ProcessOutput(count($pathToYamlFilesWithSkippedFiles));
 
+        $fixerInterfaces = StandardClassesLoaderService::getFixerClassesByInputSettingData($inputSettingData);
         $checkerInterfaces = StandardClassesLoaderService::getCheckerClassesByInputSettingData($inputSettingData);
         $results = [[]];
 
@@ -80,6 +83,9 @@ class YamlCommand extends Command
                 // check yaml is valid
                 Yaml::parse(file_get_contents($pathToYamlFile), Yaml::PARSE_CUSTOM_TAGS);
 
+                foreach ($fixerInterfaces as $fixerInterface) {
+                    $fileResults[] = $fixerInterface->fix($pathToYamlFile, $pathToYamlFile, $inputSettingData);
+                }
                 foreach ($checkerInterfaces as $checkerInterface) {
                     $fileResults[] = $checkerInterface->check($pathToYamlFile, $inputSettingData);
                 }

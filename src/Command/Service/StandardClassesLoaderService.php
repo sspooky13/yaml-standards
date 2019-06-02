@@ -2,11 +2,12 @@
 
 namespace YamlStandards\Command\Service;
 
+use YamlStandards\Command\InputSettingData;
 use YamlStandards\Model\YamlAlphabetical\YamlAlphabeticalChecker;
 use YamlStandards\Model\YamlIndent\YamlIndentChecker;
+use YamlStandards\Model\YamlIndent\YamlIndentFixer;
 use YamlStandards\Model\YamlInline\YamlInlineChecker;
 use YamlStandards\Model\YamlSpacesBetweenGroups\YamlSpacesBetweenGroupsChecker;
-use YamlStandards\Command\InputSettingData;
 
 class StandardClassesLoaderService
 {
@@ -22,8 +23,11 @@ class StandardClassesLoaderService
             $checkerClasses[] = new YamlAlphabeticalChecker();
         }
 
-        if ($inputSettingData->getCountOfIndents() !== null) {
-            $checkerClasses[] = new YamlIndentChecker();
+        // don't run checker if fix is enabled
+        if ($inputSettingData->isFixEnabled() === false) {
+            if ($inputSettingData->getCountOfIndents() !== null) {
+                $checkerClasses[] = new YamlIndentChecker();
+            }
         }
 
         if ($inputSettingData->checkInlineStandard()) {
@@ -32,6 +36,23 @@ class StandardClassesLoaderService
 
         if ($inputSettingData->getLevelForCheckSpacesBetweenGroups() !== null) {
             $checkerClasses[] = new YamlSpacesBetweenGroupsChecker();
+        }
+
+        return $checkerClasses;
+    }
+
+    /**
+     * @param \YamlStandards\Command\InputSettingData $inputSettingData
+     * @return \YamlStandards\Model\FixerInterface[]
+     */
+    public static function getFixerClassesByInputSettingData(InputSettingData $inputSettingData)
+    {
+        $checkerClasses = [];
+
+        if ($inputSettingData->isFixEnabled()) {
+            if ($inputSettingData->getCountOfIndents() !== null) {
+                $checkerClasses[] = new YamlIndentFixer();
+            }
         }
 
         return $checkerClasses;
