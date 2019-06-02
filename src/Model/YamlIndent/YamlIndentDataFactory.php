@@ -52,6 +52,14 @@ class YamlIndentDataFactory
 
         // the highest parent
         if ($countOfRowIndents === 0) {
+            // line is directive
+            if ($this->hasLineThreeDashesOnStartOfLine($trimmedLine)) {
+                $correctIndents = $this->getCorrectIndents($countOfRowIndents);
+                $trimmedFileLine = trim($fileLine);
+
+                return $correctIndents . $trimmedFileLine;
+            }
+
             // parent start as array, e.g. "- foo: bar"
             // skip comment line because we want result after this condition
             if ($isCommentLine === false && $this->isLineStartOfArrayWithKeyAndValue($trimmedLine)) {
@@ -164,6 +172,15 @@ class YamlIndentDataFactory
     private function hasLineDashOnStartOfLine($value)
     {
         return strpos($value, '-') === 0;
+    }
+
+    /**
+     * @param string $trimmedLine
+     * @return bool
+     */
+    private function hasLineThreeDashesOnStartOfLine($trimmedLine)
+    {
+        return strpos($trimmedLine, '---') === 0;
     }
 
     /**
