@@ -1,11 +1,13 @@
 <?php
 
-namespace YamlStandards\Checker;
+namespace YamlStandards\Model\YamlAlphabetical;
 
 use SebastianBergmann\Diff\Differ;
 use Symfony\Component\Yaml\Yaml;
 use YamlStandards\Command\InputSettingData;
-use YamlStandards\Result;
+use YamlStandards\Command\ProcessOutput;
+use YamlStandards\Model\CheckerInterface;
+use YamlStandards\Result\Result;
 
 /**
  * Check yaml file is alphabetical sorted
@@ -24,13 +26,13 @@ class YamlAlphabeticalChecker implements CheckerInterface
         $yamlStringDataSorted = Yaml::dump($yamlArrayDataSorted, PHP_INT_MAX);
 
         if ($yamlStringData === $yamlStringDataSorted) {
-            return new Result($pathToYamlFile, Result::RESULT_CODE_OK);
+            return new Result($pathToYamlFile, Result::RESULT_CODE_OK, ProcessOutput::STATUS_CODE_OK);
         }
 
         $differ = new Differ();
         $diffBetweenStrings = $differ->diff($yamlStringData, $yamlStringDataSorted);
 
-        return new Result($pathToYamlFile, Result::RESULT_CODE_INVALID_FILE_SYNTAX, $diffBetweenStrings);
+        return new Result($pathToYamlFile, Result::RESULT_CODE_INVALID_FILE_SYNTAX, ProcessOutput::STATUS_CODE_INVALID_FILE_SYNTAX, $diffBetweenStrings);
     }
 
     /**

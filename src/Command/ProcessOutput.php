@@ -1,8 +1,9 @@
 <?php
 
-namespace YamlStandards;
+namespace YamlStandards\Command;
 
 use Symfony\Component\Console\Terminal;
+use YamlStandards\Result\Result;
 
 class ProcessOutput
 {
@@ -17,12 +18,6 @@ class ProcessOutput
         self::STATUS_CODE_INVALID_FILE_SYNTAX => ['symbol' => 'I', 'format' => '<fg=red>%s</fg=red>', 'description' => 'Invalid file syntax'],
         self::STATUS_CODE_SKIPP => ['symbol' => 'S', 'format' => '<fg=cyan>%s</fg=cyan>', 'description' => 'Skipped'],
         self::STATUS_CODE_ERROR => ['symbol' => 'E', 'format' => '<bg=red>%s</bg=red>', 'description' => 'Error'],
-    ];
-
-    public static $statusCodeByResultCode = [
-        Result::RESULT_CODE_OK => self::STATUS_CODE_OK,
-        Result::RESULT_CODE_INVALID_FILE_SYNTAX => self::STATUS_CODE_INVALID_FILE_SYNTAX,
-        Result::RESULT_CODE_GENERAL_ERROR => self::STATUS_CODE_ERROR,
     ];
 
     /**

@@ -1,11 +1,11 @@
 <?php
 
-namespace YamlStandards\Service;
+namespace YamlStandards\Command\Service;
 
 class ResultService
 {
     /**
-     * @param \YamlStandards\Result[] $results
+     * @param \YamlStandards\Result\Result[] $results
      * @return int
      */
     public static function getResultCodeByResults(array $results)

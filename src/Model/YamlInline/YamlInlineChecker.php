@@ -1,11 +1,13 @@
 <?php
 
-namespace YamlStandards\Checker;
+namespace YamlStandards\Model\YamlInline;
 
 use SebastianBergmann\Diff\Differ;
 use Symfony\Component\Yaml\Yaml;
 use YamlStandards\Command\InputSettingData;
-use YamlStandards\Result;
+use YamlStandards\Command\ProcessOutput;
+use YamlStandards\Model\CheckerInterface;
+use YamlStandards\Result\Result;
 
 /**
  * Check yaml file complies inline standards
@@ -34,13 +36,13 @@ class YamlInlineChecker implements CheckerInterface
         $filteredYamlFile = implode("\n", $filteredYamlLines);
 
         if ($yamlStringData === $filteredYamlFile) {
-            return new Result($pathToYamlFile, Result::RESULT_CODE_OK);
+            return new Result($pathToYamlFile, Result::RESULT_CODE_OK, ProcessOutput::STATUS_CODE_OK);
         }
 
         $differ = new Differ();
         $diffBetweenStrings = $differ->diff($filteredYamlFile, $yamlStringData);
 
-        return new Result($pathToYamlFile, Result::RESULT_CODE_INVALID_FILE_SYNTAX, $diffBetweenStrings);
+        return new Result($pathToYamlFile, Result::RESULT_CODE_INVALID_FILE_SYNTAX, ProcessOutput::STATUS_CODE_INVALID_FILE_SYNTAX, $diffBetweenStrings);
     }
 
     /**

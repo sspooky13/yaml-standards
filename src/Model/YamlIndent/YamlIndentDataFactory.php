@@ -1,42 +1,11 @@
 <?php
 
-namespace YamlStandards\Checker;
+namespace YamlStandards\Model\YamlIndent;
 
-use SebastianBergmann\Diff\Differ;
-use YamlStandards\Command\InputSettingData;
-use YamlStandards\Result;
+use YamlStandards\Result\Result;
 
-/**
- * Check yaml file complies right count of indent
- */
-class YamlIndentChecker implements CheckerInterface
+class YamlIndentDataFactory
 {
-    /**
-     * @inheritDoc
-     */
-    public function check($pathToYamlFile, InputSettingData $inputSettingData)
-    {
-        $fileContent = file_get_contents($pathToYamlFile);
-        $fileContent = str_replace("\r", '', $fileContent); // remove carriage returns
-        $fileLines = explode("\n", $fileContent);
-        $rightFileLines = [];
-
-        foreach ($fileLines as $key => $fileLine) {
-            $rightFileLines[] = $this->getRightFileLines($fileLines, $key, $inputSettingData->getCountOfIndents(), $fileLine);
-        }
-
-        $rightFileContent = implode("\n", $rightFileLines);
-
-        if ($fileContent === $rightFileContent) {
-            return new Result($pathToYamlFile, Result::RESULT_CODE_OK);
-        }
-
-        $differ = new Differ();
-        $diffBetweenStrings = $differ->diff($fileContent, $rightFileContent);
-
-        return new Result($pathToYamlFile, Result::RESULT_CODE_INVALID_FILE_SYNTAX, $diffBetweenStrings);
-    }
-
     /**
      * @param string[] $fileLines
      * @param int $key
@@ -48,7 +17,7 @@ class YamlIndentChecker implements CheckerInterface
      * @SuppressWarnings("CyclomaticComplexity")
      * @SuppressWarnings("ExcessiveMethodLength")
      */
-    private function getRightFileLines(array $fileLines, $key, $countOfIndents, $fileLine, $isCommentLine = false)
+    public function getRightFileLines(array $fileLines, $key, $countOfIndents, $fileLine, $isCommentLine = false)
     {
         if ($this->isCommentLine($fileLines[$key])) {
             $key++;
@@ -83,6 +52,14 @@ class YamlIndentChecker implements CheckerInterface
 
         // the highest parent
         if ($countOfRowIndents === 0) {
+            // line is directive
+            if ($this->hasLineThreeDashesOnStartOfLine($trimmedLine)) {
+                $correctIndents = $this->getCorrectIndents($countOfRowIndents);
+                $trimmedFileLine = trim($fileLine);
+
+                return $correctIndents . $trimmedFileLine;
+            }
+
             // parent start as array, e.g. "- foo: bar"
             // skip comment line because we want result after this condition
             if ($isCommentLine === false && $this->isLineStartOfArrayWithKeyAndValue($trimmedLine)) {
@@ -157,7 +134,7 @@ class YamlIndentChecker implements CheckerInterface
      * @param string $fileLine
      * @return bool
      */
-    protected function isCommentLine($fileLine)
+    private function isCommentLine($fileLine)
     {
         return preg_match('/^\s*#/', $fileLine) === 1;
     }
@@ -166,7 +143,7 @@ class YamlIndentChecker implements CheckerInterface
      * @param int $countOfIndents
      * @return string
      */
-    protected function getCorrectIndents($countOfIndents)
+    private function getCorrectIndents($countOfIndents)
     {
         $currentNumberOfIndents = 1;
         $indents = '';
@@ -195,6 +172,15 @@ class YamlIndentChecker implements CheckerInterface
     private function hasLineDashOnStartOfLine($value)
     {
         return strpos($value, '-') === 0;
+    }
+
+    /**
+     * @param string $trimmedLine
+     * @return bool
+     */
+    private function hasLineThreeDashesOnStartOfLine($trimmedLine)
+    {
+        return strpos($trimmedLine, '---') === 0;
     }
 
     /**

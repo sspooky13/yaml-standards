@@ -1,13 +1,13 @@
 <?php
 
-namespace YamlStandards\Service;
+namespace YamlStandards\Command\Service;
 
-use YamlStandards\ProcessOutput;
+use YamlStandards\Command\ProcessOutput;
 
 class ProcessOutputService
 {
     /**
-     * @param \YamlStandards\Result[] $results
+     * @param \YamlStandards\Result\Result[] $results
      * @return int
      */
     public static function getWorstStatusCodeByResults(array $results)
@@ -15,7 +15,7 @@ class ProcessOutputService
         $resultCode = ProcessOutput::STATUS_CODE_OK;
 
         foreach ($results as $result) {
-            $statusCode = ProcessOutput::$statusCodeByResultCode[$result->getResultCode()];
+            $statusCode = $result->getStatusCode();
             $resultCode = $statusCode > $resultCode ? $statusCode : $resultCode;
         }
 

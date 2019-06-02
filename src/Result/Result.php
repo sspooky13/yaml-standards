@@ -1,6 +1,6 @@
 <?php
 
-namespace YamlStandards;
+namespace YamlStandards\Result;
 
 class Result
 {
@@ -20,23 +20,39 @@ class Result
     private $resultCode;
 
     /**
+     * @var int
+     */
+    private $statusCode;
+
+    /**
      * @var string|null
      */
     private $message;
 
     /**
+     * @var bool
+     */
+    private $canBeFixedByFixer;
+
+    /**
      * @param string $pathToFile
      * @param int $resultCode
+     * @param int $statusCode
      * @param string|null $message
+     * @param bool $canBeFixedByFixer
      */
     public function __construct(
         $pathToFile,
         $resultCode,
-        $message = null
+        $statusCode,
+        $message = null,
+        $canBeFixedByFixer = false
     ) {
         $this->pathToFile = $pathToFile;
         $this->resultCode = $resultCode;
+        $this->statusCode = $statusCode;
         $this->message = $message;
+        $this->canBeFixedByFixer = $canBeFixedByFixer;
     }
 
     /**
@@ -56,10 +72,26 @@ class Result
     }
 
     /**
+     * @return int
+     */
+    public function getStatusCode()
+    {
+        return $this->statusCode;
+    }
+
+    /**
      * @return string|null
      */
     public function getMessage()
     {
         return $this->message;
+    }
+
+    /**
+     * @return bool
+     */
+    public function canBeFixedByFixer()
+    {
+        return $this->canBeFixedByFixer;
     }
 }

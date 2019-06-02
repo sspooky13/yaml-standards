@@ -1,13 +1,19 @@
 # Changelog
 
 ## [Unreleased]
+
+## [4.2.0] - 2019-06-02
 ### Added
 - show skipped files in terminal
+- add `--fix` option
+- create fixer for yaml indent
+- show info what problem can be fixed by fixer
 
 ### Fixed
 - Yaml indent checker: fix get correct indents between dash and key if line belong to array and has zero indents
 - Yaml indent checker: fix counting of parents if line belong to array and has bad zero indents and simultaneously is child of higher parent
 - Yaml inline checker: fix show different between recommended and actual file content
+- Yaml indent checker: fix get correct indents when line is directive
 
 ## [4.1.0] - 2019-03-07
 ### Added
@@ -90,7 +96,8 @@
 [#14]: https://github.com/sspooky13/yaml-standards/issues/14
 [#13]: https://github.com/sspooky13/yaml-standards/pull/13
 
-[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/4.1.0...HEAD
+[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/4.2.0...HEAD
+[4.2.0]: https://github.com/sspooky13/yaml-standards/compare/4.1.0...4.2.0
 [4.1.0]: https://github.com/sspooky13/yaml-standards/compare/4.0.0...4.1.0
 [4.0.0]: https://github.com/sspooky13/yaml-standards/compare/3.1.1...4.0.0
 [3.1.1]: https://github.com/sspooky13/yaml-standards/compare/3.1.0...3.1.1

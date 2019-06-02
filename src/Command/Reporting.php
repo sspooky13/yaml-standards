@@ -1,6 +1,6 @@
 <?php
 
-namespace YamlStandards;
+namespace YamlStandards\Command;
 
 class Reporting
 {

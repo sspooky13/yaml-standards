@@ -41,6 +41,11 @@ class InputSettingData
      */
     private $excludedPaths;
 
+    /**
+     * @var bool
+     */
+    private $fixEnabled;
+
     public function __construct(InputInterface $input)
     {
         $this->pathToDirsOrFiles = $input->getArgument(YamlCommand::ARGUMENT_DIRS_OR_FILES);
@@ -49,6 +54,8 @@ class InputSettingData
         $this->countOfIndents = $input->getOption(YamlCommand::OPTION_CHECK_YAML_COUNT_OF_INDENTS);
         $this->inlineStandard = $input->getOption(YamlCommand::OPTION_CHECK_INLINE);
         $this->levelForCheckSpacesBetweenGroups = $input->getOption(YamlCommand::OPTION_CHECK_LEVEL_FOR_SPACES_BETWEEN_GROUPS);
+
+        $this->fixEnabled = $input->getOption(YamlCommand::OPTION_FIX);
 
         $excludedPathToDirs = $input->getOption(YamlCommand::OPTION_EXCLUDE_DIR);
         $excludedPathToFiles = $input->getOption(YamlCommand::OPTION_EXCLUDE_FILE);
@@ -109,5 +116,13 @@ class InputSettingData
     public function getLevelForCheckSpacesBetweenGroups()
     {
         return $this->levelForCheckSpacesBetweenGroups;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFixEnabled()
+    {
+        return $this->fixEnabled;
     }
 }

@@ -9,13 +9,11 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
-use YamlStandards\ProcessOutput;
-use YamlStandards\Reporting;
-use YamlStandards\Result;
-use YamlStandards\Service\ProcessOutputService;
-use YamlStandards\Service\ResultService;
-use YamlStandards\Service\StandardClassesLoaderService;
-use YamlStandards\Service\YamlFilesPathService;
+use YamlStandards\Command\Service\ProcessOutputService;
+use YamlStandards\Command\Service\ResultService;
+use YamlStandards\Command\Service\StandardClassesLoaderService;
+use YamlStandards\Command\Service\YamlFilesPathService;
+use YamlStandards\Result\Result;
 
 class YamlCommand extends Command
 {
@@ -29,7 +27,8 @@ class YamlCommand extends Command
         OPTION_CHECK_ALPHABETICAL_SORT_DEPTH = 'check-alphabetical-sort-depth',
         OPTION_CHECK_YAML_COUNT_OF_INDENTS = 'check-indents-count-of-indents',
         OPTION_CHECK_INLINE = 'check-inline',
-        OPTION_CHECK_LEVEL_FOR_SPACES_BETWEEN_GROUPS = 'check-spaces-between-groups-to-level';
+        OPTION_CHECK_LEVEL_FOR_SPACES_BETWEEN_GROUPS = 'check-spaces-between-groups-to-level',
+        OPTION_FIX = 'fix';
 
     protected static $defaultName = self::COMMAND_NAME;
 
@@ -45,7 +44,8 @@ class YamlCommand extends Command
             ->addOption(self::OPTION_CHECK_ALPHABETICAL_SORT_DEPTH, null, InputOption::VALUE_REQUIRED, 'Check yaml file is right sorted in set depth')
             ->addOption(self::OPTION_CHECK_YAML_COUNT_OF_INDENTS, null, InputOption::VALUE_REQUIRED, 'Check count of indents in yaml file')
             ->addOption(self::OPTION_CHECK_INLINE, null, InputOption::VALUE_NONE, 'Check yaml file complies inline standards')
-            ->addOption(self::OPTION_CHECK_LEVEL_FOR_SPACES_BETWEEN_GROUPS, null, InputOption::VALUE_REQUIRED, 'Check yaml file have correct space between groups for set level');
+            ->addOption(self::OPTION_CHECK_LEVEL_FOR_SPACES_BETWEEN_GROUPS, null, InputOption::VALUE_REQUIRED, 'Check yaml file have correct space between groups for set level')
+            ->addOption(self::OPTION_FIX, null, InputOption::VALUE_NONE, 'Automatically fix problems');
     }
 
     /**
@@ -61,6 +61,7 @@ class YamlCommand extends Command
         $pathToYamlFilesWithoutSkippedFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData);
         $processOutput = new ProcessOutput(count($pathToYamlFilesWithSkippedFiles));
 
+        $fixerInterfaces = StandardClassesLoaderService::getFixerClassesByInputSettingData($inputSettingData);
         $checkerInterfaces = StandardClassesLoaderService::getCheckerClassesByInputSettingData($inputSettingData);
         $results = [[]];
 
@@ -73,7 +74,7 @@ class YamlCommand extends Command
 
             if (is_readable($pathToYamlFile) === false) {
                 $message = 'File is not readable.';
-                $fileResults[] = new Result($pathToYamlFile, Result::RESULT_CODE_GENERAL_ERROR, $message);
+                $fileResults[] = new Result($pathToYamlFile, Result::RESULT_CODE_GENERAL_ERROR, ProcessOutput::STATUS_CODE_ERROR, $message);
                 $output->write($processOutput->process(ProcessOutput::STATUS_CODE_ERROR));
                 continue;
             }
@@ -82,12 +83,15 @@ class YamlCommand extends Command
                 // check yaml is valid
                 Yaml::parse(file_get_contents($pathToYamlFile), Yaml::PARSE_CUSTOM_TAGS);
 
+                foreach ($fixerInterfaces as $fixerInterface) {
+                    $fileResults[] = $fixerInterface->fix($pathToYamlFile, $pathToYamlFile, $inputSettingData);
+                }
                 foreach ($checkerInterfaces as $checkerInterface) {
                     $fileResults[] = $checkerInterface->check($pathToYamlFile, $inputSettingData);
                 }
             } catch (ParseException $e) {
                 $message = sprintf('Unable to parse the YAML string: %s', $e->getMessage());
-                $fileResults[] = new Result($pathToYamlFile, Result::RESULT_CODE_GENERAL_ERROR, $message);
+                $fileResults[] = new Result($pathToYamlFile, Result::RESULT_CODE_GENERAL_ERROR, ProcessOutput::STATUS_CODE_ERROR, $message);
             }
 
             $results[] = $fileResults;
@@ -101,16 +105,20 @@ class YamlCommand extends Command
 
     /**
      * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param \YamlStandards\Result[] $results
+     * @param \YamlStandards\Result\Result[] $results
      * @return int
      */
     private function printOutput(OutputInterface $output, array $results)
     {
         foreach ($results as $result) {
-            if ($result->getResultCode() !== Result::RESULT_CODE_OK) {
+            if ($result->getStatusCode() !== ProcessOutput::STATUS_CODE_OK) {
                 $output->writeln(sprintf('FILE: %s', $result->getPathToFile()));
                 $output->writeln('-------------------------------------------------');
                 $output->writeln($result->getMessage() . PHP_EOL);
+
+                if ($result->canBeFixedByFixer()) {
+                    $output->writeln('<fg=red>This can be fixed by `--fix` option</fg=red>' . PHP_EOL);
+                }
             }
         }
 
