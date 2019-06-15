@@ -13,6 +13,7 @@ use YamlStandards\Command\Service\ProcessOutputService;
 use YamlStandards\Command\Service\ResultService;
 use YamlStandards\Command\Service\StandardClassesLoaderService;
 use YamlStandards\Command\Service\YamlFilesPathService;
+use YamlStandards\Model\Component\YamlService;
 use YamlStandards\Result\Result;
 
 class YamlCommand extends Command
@@ -81,7 +82,7 @@ class YamlCommand extends Command
 
             try {
                 // check yaml is valid
-                Yaml::parse(file_get_contents($pathToYamlFile), Yaml::PARSE_CUSTOM_TAGS);
+                YamlService::getYamlData($pathToYamlFile);
 
                 foreach ($fixerInterfaces as $fixerInterface) {
                     $fileResults[] = $fixerInterface->fix($pathToYamlFile, $pathToYamlFile, $inputSettingData);
