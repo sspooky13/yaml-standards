@@ -15,4 +15,87 @@ class YamlService
     {
         return (array)Yaml::parse(file_get_contents($pathToYamlFile), Yaml::PARSE_CUSTOM_TAGS);
     }
+
+    /**
+     * @param string $key
+     * @return bool
+     */
+    public static function hasArrayKeyUnderscoreAsFirstCharacter($key)
+    {
+        return strpos($key, '_') === 0;
+    }
+
+    /**
+     * @param string $key
+     * @return bool
+     */
+    public static function hasNotArrayKeyUnderscoreAsFirstCharacter($key)
+    {
+        return strpos($key, '_') !== 0;
+    }
+
+    /**
+     * @param string $yamlLine
+     * @return bool
+     */
+    public static function isLineNotBlank($yamlLine)
+    {
+        return trim($yamlLine) !== '';
+    }
+
+    /**
+     * @param string $yamlLine
+     * @return bool
+     */
+    public static function isLineComment($yamlLine)
+    {
+        return preg_match('/^\s*#/', $yamlLine) === 1;
+    }
+
+    /**
+     * @param string $value
+     * @return bool
+     */
+    public static function isValueReuseVariable($value)
+    {
+        return strpos($value, '&') === 0;
+    }
+
+    /**
+     * @param string $value
+     * @return bool
+     */
+    public static function hasLineDashOnStartOfLine($value)
+    {
+        return strpos($value, '-') === 0;
+    }
+
+    /**
+     * @param string $trimmedLine
+     * @return bool
+     */
+    public static function hasLineThreeDashesOnStartOfLine($trimmedLine)
+    {
+        return strpos($trimmedLine, '---') === 0;
+    }
+
+    /**
+     * @param string $value
+     * @return bool
+     */
+    public static function isCurlyBracketInStartOfString($value)
+    {
+        return strpos($value, '{') === 0;
+    }
+
+    /**
+     * line start of array, e.g. "- foo: bar" or "- foo" or "- { foo: bar }"
+     *
+     * @param string $trimmedLine
+     * @return bool
+     */
+    public static function isLineStartOfArrayWithKeyAndValue($trimmedLine)
+    {
+        return $trimmedLine !== '-' && self::hasLineDashOnStartOfLine($trimmedLine);
+    }
 }

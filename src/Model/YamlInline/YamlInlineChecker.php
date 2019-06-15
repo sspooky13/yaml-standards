@@ -27,7 +27,7 @@ class YamlInlineChecker implements CheckerInterface
         $yamlContent = str_replace("\r", '', $yamlContent); // remove carriage returns
         $yamlLines = explode("\n", $yamlContent);
         $lastYamlElement = end($yamlLines);
-        $filteredYamlLines = array_filter($yamlLines, ['self', 'removeBlankLine']);
+        $filteredYamlLines = array_filter($yamlLines, [YamlService::class, 'isLineNotBlank']);
         $filteredYamlLines = array_filter($filteredYamlLines, ['self', 'removeCommentLine']);
         $filteredYamlLines = array_map(['self', 'removeComments'], $filteredYamlLines);
         if (trim($lastYamlElement) === '') {
@@ -44,17 +44,6 @@ class YamlInlineChecker implements CheckerInterface
         $diffBetweenStrings = $differ->diff($filteredYamlFile, $yamlStringData);
 
         return new Result($pathToYamlFile, Result::RESULT_CODE_INVALID_FILE_SYNTAX, ProcessOutput::STATUS_CODE_INVALID_FILE_SYNTAX, $diffBetweenStrings);
-    }
-
-    /**
-     * @param string $yamlLine
-     * @return bool
-     *
-     * @SuppressWarnings("UnusedPrivateMethod") Method is used but PHPMD report he is not
-     */
-    private function removeBlankLine($yamlLine)
-    {
-        return trim($yamlLine) !== '';
     }
 
     /**

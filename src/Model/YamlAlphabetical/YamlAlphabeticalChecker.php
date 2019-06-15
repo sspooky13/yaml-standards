@@ -86,34 +86,12 @@ class YamlAlphabeticalChecker implements CheckerInterface
      */
     private function sortArrayKeyWithUnderscoresAsFirst(array $yamlArrayData)
     {
-        $arrayWithUnderscoreKeys = array_filter($yamlArrayData, ['self', 'hasArrayKeyUnderscoreAsFirstCharacter'], ARRAY_FILTER_USE_KEY);
-        $arrayWithOtherKeys = array_filter($yamlArrayData, ['self', 'hasNotArrayKeyUnderscoreAsFirstCharacter'], ARRAY_FILTER_USE_KEY);
+        $arrayWithUnderscoreKeys = array_filter($yamlArrayData, [YamlService::class, 'hasArrayKeyUnderscoreAsFirstCharacter'], ARRAY_FILTER_USE_KEY);
+        $arrayWithOtherKeys = array_filter($yamlArrayData, [YamlService::class, 'hasNotArrayKeyUnderscoreAsFirstCharacter'], ARRAY_FILTER_USE_KEY);
 
         ksort($arrayWithUnderscoreKeys);
         ksort($arrayWithOtherKeys);
 
         return array_merge($arrayWithUnderscoreKeys, $arrayWithOtherKeys);
-    }
-
-    /**
-     * @param string $key
-     * @return bool
-     *
-     * @SuppressWarnings("UnusedPrivateMethod") Method is used but PHPMD report he is not
-     */
-    private function hasArrayKeyUnderscoreAsFirstCharacter($key)
-    {
-        return strpos($key, '_') === 0;
-    }
-
-    /**
-     * @param string $key
-     * @return bool
-     *
-     * @SuppressWarnings("UnusedPrivateMethod") Method is used but PHPMD report he is not
-     */
-    private function hasNotArrayKeyUnderscoreAsFirstCharacter($key)
-    {
-        return strpos($key, '_') !== 0;
     }
 }
