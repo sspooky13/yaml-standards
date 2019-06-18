@@ -3,108 +3,71 @@
 namespace YamlStandards\Command\Service;
 
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
 use Symfony\Component\Console\Output\NullOutput;
-use YamlStandards\Command\InputSettingData;
 
 class YamlFilesPathServiceTest extends TestCase
 {
     public function testFindAllYamlFilesInDir()
     {
         $pathToDir = ['./tests/yamlFiles/unSorted/'];
-        $excludedPaths = [];
-        $inputSettingData = $this->getInputSettingDataMock($pathToDir, $excludedPaths);
 
-        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData, new NullOutput());
+        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($pathToDir, new NullOutput());
 
         $this->assertCount(6, $yamlFiles);
     }
 
-    public function testFindAllYamlFilesInDirExceptOfExcludedDirs()
+    public function testFindAllYamlFilesInDirs()
     {
-        $pathToDir = ['./tests/yamlFiles/'];
-        $excludedPaths = [
+        $pathToDirs = [
             './tests/yamlFiles/sorted/config',
             './tests/yamlFiles/unSorted/route',
         ];
-        $inputSettingData = $this->getInputSettingDataMock($pathToDir, $excludedPaths);
 
-        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData, new NullOutput());
+        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($pathToDirs, new NullOutput());
 
-        $this->assertCount(9, $yamlFiles);
+        $this->assertCount(3, $yamlFiles);
     }
 
-    public function testFindAllYamlFilesInDirAndExcludedFilesToo()
+    public function testFindAllYamlFilesInPaths()
     {
-        $pathToDir = ['./tests/yamlFiles/unSorted/'];
-        $excludedPaths = ['./tests/yamlFiles/unSorted/route'];
-        $inputSettingData = $this->getInputSettingDataMock($pathToDir, $excludedPaths);
-
-        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData, new NullOutput(), true);
-
-        $this->assertCount(6, $yamlFiles);
-    }
-
-    public function testFindAllYamlFilesInDirExceptOfExcludedFiles()
-    {
-        $pathToDir = ['./tests/yamlFiles/'];
-        $excludedPaths = [
+        $pathToFiles = [
             './tests/yamlFiles/sorted/config/symfony-config.yml',
-            './tests/yamlFiles/unSorted/service/shopsys-service.yml',
+            './tests/yamlFiles/unSorted/route/symfony-route.yml',
         ];
-        $inputSettingData = $this->getInputSettingDataMock($pathToDir, $excludedPaths);
 
-        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData, new NullOutput());
+        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($pathToFiles, new NullOutput());
 
-        $this->assertCount(10, $yamlFiles);
+        $this->assertCount(2, $yamlFiles);
     }
 
-    public function testFindAllYamlFilesInDirExceptOfExcludedDirsAndFiles()
+    public function testFindAllYamlFilesInPathsAndDirs()
     {
-        $pathToDir = ['./tests/yamlFiles/'];
-        $excludedPaths = [
-            './tests/yamlFiles/sorted/config',
-            './tests/yamlFiles/unSorted/route',
-            './tests/yamlFiles/unSorted/service/shopsys-service.yml',
-            './tests/yamlFiles/unSorted/yaml-getting-started.yml',
+        $pathToDirsAndFiles = [
+            './tests/yamlFiles/sorted/config/symfony-config.yml',
+            './tests/yamlFiles/unSorted/route/symfony-route.yml',
+            './tests/yamlFiles/unSorted/config',
+            './tests/yamlFiles/unSorted/service',
         ];
-        $inputSettingData = $this->getInputSettingDataMock($pathToDir, $excludedPaths);
 
-        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData, new NullOutput());
+        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($pathToDirsAndFiles, new NullOutput());
 
-        $this->assertCount(7, $yamlFiles);
-    }
-
-    public function testFindFile()
-    {
-        $pathToFile = ['./tests/yamlFiles/sorted/yaml-getting-started.yml'];
-        $excludedPaths = [];
-        $inputSettingData = $this->getInputSettingDataMock($pathToFile, $excludedPaths);
-
-        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData, new NullOutput());
-
-        $this->assertCount(1, $yamlFiles);
+        $this->assertCount(6, $yamlFiles);
     }
 
     public function testReturnFullPathToFile()
     {
-        $pathToFile = './tests/yamlFiles/unSorted/yaml-getting-started.yml';
-        $excludedPaths = [];
-        $inputSettingData = $this->getInputSettingDataMock([$pathToFile], $excludedPaths);
+        $pathToFile = ['./tests/yamlFiles/unSorted/yaml-getting-started.yml'];
 
-        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData, new NullOutput());
-        $foundFile = reset($yamlFiles);
+        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($pathToFile, new NullOutput());
 
-        $this->assertEquals($pathToFile, $foundFile);
+        $this->assertEquals($pathToFile, $yamlFiles);
     }
 
     public function testReturnFullPathToFilesFromDir()
     {
-        $pathToFile = ['./tests/yamlFiles/unSorted/config/', './tests/yamlFiles/unSorted/route/'];
-        $excludedPaths = [];
-        $inputSettingData = $this->getInputSettingDataMock($pathToFile, $excludedPaths);
+        $pathToDirs = ['./tests/yamlFiles/unSorted/config/', './tests/yamlFiles/unSorted/route/'];
 
-        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData, new NullOutput());
+        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($pathToDirs, new NullOutput());
 
         $expectedYamlFiles = [
             './tests/yamlFiles/unSorted/config/symfony-config.yml',
@@ -112,20 +75,31 @@ class YamlFilesPathServiceTest extends TestCase
             './tests/yamlFiles/unSorted/route/symfony-route.yml',
         ];
 
-        $this->assertCount(count(array_intersect($yamlFiles, $expectedYamlFiles)), $yamlFiles); // assert two arrays are equal, but order of elements not important
+        $this->assertTrue($this->arraysAreEqual($yamlFiles, $expectedYamlFiles)); // assert two arrays are equal, but order of elements is not important
     }
 
     /**
-     * @param string[] $pathToDirsOrFiles
-     * @param string[] $excludedPaths
-     * @return \YamlStandards\Command\InputSettingData|PHPUnit_Framework_MockObject_MockObject
+     * @param string[] $expectedPaths
+     * @param string[] $actualPaths
+     * @return bool
      */
-    private function getInputSettingDataMock(array $pathToDirsOrFiles, array $excludedPaths)
+    private function arraysAreEqual(array $expectedPaths, array $actualPaths)
     {
-        $inputSettingDataMock = $this->createMock(InputSettingData::class);
-        $inputSettingDataMock->method('getPathToDirsOrFiles')->willReturn($pathToDirsOrFiles);
-        $inputSettingDataMock->method('getExcludedPaths')->willReturn($excludedPaths);
+        $differentBetweenArrays = array_diff($actualPaths, $expectedPaths);
+        if (count($differentBetweenArrays) > 0) {
+            return false;
+        }
 
-        return $inputSettingDataMock;
+        if (count($actualPaths) !== count($expectedPaths)) {
+            return false;
+        }
+
+        foreach ($actualPaths as $actualPath) {
+            if (in_array($actualPath, $expectedPaths, true) === false) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
