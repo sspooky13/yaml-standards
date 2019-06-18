@@ -134,7 +134,7 @@ class YamlCommand extends Command
      * @param string[] $excludedFileMasks
      * @return bool
      */
-    private function isFileSkipped($pathToFile, $pathToSkippedYamlFiles, array $excludedFileMasks = [])
+    private function isFileSkipped($pathToFile, array $pathToSkippedYamlFiles, array $excludedFileMasks = [])
     {
         if (in_array($pathToFile, $pathToSkippedYamlFiles, true)) {
             return true;
