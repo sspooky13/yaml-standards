@@ -57,17 +57,17 @@ class YamlCommand extends Command
 
         $inputSettingData = new InputSettingData($input);
 
-        $pathToYamlFilesWithSkippedFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData, $output, true);
-        $pathToYamlFilesWithoutSkippedFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData, $output);
-        $processOutput = new ProcessOutput(count($pathToYamlFilesWithSkippedFiles));
+        $pathToYamlFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData->getPathToDirsOrFiles(), $output);
+        $pathToSkippedYamlFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData->getExcludedPaths(), $output);
+        $processOutput = new ProcessOutput(count($pathToYamlFiles));
 
         $fixerInterfaces = StandardClassesLoaderService::getFixerClassesByInputSettingData($inputSettingData);
         $checkerInterfaces = StandardClassesLoaderService::getCheckerClassesByInputSettingData($inputSettingData);
         $results = [[]];
 
-        foreach ($pathToYamlFilesWithSkippedFiles as $pathToYamlFile) {
+        foreach ($pathToYamlFiles as $pathToYamlFile) {
             $fileResults = [];
-            if ($this->isFileSkipped($pathToYamlFile, $pathToYamlFilesWithoutSkippedFiles, $inputSettingData->getExcludedFileMasks())) {
+            if ($this->isFileSkipped($pathToYamlFile, $pathToSkippedYamlFiles, $inputSettingData->getExcludedFileMasks())) {
                 $output->write($processOutput->process(ProcessOutput::STATUS_CODE_SKIPP));
                 continue;
             }
@@ -129,13 +129,13 @@ class YamlCommand extends Command
 
     /**
      * @param string $pathToFile
-     * @param string[] $pathToYamlFilesWithoutSkippedFiles
+     * @param string[] $pathToSkippedYamlFiles
      * @param string[] $excludedFileMasks
      * @return bool
      */
-    private function isFileSkipped($pathToFile, $pathToYamlFilesWithoutSkippedFiles, array $excludedFileMasks = [])
+    private function isFileSkipped($pathToFile, $pathToSkippedYamlFiles, array $excludedFileMasks = [])
     {
-        if (in_array($pathToFile, $pathToYamlFilesWithoutSkippedFiles, true) === false) {
+        if (in_array($pathToFile, $pathToSkippedYamlFiles, true)) {
             return true;
         }
 
