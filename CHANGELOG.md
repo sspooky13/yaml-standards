@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Fixed
+- Yaml path service: first check whether path refer to real dir or file
 
 ## [4.2.2] - 2019-06-18
 ### Fixed

@@ -20,6 +20,10 @@ class YamlFilesPathService
     {
         $pathToFiles = [];
         foreach ($pathToDirsOrFiles as $pathToDirOrFile) {
+            if (self::existsDirectoryOrFile($pathToDirOrFile) === false) {
+                continue;
+            }
+
             if (is_file($pathToDirOrFile)) {
                 $pathToFiles[] = $pathToDirOrFile;
                 continue;
@@ -41,5 +45,14 @@ class YamlFilesPathService
         $pathToFiles = str_replace('\\', '/', $pathToFiles);
 
         return array_unique($pathToFiles);
+    }
+
+    /**
+     * @param string $pathToDirOrFile
+     * @return bool
+     */
+    private static function existsDirectoryOrFile($pathToDirOrFile)
+    {
+        return is_dir($pathToDirOrFile) || is_file($pathToDirOrFile);
     }
 }
