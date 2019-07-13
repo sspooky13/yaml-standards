@@ -7,6 +7,7 @@ use Symfony\Component\Yaml\Yaml;
 use YamlStandards\Command\InputSettingData;
 use YamlStandards\Command\ProcessOutput;
 use YamlStandards\Model\CheckerInterface;
+use YamlStandards\Model\Component\YamlService;
 use YamlStandards\Result\Result;
 
 /**
@@ -19,14 +20,14 @@ class YamlInlineChecker implements CheckerInterface
      */
     public function check($pathToYamlFile, InputSettingData $inputSettingData)
     {
-        $yamlArrayData = $this->parseData($pathToYamlFile);
+        $yamlArrayData = YamlService::getYamlData($pathToYamlFile);
         $yamlStringData = Yaml::dump($yamlArrayData, 3);
 
         $yamlContent = file_get_contents($pathToYamlFile);
         $yamlContent = str_replace("\r", '', $yamlContent); // remove carriage returns
         $yamlLines = explode("\n", $yamlContent);
         $lastYamlElement = end($yamlLines);
-        $filteredYamlLines = array_filter($yamlLines, ['self', 'removeBlankLine']);
+        $filteredYamlLines = array_filter($yamlLines, [YamlService::class, 'isLineNotBlank']);
         $filteredYamlLines = array_filter($filteredYamlLines, ['self', 'removeCommentLine']);
         $filteredYamlLines = array_map(['self', 'removeComments'], $filteredYamlLines);
         if (trim($lastYamlElement) === '') {
@@ -43,27 +44,6 @@ class YamlInlineChecker implements CheckerInterface
         $diffBetweenStrings = $differ->diff($filteredYamlFile, $yamlStringData);
 
         return new Result($pathToYamlFile, Result::RESULT_CODE_INVALID_FILE_SYNTAX, ProcessOutput::STATUS_CODE_INVALID_FILE_SYNTAX, $diffBetweenStrings);
-    }
-
-    /**
-     * @param string $pathToYamlFile
-     * @throws \Symfony\Component\Yaml\Exception\ParseException
-     * @return string[]
-     */
-    private function parseData($pathToYamlFile)
-    {
-        return (array)Yaml::parse(file_get_contents($pathToYamlFile), Yaml::PARSE_CUSTOM_TAGS);
-    }
-
-    /**
-     * @param string $yamlLine
-     * @return bool
-     *
-     * @SuppressWarnings("UnusedPrivateMethod") Method is used but PHPMD report he is not
-     */
-    private function removeBlankLine($yamlLine)
-    {
-        return trim($yamlLine) !== '';
     }
 
     /**

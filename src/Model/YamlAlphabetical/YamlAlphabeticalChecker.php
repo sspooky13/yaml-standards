@@ -7,6 +7,7 @@ use Symfony\Component\Yaml\Yaml;
 use YamlStandards\Command\InputSettingData;
 use YamlStandards\Command\ProcessOutput;
 use YamlStandards\Model\CheckerInterface;
+use YamlStandards\Model\Component\YamlService;
 use YamlStandards\Result\Result;
 
 /**
@@ -19,7 +20,7 @@ class YamlAlphabeticalChecker implements CheckerInterface
      */
     public function check($pathToYamlFile, InputSettingData $inputSettingData)
     {
-        $yamlArrayData = $this->parseData($pathToYamlFile);
+        $yamlArrayData = YamlService::getYamlData($pathToYamlFile);
         $yamlArrayDataSorted = $this->sortArray($yamlArrayData, $inputSettingData->getAlphabeticalSortDepth());
 
         $yamlStringData = Yaml::dump($yamlArrayData, PHP_INT_MAX);
@@ -33,16 +34,6 @@ class YamlAlphabeticalChecker implements CheckerInterface
         $diffBetweenStrings = $differ->diff($yamlStringData, $yamlStringDataSorted);
 
         return new Result($pathToYamlFile, Result::RESULT_CODE_INVALID_FILE_SYNTAX, ProcessOutput::STATUS_CODE_INVALID_FILE_SYNTAX, $diffBetweenStrings);
-    }
-
-    /**
-     * @param string $pathToYamlFile
-     * @throws \Symfony\Component\Yaml\Exception\ParseException
-     * @return string[]
-     */
-    private function parseData($pathToYamlFile)
-    {
-        return (array)Yaml::parse(file_get_contents($pathToYamlFile), Yaml::PARSE_CUSTOM_TAGS);
     }
 
     /**
@@ -95,34 +86,12 @@ class YamlAlphabeticalChecker implements CheckerInterface
      */
     private function sortArrayKeyWithUnderscoresAsFirst(array $yamlArrayData)
     {
-        $arrayWithUnderscoreKeys = array_filter($yamlArrayData, ['self', 'hasArrayKeyUnderscoreAsFirstCharacter'], ARRAY_FILTER_USE_KEY);
-        $arrayWithOtherKeys = array_filter($yamlArrayData, ['self', 'hasNotArrayKeyUnderscoreAsFirstCharacter'], ARRAY_FILTER_USE_KEY);
+        $arrayWithUnderscoreKeys = array_filter($yamlArrayData, [YamlService::class, 'hasArrayKeyUnderscoreAsFirstCharacter'], ARRAY_FILTER_USE_KEY);
+        $arrayWithOtherKeys = array_filter($yamlArrayData, [YamlService::class, 'hasNotArrayKeyUnderscoreAsFirstCharacter'], ARRAY_FILTER_USE_KEY);
 
         ksort($arrayWithUnderscoreKeys);
         ksort($arrayWithOtherKeys);
 
         return array_merge($arrayWithUnderscoreKeys, $arrayWithOtherKeys);
-    }
-
-    /**
-     * @param string $key
-     * @return bool
-     *
-     * @SuppressWarnings("UnusedPrivateMethod") Method is used but PHPMD report he is not
-     */
-    private function hasArrayKeyUnderscoreAsFirstCharacter($key)
-    {
-        return strpos($key, '_') === 0;
-    }
-
-    /**
-     * @param string $key
-     * @return bool
-     *
-     * @SuppressWarnings("UnusedPrivateMethod") Method is used but PHPMD report he is not
-     */
-    private function hasNotArrayKeyUnderscoreAsFirstCharacter($key)
-    {
-        return strpos($key, '_') !== 0;
     }
 }

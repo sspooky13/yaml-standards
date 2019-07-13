@@ -2,7 +2,7 @@
 
 namespace YamlStandards\Model\YamlIndent;
 
-use YamlStandards\Result\Result;
+use YamlStandards\Model\Component\YamlService;
 
 class YamlIndentDataFactory
 {
@@ -19,7 +19,7 @@ class YamlIndentDataFactory
      */
     public function getRightFileLines(array $fileLines, $key, $countOfIndents, $fileLine, $isCommentLine = false)
     {
-        if ($this->isCommentLine($fileLines[$key])) {
+        if (YamlService::isLineComment($fileLines[$key])) {
             $key++;
             return $this->getRightFileLines($fileLines, $key, $countOfIndents, $fileLine, true);
         }
@@ -53,7 +53,7 @@ class YamlIndentDataFactory
         // the highest parent
         if ($countOfRowIndents === 0) {
             // line is directive
-            if ($this->hasLineThreeDashesOnStartOfLine($trimmedLine)) {
+            if (YamlService::hasLineThreeDashesOnStartOfLine($trimmedLine)) {
                 $correctIndents = $this->getCorrectIndents($countOfRowIndents);
                 $trimmedFileLine = trim($fileLine);
 
@@ -62,7 +62,7 @@ class YamlIndentDataFactory
 
             // parent start as array, e.g. "- foo: bar"
             // skip comment line because we want result after this condition
-            if ($isCommentLine === false && $this->isLineStartOfArrayWithKeyAndValue($trimmedLine)) {
+            if ($isCommentLine === false && YamlService::isLineStartOfArrayWithKeyAndValue($trimmedLine)) {
                 return $this->getCorrectLineForArrayWithKeyAndValue($line, $fileLines, $key, $countOfIndents, $fileLine, $isCommentLine);
             }
 
@@ -73,7 +73,7 @@ class YamlIndentDataFactory
         }
 
         // line start of array, e.g. "- foo: bar" or "- foo" or "- { foo: bar }"
-        if ($this->isLineStartOfArrayWithKeyAndValue($trimmedLine)) {
+        if (YamlService::isLineStartOfArrayWithKeyAndValue($trimmedLine)) {
             return $this->getCorrectLineForArrayWithKeyAndValue($line, $fileLines, $key, $countOfIndents, $fileLine, $isCommentLine);
         }
 
@@ -110,7 +110,7 @@ class YamlIndentDataFactory
         $trimmedLineValue = trim($lineValue);
 
         // parent, not comment line
-        if ($isCommentLine === false && ($trimmedLineValue === '' || $this->isValueReuseVariable($trimmedLineValue))) {
+        if ($isCommentLine === false && ($trimmedLineValue === '' || YamlService::isValueReuseVariable($trimmedLineValue))) {
             $nextLine = $fileLines[$key + 1];
             $countOfNextRowIndents = strlen($nextLine) - strlen(ltrim($nextLine));
             if ($countOfNextRowIndents > $countOfRowIndents) {
@@ -131,15 +131,6 @@ class YamlIndentDataFactory
     }
 
     /**
-     * @param string $fileLine
-     * @return bool
-     */
-    private function isCommentLine($fileLine)
-    {
-        return preg_match('/^\s*#/', $fileLine) === 1;
-    }
-
-    /**
      * @param int $countOfIndents
      * @return string
      */
@@ -154,53 +145,6 @@ class YamlIndentDataFactory
         }
 
         return $indents;
-    }
-
-    /**
-     * @param string $value
-     * @return bool
-     */
-    private function isValueReuseVariable($value)
-    {
-        return strpos($value, '&') === 0;
-    }
-
-    /**
-     * @param string $value
-     * @return bool
-     */
-    private function hasLineDashOnStartOfLine($value)
-    {
-        return strpos($value, '-') === 0;
-    }
-
-    /**
-     * @param string $trimmedLine
-     * @return bool
-     */
-    private function hasLineThreeDashesOnStartOfLine($trimmedLine)
-    {
-        return strpos($trimmedLine, '---') === 0;
-    }
-
-    /**
-     * @param string $value
-     * @return bool
-     */
-    private function isCurlyBracketInStartOfString($value)
-    {
-        return strpos($value, '{') === 0;
-    }
-
-    /**
-     * line start of array, e.g. "- foo: bar" or "- foo" or "- { foo: bar }"
-     *
-     * @param string $trimmedLine
-     * @return bool
-     */
-    private function isLineStartOfArrayWithKeyAndValue($trimmedLine)
-    {
-        return $trimmedLine !== '-' && $this->hasLineDashOnStartOfLine($trimmedLine);
     }
 
     /**
@@ -224,14 +168,14 @@ class YamlIndentDataFactory
             $prevLine = $fileLines[$key];
             $trimmedPrevLine = trim($prevLine);
 
-            if ($this->hasLineDashOnStartOfLine($trimmedPrevLine)) {
+            if (YamlService::hasLineDashOnStartOfLine($trimmedPrevLine)) {
                 $prevLine = preg_replace('/-/', ' ', $prevLine, 1); // replace '-' for space
             }
 
             $countOfPrevRowIndents = strlen($prevLine) - strlen(ltrim($prevLine));
 
             if ($countOfPrevRowIndents === $countOfRowIndents) {
-                if ($this->isLineStartOfArrayWithKeyAndValue($trimmedPrevLine)) {
+                if (YamlService::isLineStartOfArrayWithKeyAndValue($trimmedPrevLine)) {
                     return true;
                 }
             } else {
@@ -267,7 +211,7 @@ class YamlIndentDataFactory
         }
 
         // solution "- { foo: bar }"
-        if ($this->isCurlyBracketInStartOfString($trimmedLineWithoutDash)) {
+        if (YamlService::isCurlyBracketInStartOfString($trimmedLineWithoutDash)) {
             $correctIndentsBetweenDashAndBracket = $this->getCorrectIndents(1);
 
             return $correctIndentsOnStartOfLine . '-' . $correctIndentsBetweenDashAndBracket . $trimmedLineWithoutDash;
@@ -318,17 +262,17 @@ class YamlIndentDataFactory
         $line = $fileLines[$key];
         $countOfRowIndents = strlen($line) - strlen(ltrim($line));
         $trimmedLine = trim($line);
-        $isArrayLine = $this->hasLineDashOnStartOfLine($trimmedLine);
+        $isArrayLine = YamlService::hasLineDashOnStartOfLine($trimmedLine);
 
         while ($key > 0) {
             $key--;
             $prevLine = $fileLines[$key];
             $trimmedPrevLine = trim($prevLine);
-            $isPrevLineArrayLine = $this->hasLineDashOnStartOfLine($trimmedPrevLine);
+            $isPrevLineArrayLine = YamlService::hasLineDashOnStartOfLine($trimmedPrevLine);
             $countOfPrevRowIndents = strlen($prevLine) - strlen(ltrim($prevLine));
 
             // ignore comment line and empty line
-            if ($trimmedPrevLine === '' || $this->isCommentLine($prevLine)) {
+            if ($trimmedPrevLine === '' || YamlService::isLineComment($prevLine)) {
                 continue;
             }
 
@@ -352,7 +296,7 @@ class YamlIndentDataFactory
                 $line = $fileLines[$key];
                 $countOfRowIndents = strlen($line) - strlen(ltrim($line));
                 $trimmedLine = trim($line);
-                $isArrayLine = $this->hasLineDashOnStartOfLine($trimmedLine);
+                $isArrayLine = YamlService::hasLineDashOnStartOfLine($trimmedLine);
 
                 $countOfParents++;
             }
@@ -360,12 +304,12 @@ class YamlIndentDataFactory
             // if line has zero counts of indents then it's highest parent and should be ended
             if ($countOfRowIndents === 0) {
                 // find parent if line belong to array, if it exists then add one parent to count of parents variable
-                if ($this->isLineStartOfArrayWithKeyAndValue($trimmedLine)) {
+                if (YamlService::isLineStartOfArrayWithKeyAndValue($trimmedLine)) {
                     while ($key > 0) {
                         $key--;
                         $prevLine = $fileLines[$key];
                         $trimmedPrevLine = trim($prevLine);
-                        if ($trimmedPrevLine === '' || $this->isCommentLine($prevLine)) {
+                        if ($trimmedPrevLine === '' || YamlService::isLineComment($prevLine)) {
                             continue;
                         }
 

@@ -6,6 +6,7 @@ use SebastianBergmann\Diff\Differ;
 use YamlStandards\Command\InputSettingData;
 use YamlStandards\Command\ProcessOutput;
 use YamlStandards\Model\CheckerInterface;
+use YamlStandards\Model\Component\YamlService;
 use YamlStandards\Result\Result;
 
 /**
@@ -22,7 +23,7 @@ class YamlSpacesBetweenGroupsChecker implements CheckerInterface
         $yamlContent = str_replace("\r", '', $yamlContent); // remove carriage returns
         $yamlLines = explode("\n", $yamlContent);
         $lastYamlElement = end($yamlLines);
-        $filteredYamlLines = array_values(array_filter($yamlLines, ['self', 'removeBlankLine']));
+        $filteredYamlLines = array_values(array_filter($yamlLines, [YamlService::class, 'isLineNotBlank']));
         $correctYamlContent = $this->getCorrectYamlContentWithSpacesBetweeenGroups($filteredYamlLines, $inputSettingData->getLevelForCheckSpacesBetweenGroups());
 
         if (trim($lastYamlElement) === '') {
@@ -49,7 +50,7 @@ class YamlSpacesBetweenGroupsChecker implements CheckerInterface
         $correctYamlLines = [];
 
         foreach ($yamlLines as $key => $yamlLine) {
-            if ($this->isCommentLine($yamlLine)) {
+            if (YamlService::isLineComment($yamlLine)) {
                 $correctYamlLines[$key] = $yamlLine;
                 continue;
             }
@@ -69,26 +70,6 @@ class YamlSpacesBetweenGroupsChecker implements CheckerInterface
     }
 
     /**
-     * @param string $yamlLine
-     * @return bool
-     */
-    protected function isCommentLine($yamlLine)
-    {
-        return preg_match('/^\s*#/', $yamlLine) === 1;
-    }
-
-    /**
-     * @param string $yamlLine
-     * @return bool
-     *
-     * @SuppressWarnings("UnusedPrivateMethod") Method is used but PHPMD report he is not
-     */
-    private function removeBlankLine($yamlLine)
-    {
-        return trim($yamlLine) !== '';
-    }
-
-    /**
      * @param int $key
      * @param string[] $yamlLines
      * @param int $previousCountOfIndents
@@ -101,7 +82,7 @@ class YamlSpacesBetweenGroupsChecker implements CheckerInterface
         $countOfRowIndents = strlen($yamlLine) - strlen(ltrim($yamlLine));
         $key--;
 
-        if ($this->isCommentLine($yamlLine)) {
+        if (YamlService::isLineComment($yamlLine)) {
             return $this->getLevelOfCurrentLine($key, $yamlLines, $previousCountOfIndents, $currentLineLevel);
         }
 
@@ -138,7 +119,7 @@ class YamlSpacesBetweenGroupsChecker implements CheckerInterface
             return $correctYamlLines;
         }
 
-        while (array_key_exists($key, $correctYamlLines) && $this->isCommentLine($correctYamlLines[$key])) {
+        while (array_key_exists($key, $correctYamlLines) && YamlService::isLineComment($correctYamlLines[$key])) {
             $key--;
         }
 
