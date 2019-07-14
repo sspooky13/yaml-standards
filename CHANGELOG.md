@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [4.2.3] - 2019-07-14
 ### Fixed
 - Yaml path service: first check whether path refer to real dir or file
 
@@ -106,7 +108,8 @@
 [#14]: https://github.com/sspooky13/yaml-standards/issues/14
 [#13]: https://github.com/sspooky13/yaml-standards/pull/13
 
-[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/4.2.2...HEAD
+[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/4.2.3...HEAD
+[4.2.3]: https://github.com/sspooky13/yaml-standards/compare/4.2.2...4.2.3
 [4.2.2]: https://github.com/sspooky13/yaml-standards/compare/4.2.1...4.2.2
 [4.2.1]: https://github.com/sspooky13/yaml-standards/compare/4.2.0...4.2.1
 [4.2.0]: https://github.com/sspooky13/yaml-standards/compare/4.1.0...4.2.0
