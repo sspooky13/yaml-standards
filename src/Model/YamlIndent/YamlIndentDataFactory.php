@@ -136,15 +136,7 @@ class YamlIndentDataFactory
      */
     private function getCorrectIndents($countOfIndents)
     {
-        $currentNumberOfIndents = 1;
-        $indents = '';
-
-        while ($currentNumberOfIndents <= $countOfIndents) {
-            $indents .= ' ';
-            $currentNumberOfIndents++;
-        }
-
-        return $indents;
+        return str_repeat(' ', $countOfIndents);
     }
 
     /**
