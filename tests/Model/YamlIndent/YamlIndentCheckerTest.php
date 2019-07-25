@@ -24,6 +24,7 @@ class YamlIndentCheckerTest extends TestCase
     {
         $inputSettingData = $this->getInputSettingDataMock();
         $pathToFiles = [
+            __DIR__ . '/resource/unfixed/kustomization.yaml',
             __DIR__ . '/resource/unfixed/shopsys-service.yml',
             __DIR__ . '/resource/unfixed/symfony-config.yml',
             __DIR__ . '/resource/unfixed/symfony-route.yml',
@@ -54,6 +55,7 @@ class YamlIndentCheckerTest extends TestCase
     {
         $inputSettingData = $this->getInputSettingDataMock();
         $pathToFiles = [
+            __DIR__ . '/resource/fixed/kustomization.yaml',
             __DIR__ . '/resource/fixed/shopsys-service.yml',
             __DIR__ . '/resource/fixed/symfony-config.yml',
             __DIR__ . '/resource/fixed/symfony-route.yml',
