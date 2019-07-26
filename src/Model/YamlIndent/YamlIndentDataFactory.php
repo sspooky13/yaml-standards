@@ -209,34 +209,21 @@ class YamlIndentDataFactory
             return $correctIndentsOnStartOfLine . '-' . $correctIndentsBetweenDashAndBracket . $trimmedLineWithoutDash;
         }
 
-        /**
-         * solution for more values in array
-         * "- foo: bar"
-         * "  baz: qux:
-         */
-        if (array_key_exists($key + 1, $fileLines) && $this->isNextLineKeyAndValueOfArray($lineWithReplacedDashToSpace, $fileLines[$key + 1])) {
-            $correctIndentsBetweenDashAndKey = $this->getCorrectIndents($countOfIndents - 1); // 1 space is dash, dash is as indent
+        // solution "- foo" (single value of an array)
+        if (YamlService::isKeyInStartOfString($trimmedLineWithoutDash) === false) {
+            $correctIndentsBetweenDashAndKey = $this->getCorrectIndents(1);
 
             return $correctIndentsOnStartOfLine . '-' . $correctIndentsBetweenDashAndKey . $trimmedLineWithoutDash;
         }
 
-        // solution for one value in array "- foo: bar" or "- foo"
-        $correctIndentsBetweenDashAndKey = $this->getCorrectIndents(1);
+        /**
+         * solution for one or more values in array
+         * "- foo: bar"
+         * "  baz: qux"
+         */
+        $correctIndentsBetweenDashAndKey = $this->getCorrectIndents($countOfIndents - 1); // 1 space is dash, dash is as indent
 
         return $correctIndentsOnStartOfLine . '-' . $correctIndentsBetweenDashAndKey . $trimmedLineWithoutDash;
-    }
-
-    /**
-     * @param string $currentLine
-     * @param string $nextLine
-     * @return bool
-     */
-    private function isNextLineKeyAndValueOfArray($currentLine, $nextLine)
-    {
-        $countOfCurrentRowIndents = strlen($currentLine) - strlen(ltrim($currentLine));
-        $countOfNextRowIndents = strlen($nextLine) - strlen(ltrim($nextLine));
-
-        return $countOfCurrentRowIndents === $countOfNextRowIndents;
     }
 
     /**
@@ -247,11 +234,13 @@ class YamlIndentDataFactory
      * @return int
      *
      * @SuppressWarnings("CyclomaticComplexity")
+     * @SuppressWarnings("ExcessiveMethodLength")
      */
     private function getCountOfParentsForLine(array $fileLines, $key)
     {
         $countOfParents = 0;
         $line = $fileLines[$key];
+        $originalLine = $line;
         $countOfRowIndents = strlen($line) - strlen(ltrim($line));
         $trimmedLine = trim($line);
         $isArrayLine = YamlService::hasLineDashOnStartOfLine($trimmedLine);
@@ -309,6 +298,17 @@ class YamlIndentDataFactory
                         $explodedPrevLine = explode(':', $prevLine);
                         if ($countOfRowIndents === 0 && array_key_exists(1, $explodedPrevLine) && trim($explodedPrevLine[1]) === '') {
                             $countOfParents++;
+
+                            /* nested hierarchy in array fix, eg.
+                               - foo:
+                                   nested: value
+                                 bar: baz
+                            */
+                            $originalLineKeyIndent = strlen($originalLine) - strlen(ltrim($originalLine, '- '));
+                            $lineKeyIndent = strlen($line) - strlen(ltrim($line, '- '));
+                            if (YamlService::isLineOpeningAnArray($trimmedLine) && $originalLineKeyIndent > $lineKeyIndent) {
+                                $countOfParents++;
+                            }
 
                             break;
                         }

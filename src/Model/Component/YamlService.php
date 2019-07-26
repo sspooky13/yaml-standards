@@ -2,6 +2,7 @@
 
 namespace YamlStandards\Model\Component;
 
+use Symfony\Component\Yaml\Inline;
 use Symfony\Component\Yaml\Yaml;
 
 class YamlService
@@ -97,5 +98,27 @@ class YamlService
     public static function isLineStartOfArrayWithKeyAndValue($trimmedLine)
     {
         return $trimmedLine !== '-' && self::hasLineDashOnStartOfLine($trimmedLine);
+    }
+
+    /**
+     * value starting with key, e.g. 'foo: bar' or '"foo bar": baz'
+     *
+     * @param string $value
+     * @return bool
+     */
+    public static function isKeyInStartOfString($value)
+    {
+        return (bool)preg_match('~^(' . Inline::REGEX_QUOTED_STRING . '|[^ \'"{\[].*?) *:~u', $value);
+    }
+
+    /**
+     * line possibly opening an array, e.g. 'foo:' or '- foo:'
+     *
+     * @param string $trimmedLine
+     * @return bool
+     */
+    public static function isLineOpeningAnArray($trimmedLine)
+    {
+        return (bool)preg_match('~^(- +)*(' . Inline::REGEX_QUOTED_STRING . '|[^ \'"{\[].*?) *:$~u', $trimmedLine);
     }
 }
