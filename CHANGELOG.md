@@ -2,6 +2,30 @@
 
 ## [Unreleased]
 
+## [4.2.4] - 2019-07-26
+### Fixed
+- [#27] Yaml indent: fix nested hierarchy, where elements are nested in 2 arrays, e.g.:
+```yaml
+patchesJson6902:
+-   target:
+        group: extensions
+        version: v1beta1
+        kind: Ingress
+        name: shopsys
+    path: ./ingress-patch.yaml
+```
+to correct
+```yaml
+patchesJson6902:
+    -   target:
+            group: extensions
+            version: v1beta1
+            kind: Ingress
+            name: shopsys
+        path: ./ingress-patch.yaml
+```
+, Thanks to [@PetrHeinz]
+
 ## [4.2.3] - 2019-07-14
 ### Fixed
 - Yaml path service: first check whether path refer to real dir or file
@@ -103,7 +127,9 @@
 [@ChrisDBrown]: https://github.com/ChrisDBrown
 [@boris-brtan]: https://github.com/boris-brtan
 [@DavidOstrozlik]: https://github.com/DavidOstrozlik
+[@PetrHeinz]: https://github.com/PetrHeinz
 
+[#27]: https://github.com/sspooky13/yaml-standards/pull/27
 [#18]: https://github.com/sspooky13/yaml-standards/pull/18
 [#14]: https://github.com/sspooky13/yaml-standards/issues/14
 [#13]: https://github.com/sspooky13/yaml-standards/pull/13
