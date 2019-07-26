@@ -67,7 +67,7 @@ class YamlIndentCheckerTest extends TestCase
 
         foreach ($pathToFiles as $pathToFile) {
             $result = $yamlIndentChecker->check($pathToFile, $inputSettingData);
-            $this->assertSame(Result::RESULT_CODE_OK, $result->getResultCode());
+            $this->assertSame(Result::RESULT_CODE_OK, $result->getResultCode(), sprintf('YAML indent check of "%s" failed.', $pathToFile));
         }
     }
 
