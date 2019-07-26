@@ -275,6 +275,15 @@ class YamlIndentDataFactory
                 $isArrayLine = YamlService::hasLineDashOnStartOfLine($trimmedLine);
 
                 $countOfParents++;
+
+                /* nested hierarchy in array fix, eg.
+                   - foo:
+                       nested: value
+                     bar: baz
+                */
+                if ($isArrayLine && YamlService::isLineOpeningAnArray($trimmedLine) && YamlService::keyIndentsOf($originalLine) > YamlService::keyIndentsOf($line)) {
+                    $countOfParents++;
+                }
             }
 
             // if line has zero counts of indents then it's highest parent and should be ended
@@ -293,15 +302,6 @@ class YamlIndentDataFactory
                         $explodedPrevLine = explode(':', $prevLine);
                         if ($countOfRowIndents === 0 && array_key_exists(1, $explodedPrevLine) && trim($explodedPrevLine[1]) === '') {
                             $countOfParents++;
-
-                            /* nested hierarchy in array fix, eg.
-                               - foo:
-                                   nested: value
-                                 bar: baz
-                            */
-                            if (YamlService::isLineOpeningAnArray($trimmedLine) && YamlService::keyIndentsOf($originalLine) > YamlService::keyIndentsOf($line)) {
-                                $countOfParents++;
-                            }
 
                             break;
                         }
