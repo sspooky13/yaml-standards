@@ -26,7 +26,7 @@ class YamlIndentDataFactory
 
         $line = $fileLines[$key];
         $trimmedLine = trim($line);
-        $countOfRowIndents = strlen($line) - strlen(ltrim($line));
+        $countOfRowIndents = YamlService::rowIndentsOf($line);
         $explodedLine = explode(':', $line);
 
         // empty line
@@ -112,8 +112,7 @@ class YamlIndentDataFactory
         // parent, not comment line
         if ($isCommentLine === false && ($trimmedLineValue === '' || YamlService::isValueReuseVariable($trimmedLineValue))) {
             $nextLine = $fileLines[$key + 1];
-            $countOfNextRowIndents = strlen($nextLine) - strlen(ltrim($nextLine));
-            if ($countOfNextRowIndents > $countOfRowIndents) {
+            if (YamlService::rowIndentsOf($nextLine) > $countOfRowIndents) {
                 $countOfParents = $this->getCountOfParentsForLine($fileLines, $key);
 
                 $correctIndents = $this->getCorrectIndents($countOfParents * $countOfIndents);
@@ -154,8 +153,6 @@ class YamlIndentDataFactory
     {
         while ($key >= 0) {
             $line = $fileLines[$key];
-            $countOfRowIndents = strlen($line) - strlen(ltrim($line));
-
             $key--;
             $prevLine = $fileLines[$key];
             $trimmedPrevLine = trim($prevLine);
@@ -164,9 +161,7 @@ class YamlIndentDataFactory
                 $prevLine = preg_replace('/-/', ' ', $prevLine, 1); // replace '-' for space
             }
 
-            $countOfPrevRowIndents = strlen($prevLine) - strlen(ltrim($prevLine));
-
-            if ($countOfPrevRowIndents === $countOfRowIndents) {
+            if (YamlService::rowIndentsOf($prevLine) === YamlService::rowIndentsOf($line)) {
                 if (YamlService::isLineStartOfArrayWithKeyAndValue($trimmedPrevLine)) {
                     return true;
                 }
@@ -241,7 +236,7 @@ class YamlIndentDataFactory
         $countOfParents = 0;
         $line = $fileLines[$key];
         $originalLine = $line;
-        $countOfRowIndents = strlen($line) - strlen(ltrim($line));
+        $countOfRowIndents = YamlService::rowIndentsOf($line);
         $trimmedLine = trim($line);
         $isArrayLine = YamlService::hasLineDashOnStartOfLine($trimmedLine);
 
@@ -250,7 +245,7 @@ class YamlIndentDataFactory
             $prevLine = $fileLines[$key];
             $trimmedPrevLine = trim($prevLine);
             $isPrevLineArrayLine = YamlService::hasLineDashOnStartOfLine($trimmedPrevLine);
-            $countOfPrevRowIndents = strlen($prevLine) - strlen(ltrim($prevLine));
+            $countOfPrevRowIndents = YamlService::rowIndentsOf($prevLine);
 
             // ignore comment line and empty line
             if ($trimmedPrevLine === '' || YamlService::isLineComment($prevLine)) {
@@ -275,7 +270,7 @@ class YamlIndentDataFactory
                 ($isArrayLine === false && $countOfPrevRowIndents < $countOfRowIndents)
             ) {
                 $line = $fileLines[$key];
-                $countOfRowIndents = strlen($line) - strlen(ltrim($line));
+                $countOfRowIndents = YamlService::rowIndentsOf($line);
                 $trimmedLine = trim($line);
                 $isArrayLine = YamlService::hasLineDashOnStartOfLine($trimmedLine);
 
@@ -294,7 +289,7 @@ class YamlIndentDataFactory
                             continue;
                         }
 
-                        $countOfRowIndents = strlen($prevLine) - strlen(ltrim($prevLine));
+                        $countOfRowIndents = YamlService::rowIndentsOf($prevLine);
                         $explodedPrevLine = explode(':', $prevLine);
                         if ($countOfRowIndents === 0 && array_key_exists(1, $explodedPrevLine) && trim($explodedPrevLine[1]) === '') {
                             $countOfParents++;
@@ -304,9 +299,7 @@ class YamlIndentDataFactory
                                    nested: value
                                  bar: baz
                             */
-                            $originalLineKeyIndent = strlen($originalLine) - strlen(ltrim($originalLine, '- '));
-                            $lineKeyIndent = strlen($line) - strlen(ltrim($line, '- '));
-                            if (YamlService::isLineOpeningAnArray($trimmedLine) && $originalLineKeyIndent > $lineKeyIndent) {
+                            if (YamlService::isLineOpeningAnArray($trimmedLine) && YamlService::keyIndentsOf($originalLine) > YamlService::keyIndentsOf($line)) {
                                 $countOfParents++;
                             }
 

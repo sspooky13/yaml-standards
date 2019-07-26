@@ -55,8 +55,7 @@ class YamlSpacesBetweenGroupsChecker implements CheckerInterface
                 continue;
             }
 
-            $countOfRowIndents = strlen($yamlLine) - strlen(ltrim($yamlLine));
-            $lineLevel = $this->getLevelOfCurrentLine($key, $yamlLines, $countOfRowIndents);
+            $lineLevel = $this->getLevelOfCurrentLine($key, $yamlLines, YamlService::rowIndentsOf($yamlLine));
             $correctYamlLines[$key] = $yamlLine;
 
             if ($lineLevel <= $level) {
@@ -79,7 +78,7 @@ class YamlSpacesBetweenGroupsChecker implements CheckerInterface
     private function getLevelOfCurrentLine($key, array $yamlLines, $previousCountOfIndents, $currentLineLevel = 1)
     {
         $yamlLine = $yamlLines[$key];
-        $countOfRowIndents = strlen($yamlLine) - strlen(ltrim($yamlLine));
+        $countOfRowIndents = YamlService::rowIndentsOf($yamlLine);
         $key--;
 
         if (YamlService::isLineComment($yamlLine)) {
@@ -112,7 +111,6 @@ class YamlSpacesBetweenGroupsChecker implements CheckerInterface
     private function getCorrectYamlLinesWithSpace($correctYamlLines, $key)
     {
         $yamlLine = $correctYamlLines[$key];
-        $countOfRowIndents = strlen($yamlLine) - strlen(ltrim($yamlLine));
         $key--;
 
         if (reset($correctYamlLines) === $yamlLine) {
@@ -128,9 +126,7 @@ class YamlSpacesBetweenGroupsChecker implements CheckerInterface
         }
 
         $previousYamlLine = $correctYamlLines[$key];
-        $previousCountOfRowIndents = strlen($previousYamlLine) - strlen(ltrim($previousYamlLine));
-
-        if ($previousCountOfRowIndents < $countOfRowIndents) {
+        if (YamlService::rowIndentsOf($previousYamlLine) < YamlService::rowIndentsOf($yamlLine)) {
             return $correctYamlLines;
         }
 

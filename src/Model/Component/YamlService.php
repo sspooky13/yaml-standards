@@ -121,4 +121,22 @@ class YamlService
     {
         return (bool)preg_match('~^(- +)*(' . Inline::REGEX_QUOTED_STRING . '|[^ \'"{\[].*?) *:$~u', $trimmedLine);
     }
+
+    /**
+     * @param string $line
+     * @return int
+     */
+    public static function rowIndentsOf($line)
+    {
+        return strlen($line) - strlen(ltrim($line));
+    }
+
+    /**
+     * @param string $line
+     * @return int
+     */
+    public static function keyIndentsOf($line)
+    {
+        return strlen($line) - strlen(ltrim($line, '- '));
+    }
 }
