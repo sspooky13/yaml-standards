@@ -7,7 +7,6 @@ use RecursiveIteratorIterator;
 use RecursiveRegexIterator;
 use RegexIterator;
 use Symfony\Component\Console\Output\OutputInterface;
-use UnexpectedValueException;
 
 class YamlFilesPathService
 {
@@ -29,16 +28,15 @@ class YamlFilesPathService
                 continue;
             }
 
-            try {
-                $recursiveDirectoryIterator = new RecursiveDirectoryIterator($pathToDirOrFile);
-                $recursiveIteratorIterator = new RecursiveIteratorIterator($recursiveDirectoryIterator);
-                $regexIterator = new RegexIterator($recursiveIteratorIterator, '/^.+\.(ya?ml(\.dist)?)$/i', RecursiveRegexIterator::GET_MATCH);
+            $recursiveIteratorIterator = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($pathToDirOrFile),
+                RecursiveIteratorIterator::LEAVES_ONLY,
+                RecursiveIteratorIterator::CATCH_GET_CHILD
+            );
+            $regexIterator = new RegexIterator($recursiveIteratorIterator, '/^.+\.(ya?ml(\.dist)?)$/i', RecursiveRegexIterator::GET_MATCH);
 
-                foreach ($regexIterator as $pathToFile) {
-                    $pathToFiles[] = reset($pathToFile);
-                }
-            } catch (UnexpectedValueException $exception) {
-                $output->writeln(sprintf('Error was caught: %s' . PHP_EOL, $exception->getMessage()));
+            foreach ($regexIterator as $pathToFile) {
+                $pathToFiles[] = reset($pathToFile);
             }
         }
 
