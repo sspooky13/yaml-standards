@@ -3,7 +3,6 @@
 | Bug fix?                      | yes/no
 | New feature?                  | yes/no
 | BC breaks?                    | yes/no
-| Standards and tests pass?     | yes/no
 | Fixes issues                  | #...
 | License                       | MIT
 
