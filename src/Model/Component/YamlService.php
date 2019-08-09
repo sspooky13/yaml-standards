@@ -108,7 +108,7 @@ class YamlService
      */
     public static function isKeyInStartOfString($value)
     {
-        return (bool)preg_match('~^(' . Inline::REGEX_QUOTED_STRING . '|[^ \'"{\[].*?) *:~u', $value);
+        return (bool)preg_match('~^(' . Inline::REGEX_QUOTED_STRING . '|[^ \'"{\[].*?) *:(\s|$)~u', $value);
     }
 
     /**
