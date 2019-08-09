@@ -1,31 +1,15 @@
 language: php
 
-matrix:
-  include:
-    - php: '5.6'
-      env: DEPENDENCIES=lowest
-    - php: '5.6'
-      env: DEPENDENCIES=highest
+php:
+  - '5.6'
+  - '7.0'
+  - '7.1'
+  - '7.2'
+  - '7.3'
 
-    - php: '7.0'
-      env: DEPENDENCIES=lowest
-    - php: '7.0'
-      env: DEPENDENCIES=highest
-
-    - php: '7.1'
-      env: DEPENDENCIES=lowest
-    - php: '7.1'
-      env: DEPENDENCIES=highest
-
-    - php: '7.2'
-      env: DEPENDENCIES=lowest
-    - php: '7.2'
-      env: DEPENDENCIES=highest
-
-    - php: '7.3'
-      env: DEPENDENCIES=lowest
-    - php: '7.3'
-      env: DEPENDENCIES=highest
+env:
+  - DEPENDENCIES=lowest
+  - DEPENDENCIES=highest
 
 before_script:
   - composer self-update
