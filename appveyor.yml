@@ -6,6 +6,7 @@ clone_folder: c:\projects\yaml-standards
 
 environment:
   # PHP version must be exactly defined because command `choco search PHP --exact --all-versions` returns only last version, I don't know why. I hope in near future this error will be fixed
+  APPVEYOR_CACHE_SKIP_RESTORE: true # cache is bad and I don't know how to clear it
   matrix:
     - php_version: 5.6.40
       dependencies: lowest
@@ -54,10 +55,12 @@ install:
   - IF %PHP%==1 echo extension=php_openssl.dll >> php.ini
   - IF %PHP%==1 echo extension=php_mbstring.dll >> php.ini
   - IF %PHP%==1 echo extension=php_fileinfo.dll >> php.ini
+  - IF %PHP%==1 echo extension=php_curl.dll >> php.ini
   - IF %PHP%==1 echo @php %%~dp0composer.phar %%* > composer.bat
   - appveyor-retry appveyor DownloadFile https://getcomposer.org/composer.phar
   - cd c:\projects\yaml-standards
   - composer self-update
+  - composer global require hirak/prestissimo
   - IF %dependencies%==lowest appveyor-retry composer update --prefer-lowest --prefer-dist --no-interaction --no-progress
   - IF %dependencies%==highest appveyor-retry composer update --prefer-dist --no-interaction --no-progress
 
