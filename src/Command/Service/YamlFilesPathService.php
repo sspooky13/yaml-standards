@@ -6,16 +6,14 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RecursiveRegexIterator;
 use RegexIterator;
-use Symfony\Component\Console\Output\OutputInterface;
 
 class YamlFilesPathService
 {
     /**
      * @param string[] $pathToDirsOrFiles
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @return string[]
      */
-    public static function getPathToYamlFiles(array $pathToDirsOrFiles, OutputInterface $output)
+    public static function getPathToYamlFiles(array $pathToDirsOrFiles)
     {
         $pathToFiles = [];
         foreach ($pathToDirsOrFiles as $pathToDirOrFile) {

@@ -58,8 +58,8 @@ class YamlCommand extends Command
 
         $inputSettingData = new InputSettingData($input);
 
-        $pathToYamlFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData->getPathToDirsOrFiles(), $output);
-        $pathToSkippedYamlFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData->getExcludedPaths(), $output);
+        $pathToYamlFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData->getPathToDirsOrFiles());
+        $pathToSkippedYamlFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData->getExcludedPaths());
         $processOutput = new ProcessOutput(count($pathToYamlFiles));
 
         $fixerInterfaces = StandardClassesLoaderService::getFixerClassesByInputSettingData($inputSettingData);
