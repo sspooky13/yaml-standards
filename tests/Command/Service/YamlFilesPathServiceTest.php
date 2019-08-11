@@ -3,7 +3,6 @@
 namespace YamlStandards\Command\Service;
 
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Console\Output\NullOutput;
 
 class YamlFilesPathServiceTest extends TestCase
 {
@@ -11,7 +10,7 @@ class YamlFilesPathServiceTest extends TestCase
     {
         $pathToDir = ['./tests/yamlFiles/unSorted/'];
 
-        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($pathToDir, new NullOutput());
+        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($pathToDir);
 
         $this->assertCount(6, $yamlFiles);
     }
@@ -23,7 +22,7 @@ class YamlFilesPathServiceTest extends TestCase
             './tests/yamlFiles/unSorted/route',
         ];
 
-        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($pathToDirs, new NullOutput());
+        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($pathToDirs);
 
         $this->assertCount(3, $yamlFiles);
     }
@@ -35,7 +34,7 @@ class YamlFilesPathServiceTest extends TestCase
             './tests/yamlFiles/unSorted/route/symfony-route.yml',
         ];
 
-        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($pathToFiles, new NullOutput());
+        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($pathToFiles);
 
         $this->assertCount(2, $yamlFiles);
     }
@@ -49,7 +48,7 @@ class YamlFilesPathServiceTest extends TestCase
             './tests/yamlFiles/unSorted/service',
         ];
 
-        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($pathToDirsAndFiles, new NullOutput());
+        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($pathToDirsAndFiles);
 
         $this->assertCount(6, $yamlFiles);
     }
@@ -58,7 +57,7 @@ class YamlFilesPathServiceTest extends TestCase
     {
         $pathToFile = ['./tests/yamlFiles/unSorted/yaml-getting-started.yml'];
 
-        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($pathToFile, new NullOutput());
+        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($pathToFile);
 
         $this->assertEquals($pathToFile, $yamlFiles);
     }
@@ -67,7 +66,7 @@ class YamlFilesPathServiceTest extends TestCase
     {
         $pathToDirs = ['./tests/yamlFiles/unSorted/config/', './tests/yamlFiles/unSorted/route/'];
 
-        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($pathToDirs, new NullOutput());
+        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($pathToDirs);
 
         $expectedYamlFiles = [
             './tests/yamlFiles/unSorted/config/symfony-config.yml',
