@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [4.2.5] - 2019-08-13
 ### Changed
 - [#31] Yaml files path service: ignore uniterable filepaths, Thanks to [@PetrHeinz]
 - [#32] Yaml indent: fix situation when key is without value and is not parent, Thanks to [@PetrHeinz]
@@ -141,7 +143,8 @@ patchesJson6902:
 [#14]: https://github.com/sspooky13/yaml-standards/issues/14
 [#13]: https://github.com/sspooky13/yaml-standards/pull/13
 
-[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/4.2.4...HEAD
+[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/4.2.5...HEAD
+[4.2.5]: https://github.com/sspooky13/yaml-standards/compare/4.2.4...4.2.5
 [4.2.4]: https://github.com/sspooky13/yaml-standards/compare/4.2.3...4.2.4
 [4.2.3]: https://github.com/sspooky13/yaml-standards/compare/4.2.2...4.2.3
 [4.2.2]: https://github.com/sspooky13/yaml-standards/compare/4.2.1...4.2.2
