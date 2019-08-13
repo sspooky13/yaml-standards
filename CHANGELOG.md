@@ -5,6 +5,8 @@
 ## [4.2.5] - 2019-08-13
 ### Changed
 - [#31] Yaml files path service: ignore uniterable filepaths, Thanks to [@PetrHeinz]
+
+### Fixed
 - [#32] Yaml indent: fix situation when key is without value and is not parent, Thanks to [@PetrHeinz]
 - [#35] Yaml indent: fix right indent for arrays with unquoted colons, Thanks to [@PetrHeinz]
 
