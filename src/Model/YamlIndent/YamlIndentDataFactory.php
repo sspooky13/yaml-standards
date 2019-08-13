@@ -111,7 +111,8 @@ class YamlIndentDataFactory
 
         // parent, not comment line
         if ($isCommentLine === false && ($trimmedLineValue === '' || YamlService::isValueReuseVariable($trimmedLineValue))) {
-            $nextLine = $fileLines[$key + 1];
+            // fix situation when key is without value and is not parent, e.g.: "   foo:"
+            $nextLine = array_key_exists($key + 1, $fileLines) ? $fileLines[$key + 1] : '';
             if (YamlService::rowIndentsOf($nextLine) > $countOfRowIndents) {
                 $countOfParents = $this->getCountOfParentsForLine($fileLines, $key);
 
