@@ -8,6 +8,7 @@ use YamlStandards\Model\YamlIndent\YamlIndentChecker;
 use YamlStandards\Model\YamlIndent\YamlIndentFixer;
 use YamlStandards\Model\YamlInline\YamlInlineChecker;
 use YamlStandards\Model\YamlSpacesBetweenGroups\YamlSpacesBetweenGroupsChecker;
+use YamlStandards\Model\YamlSpacesBetweenGroups\YamlSpacesBetweenGroupsFixer;
 
 class StandardClassesLoaderService
 {
@@ -28,14 +29,13 @@ class StandardClassesLoaderService
             if ($inputSettingData->getCountOfIndents() !== null) {
                 $checkerClasses[] = new YamlIndentChecker();
             }
+            if ($inputSettingData->getLevelForCheckSpacesBetweenGroups() !== null) {
+                $checkerClasses[] = new YamlSpacesBetweenGroupsChecker();
+            }
         }
 
         if ($inputSettingData->checkInlineStandard()) {
             $checkerClasses[] = new YamlInlineChecker();
-        }
-
-        if ($inputSettingData->getLevelForCheckSpacesBetweenGroups() !== null) {
-            $checkerClasses[] = new YamlSpacesBetweenGroupsChecker();
         }
 
         return $checkerClasses;
@@ -52,6 +52,9 @@ class StandardClassesLoaderService
         if ($inputSettingData->isFixEnabled()) {
             if ($inputSettingData->getCountOfIndents() !== null) {
                 $checkerClasses[] = new YamlIndentFixer();
+            }
+            if ($inputSettingData->getLevelForCheckSpacesBetweenGroups() !== null) {
+                $checkerClasses[] = new YamlSpacesBetweenGroupsFixer();
             }
         }
 
