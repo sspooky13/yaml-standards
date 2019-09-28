@@ -58,6 +58,9 @@ class YamlIndentFixerTest extends TestCase
         }
     }
 
+    /**
+     * @return string
+     */
     private function getTempCorrectYamlFile()
     {
         return __DIR__ . '/resource/temp/noName.yml';
