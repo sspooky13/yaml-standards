@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- create fixer for yaml spaces between groups
 
 ## [4.2.5] - 2019-08-13
 ### Changed

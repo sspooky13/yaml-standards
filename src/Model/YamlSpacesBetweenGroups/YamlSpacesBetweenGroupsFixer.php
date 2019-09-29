@@ -5,19 +5,19 @@ namespace YamlStandards\Model\YamlSpacesBetweenGroups;
 use SebastianBergmann\Diff\Differ;
 use YamlStandards\Command\InputSettingData;
 use YamlStandards\Command\ProcessOutput;
-use YamlStandards\Model\CheckerInterface;
 use YamlStandards\Model\Component\YamlService;
+use YamlStandards\Model\FixerInterface;
 use YamlStandards\Result\Result;
 
 /**
- * Check yaml file have space between groups
+ * Fix yaml file have space between groups
  */
-class YamlSpacesBetweenGroupsChecker implements CheckerInterface
+class YamlSpacesBetweenGroupsFixer implements FixerInterface
 {
     /**
      * @inheritDoc
      */
-    public function check($pathToYamlFile, InputSettingData $inputSettingData)
+    public function fix($pathToYamlFile, $pathToDumpFixedFile, InputSettingData $inputSettingData)
     {
         $yamlContent = file_get_contents($pathToYamlFile);
         $yamlContent = str_replace("\r", '', $yamlContent); // remove carriage returns
@@ -36,9 +36,11 @@ class YamlSpacesBetweenGroupsChecker implements CheckerInterface
             return new Result($pathToYamlFile, Result::RESULT_CODE_OK, ProcessOutput::STATUS_CODE_OK);
         }
 
+        file_put_contents($pathToDumpFixedFile, $correctYamlContent);
+
         $differ = new Differ();
         $diffBetweenStrings = $differ->diff($yamlContent, $correctYamlContent);
 
-        return new Result($pathToYamlFile, Result::RESULT_CODE_INVALID_FILE_SYNTAX, ProcessOutput::STATUS_CODE_INVALID_FILE_SYNTAX, $diffBetweenStrings, true);
+        return new Result($pathToYamlFile, Result::RESULT_CODE_OK, ProcessOutput::STATUS_CODE_INVALID_FILE_SYNTAX, $diffBetweenStrings);
     }
 }

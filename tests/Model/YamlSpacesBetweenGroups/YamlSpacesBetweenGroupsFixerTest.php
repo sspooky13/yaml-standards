@@ -1,35 +1,17 @@
 <?php
 
-namespace YamlStandards\Model\YamlIndent;
+namespace YamlStandards\Model\YamlSpacesBetweenGroups;
 
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
 use YamlStandards\Command\InputSettingData;
 
-class YamlIndentFixerTest extends TestCase
+class YamlSpacesBetweenGroupsFixerTest extends TestCase
 {
-    public function testFixUnfixedFile()
+    public function testCheckFixedFilesIsCorrect()
     {
-        $inputSettingData = $this->getInputSettingDataMock();
-        $pathToUnfixedFile = __DIR__ . '/resource/unfixed/yaml-getting-started.yml';
-        $pathToFixedFile = __DIR__ . '/resource/fixed/yaml-getting-started.yml';
-        $tempCorrectYamlFile = $this->getTempCorrectYamlFile();
-
-        $yamlIndentChecker = new YamlIndentFixer();
-        $yamlIndentChecker->fix($pathToUnfixedFile, $tempCorrectYamlFile, $inputSettingData);
-
-        $yamlFileContent = file_get_contents($tempCorrectYamlFile);
-        $correctYamlFileContent = file_get_contents($pathToFixedFile);
-
-        $this->assertSame($correctYamlFileContent, $yamlFileContent);
-    }
-
-    public function testFixUnfixedFiles()
-    {
-        $inputSettingData = $this->getInputSettingDataMock();
+        $levels = [1, 2, 3, 3, 1];
         $pathToUnfixedFiles = [
-            __DIR__ . '/resource/unfixed/kustomization.yaml',
-            __DIR__ . '/resource/unfixed/shopsys-service.yml',
             __DIR__ . '/resource/unfixed/symfony-config.yml',
             __DIR__ . '/resource/unfixed/symfony-route.yml',
             __DIR__ . '/resource/unfixed/symfony-security.yml',
@@ -37,19 +19,18 @@ class YamlIndentFixerTest extends TestCase
             __DIR__ . '/resource/unfixed/yaml-getting-started.yml',
         ];
         $pathToFixedFiles = [
-            __DIR__ . '/resource/fixed/kustomization.yaml',
-            __DIR__ . '/resource/fixed/shopsys-service.yml',
             __DIR__ . '/resource/fixed/symfony-config.yml',
             __DIR__ . '/resource/fixed/symfony-route.yml',
             __DIR__ . '/resource/fixed/symfony-security.yml',
             __DIR__ . '/resource/fixed/symfony-service.yml',
             __DIR__ . '/resource/fixed/yaml-getting-started.yml',
         ];
-        $tempCorrectYamlFile = $this->getTempCorrectYamlFile();
 
-        $yamlIndentChecker = new YamlIndentFixer();
+        $tempCorrectYamlFile = $this->getTempCorrectYamlFile();
+        $yamlIndentChecker = new YamlSpacesBetweenGroupsFixer();
 
         foreach ($pathToUnfixedFiles as $key => $pathToUnfixedFile) {
+            $inputSettingData = $this->getInputSettingDataMock($levels[$key]);
             $yamlIndentChecker->fix($pathToUnfixedFile, $tempCorrectYamlFile, $inputSettingData);
             $yamlFileContent = file_get_contents($tempCorrectYamlFile);
             $correctYamlFileContent = file_get_contents($pathToFixedFiles[$key]);
@@ -67,12 +48,13 @@ class YamlIndentFixerTest extends TestCase
     }
 
     /**
+     * @param int $level
      * @return \YamlStandards\Command\InputSettingData|PHPUnit_Framework_MockObject_MockObject
      */
-    private function getInputSettingDataMock()
+    private function getInputSettingDataMock($level)
     {
         $inputSettingDataMock = $this->createMock(InputSettingData::class);
-        $inputSettingDataMock->method('getCountOfIndents')->willReturn(4);
+        $inputSettingDataMock->method('getLevelForCheckSpacesBetweenGroups')->willReturn($level);
 
         return $inputSettingDataMock;
     }
