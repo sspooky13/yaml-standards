@@ -9,6 +9,10 @@ env:
   - DEPENDENCIES=lowest
   - DEPENDENCIES=highest
 
+cache:
+    directories:
+        - ~/.composer/cache
+
 before_script:
   - composer self-update
   - composer global require hirak/prestissimo
