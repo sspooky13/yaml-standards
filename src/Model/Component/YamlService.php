@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YamlStandards\Model\Component;
 
 use Symfony\Component\Yaml\Inline;

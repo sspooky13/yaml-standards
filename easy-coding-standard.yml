@@ -3,3 +3,12 @@ imports:
 
 services:
     PhpCsFixer\Fixer\Strict\DeclareStrictTypesFixer: ~
+
+parameters:
+    line_ending: "\n"
+    skip:
+        ObjectCalisthenics\Sniffs\Files\FunctionLengthSniff:
+            - '*/src/Model/YamlIndent/YamlIndentDataFactory.php'
+
+        SlevomatCodingStandard\Sniffs\Classes\UnusedPrivateElementsSniff.UnusedMethod:
+            - '*/src/Model/YamlInline/YamlInlineChecker.php'

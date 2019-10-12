@@ -35,7 +35,7 @@ or setting for ANT:
 <property name="path.yaml-standards" value="./vendor/bin/yaml-standards"/>
 
 <target name="yaml-standards" description="Run yaml standards checks">
-    <exec 
+    <exec
         executable="${path.yaml-standards}"
         logoutput="true"
         passthru="true"

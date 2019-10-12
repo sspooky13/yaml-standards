@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YamlStandards\Model\YamlSpacesBetweenGroups;
 
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
 use YamlStandards\Command\InputSettingData;
 
 class YamlSpacesBetweenGroupsFixerTest extends TestCase
@@ -49,7 +50,7 @@ class YamlSpacesBetweenGroupsFixerTest extends TestCase
 
     /**
      * @param int $level
-     * @return \YamlStandards\Command\InputSettingData|PHPUnit_Framework_MockObject_MockObject
+     * @return \YamlStandards\Command\InputSettingData|\PHPUnit_Framework_MockObject_MockObject
      */
     private function getInputSettingDataMock($level)
     {

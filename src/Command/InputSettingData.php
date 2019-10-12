@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YamlStandards\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
@@ -46,6 +48,9 @@ class InputSettingData
      */
     private $fixEnabled;
 
+    /**
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     */
     public function __construct(InputInterface $input)
     {
         $this->pathToDirsOrFiles = $input->getArgument(YamlCommand::ARGUMENT_DIRS_OR_FILES);

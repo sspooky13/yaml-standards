@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YamlStandards\Model\YamlIndent;
 
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
 use YamlStandards\Command\InputSettingData;
 use YamlStandards\Result\Result;
 
@@ -72,7 +73,7 @@ class YamlIndentCheckerTest extends TestCase
     }
 
     /**
-     * @return \YamlStandards\Command\InputSettingData|PHPUnit_Framework_MockObject_MockObject
+     * @return \YamlStandards\Command\InputSettingData|\PHPUnit_Framework_MockObject_MockObject
      */
     private function getInputSettingDataMock()
     {

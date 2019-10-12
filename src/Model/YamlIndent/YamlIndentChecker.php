@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YamlStandards\Model\YamlIndent;
 
 use SebastianBergmann\Diff\Differ;

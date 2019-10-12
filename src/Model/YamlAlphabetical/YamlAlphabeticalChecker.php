@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YamlStandards\Model\YamlAlphabetical;
 
 use SebastianBergmann\Diff\Differ;

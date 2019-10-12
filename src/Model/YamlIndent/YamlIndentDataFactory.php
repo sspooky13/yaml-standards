@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YamlStandards\Model\YamlIndent;
 
 use YamlStandards\Model\Component\YamlService;
@@ -13,9 +15,6 @@ class YamlIndentDataFactory
      * @param string $fileLine current checked line in loop
      * @param bool $isCommentLine
      * @return string
-     *
-     * @SuppressWarnings("CyclomaticComplexity")
-     * @SuppressWarnings("ExcessiveMethodLength")
      */
     public function getRightFileLines(array $fileLines, $key, $countOfIndents, $fileLine, $isCommentLine = false)
     {
@@ -228,9 +227,6 @@ class YamlIndentDataFactory
      * @param string[] $fileLines
      * @param int $key
      * @return int
-     *
-     * @SuppressWarnings("CyclomaticComplexity")
-     * @SuppressWarnings("ExcessiveMethodLength")
      */
     private function getCountOfParentsForLine(array $fileLines, $key)
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YamlStandards\Command;
 
 use Symfony\Component\Console\Terminal;

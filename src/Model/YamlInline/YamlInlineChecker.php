@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YamlStandards\Model\YamlInline;
 
 use SebastianBergmann\Diff\Differ;
@@ -49,8 +51,6 @@ class YamlInlineChecker implements CheckerInterface
     /**
      * @param string $yamlLine
      * @return bool
-     *
-     * @SuppressWarnings("UnusedPrivateMethod") Method is used but PHPMD report he is not
      */
     private function removeCommentLine($yamlLine)
     {
@@ -60,8 +60,6 @@ class YamlInlineChecker implements CheckerInterface
     /**
      * @param string $yamlLine
      * @return string
-     *
-     * @SuppressWarnings("UnusedPrivateMethod") Method is used but PHPMD report he is not
      */
     private function removeComments($yamlLine)
     {
