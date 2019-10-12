@@ -16,36 +16,32 @@
             "YamlStandards\\": [
                 "src"
             ]
-        },
-        "classmap": [
-            "src"
-        ]
+        }
     },
     "autoload-dev": {
         "psr-4": {
             "YamlStandards\\": [
                 "tests"
             ]
-        },
-        "classmap": [
-            "tests"
-        ]
+        }
     },
     "require": {
-        "php": "^5.6 || ^7.0",
+        "php": "^7.1",
         "symfony/console": "^3.0 || ^4.0.10",
-        "symfony/yaml": "^3.3 || ^4.0.10",
+        "symfony/yaml": "^3.0 || ^4.0.10",
         "sebastian/diff": "^1.4 || ^2.0 || ^3.0"
     },
     "require-dev": {
-        "phing/phing": "2.16.*",
-        "phpunit/phpunit": "^5.7.27 || 6.4.*",
-        "shopsys/coding-standards": "3.1.*",
-        "friendsofphp/php-cs-fixer": "^2.13",
-        "phpmd/phpmd": "^2.6",
+        "phing/phing": "^2.16",
+        "jakub-onderka/php-parallel-lint": "^0.9",
+        "phpunit/phpunit": "^7.5",
+        "shopsys/coding-standards": "^7.3",
         "symfony/var-dumper": "^3.4 || ^4.3"
     },
     "bin": [
         "bin/yaml-standards"
-    ]
+    ],
+    "conflict": {
+        "symplify/easy-coding-standard": "<5.4.2"
+    }
 }
