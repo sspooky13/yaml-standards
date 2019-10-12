@@ -12,6 +12,7 @@
     <property name="path.src" value="${path.root}/src"/>
     <property name="path.tests" value="${path.root}/tests"/>
     <property name="path.vendor" value="${path.root}/vendor"/>
+    <property name="phpstan.level" value="5"/>
 
     <target name="build-ci" depends="standards, tests-unit" description="Run build commands on CI."/>
 
@@ -172,6 +173,7 @@
             <arg path="${path.src}"/>
             <arg path="${path.tests}"/>
 
+            <arg value="--level=${phpstan.level}"/>
             <arg value="-vvv"/>
         </exec>
     </target>

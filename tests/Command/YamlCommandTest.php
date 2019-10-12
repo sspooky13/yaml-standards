@@ -60,7 +60,6 @@ class YamlCommandTest extends TestCase
         $commandExitCode = $command->execute([
             YamlCommand::ARGUMENT_DIRS_OR_FILES => ['./tests/yamlFiles/sorted/service/symfony-service.yml'],
             '--' . YamlCommand::OPTION_CHECK_ALPHABETICAL_SORT_DEPTH => 2,
-            '--' . YamlCommand::OPTION_CHECK_ALPHABETICAL_SORT_DEPTH => 2,
             '--' . YamlCommand::OPTION_CHECK_YAML_COUNT_OF_INDENTS => 4,
             '--' . YamlCommand::OPTION_CHECK_INLINE,
             '--' . YamlCommand::OPTION_CHECK_LEVEL_FOR_SPACES_BETWEEN_GROUPS => 2,

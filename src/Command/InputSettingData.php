@@ -19,12 +19,12 @@ class InputSettingData
     private $excludedFileMasks;
 
     /**
-     * @var int|null
+     * @var string|null
      */
     private $alphabeticalSortDepth;
 
     /**
-     * @var int|null
+     * @var string|null
      */
     private $countOfIndents;
 
@@ -34,7 +34,7 @@ class InputSettingData
     private $inlineStandard;
 
     /**
-     * @var int|null
+     * @var string|null
      */
     private $levelForCheckSpacesBetweenGroups;
 
@@ -96,7 +96,7 @@ class InputSettingData
      */
     public function getAlphabeticalSortDepth()
     {
-        return $this->alphabeticalSortDepth;
+        return $this->alphabeticalSortDepth === null ? null : (int)$this->alphabeticalSortDepth;
     }
 
     /**
@@ -104,7 +104,7 @@ class InputSettingData
      */
     public function getCountOfIndents()
     {
-        return $this->countOfIndents;
+        return $this->countOfIndents === null ? null : (int)$this->countOfIndents;
     }
 
     /**
@@ -120,7 +120,7 @@ class InputSettingData
      */
     public function getLevelForCheckSpacesBetweenGroups()
     {
-        return $this->levelForCheckSpacesBetweenGroups;
+        return $this->levelForCheckSpacesBetweenGroups === null ? null : (int)$this->levelForCheckSpacesBetweenGroups;
     }
 
     /**

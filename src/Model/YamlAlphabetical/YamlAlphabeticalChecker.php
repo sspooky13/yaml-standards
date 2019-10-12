@@ -84,7 +84,7 @@ class YamlAlphabeticalChecker implements CheckerInterface
 
     /**
      * @param string[] $yamlArrayData
-     * @return string[]
+     * @return string[]|string[][]
      */
     private function sortArrayKeyWithUnderscoresAsFirst(array $yamlArrayData)
     {
