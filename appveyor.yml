@@ -50,7 +50,6 @@ install:
   - appveyor-retry appveyor DownloadFile https://getcomposer.org/composer.phar
   - cd c:\projects\yaml-standards
   - composer self-update
-  - composer global require hirak/prestissimo
   - IF %dependencies%==lowest appveyor-retry composer update --prefer-lowest --prefer-dist --no-interaction --no-progress
   - IF %dependencies%==highest appveyor-retry composer update --prefer-dist --no-interaction --no-progress
 
