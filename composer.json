@@ -28,6 +28,7 @@
     "require": {
         "php": "^7.1",
         "symfony/console": "^3.0 || ^4.0.10",
+        "symfony/config": "^3.0 || ^4.0.10",
         "symfony/yaml": "^3.0 || ^4.0.10",
         "sebastian/diff": "^1.4 || ^2.0 || ^3.0"
     },
