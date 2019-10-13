@@ -19,7 +19,7 @@ class YamlSpacesBetweenGroupsFixer implements FixerInterface
     /**
      * @inheritDoc
      */
-    public function fix($pathToYamlFile, $pathToDumpFixedFile, InputSettingData $inputSettingData)
+    public function fix(string $pathToYamlFile, string $pathToDumpFixedFile, InputSettingData $inputSettingData): Result
     {
         $yamlContent = file_get_contents($pathToYamlFile);
         $yamlContent = str_replace("\r", '', $yamlContent); // remove carriage returns

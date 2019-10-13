@@ -8,7 +8,7 @@ class Reporting
 {
     private static $startTime;
 
-    public static function startTiming()
+    public static function startTiming(): void
     {
         self::$startTime = microtime(true);
     }
@@ -16,7 +16,7 @@ class Reporting
     /**
      * @return string
      */
-    public static function printRunTime()
+    public static function printRunTime(): string
     {
         $time = round((microtime(true) - self::$startTime) * 1000);
         $memory = round(memory_get_peak_usage(true) / (1024 * 1024), 2);

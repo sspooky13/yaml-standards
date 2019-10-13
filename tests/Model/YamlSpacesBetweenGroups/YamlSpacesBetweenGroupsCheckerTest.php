@@ -10,7 +10,7 @@ use YamlStandards\Result\Result;
 
 class YamlSpacesBetweenGroupsCheckerTest extends TestCase
 {
-    public function testCheckUnfixedFilesIsNotCorrect()
+    public function testCheckUnfixedFilesIsNotCorrect(): void
     {
         $levels = [1, 2, 3, 3, 1];
         $pathToFiles = [
@@ -30,7 +30,7 @@ class YamlSpacesBetweenGroupsCheckerTest extends TestCase
         }
     }
 
-    public function testCheckFixedFilesIsCorrect()
+    public function testCheckFixedFilesIsCorrect(): void
     {
         $levels = [1, 2, 3, 3, 1];
         $pathToFiles = [

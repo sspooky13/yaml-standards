@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace YamlStandards\Model;
 
 use YamlStandards\Command\InputSettingData;
+use YamlStandards\Result\Result;
 
 interface FixerInterface
 {
@@ -14,5 +15,5 @@ interface FixerInterface
      * @param \YamlStandards\Command\InputSettingData $inputSettingData
      * @return \YamlStandards\Result\Result
      */
-    public function fix($pathToYamlFile, $pathToDumpFixedFile, InputSettingData $inputSettingData);
+    public function fix(string $pathToYamlFile, string $pathToDumpFixedFile, InputSettingData $inputSettingData): Result;
 }

@@ -10,7 +10,7 @@ use YamlStandards\Model\Component\YamlService;
 
 class YamlSpacesBetweenGroupsDataFactoryTest extends TestCase
 {
-    public function testGetCorrectYamlContentWithSpaces()
+    public function testGetCorrectYamlContentWithSpaces(): void
     {
         $yamlLines = ['foo:', '    bar: baz', '    qux: quux', '        quuz: corge', '            grault:', '                garply: waldo', '                fred: plugh'];
         $rightYamlLines = implode("\n", ['foo:', '    bar: baz', '', '    qux: quux', '        quuz: corge', '            grault:', '                garply: waldo', '', '                fred: plugh']);
@@ -21,7 +21,7 @@ class YamlSpacesBetweenGroupsDataFactoryTest extends TestCase
         $this->assertSame($rightYamlLines, $yamlContent);
     }
 
-    public function testGetCorrectLevelsFromYamlFile()
+    public function testGetCorrectLevelsFromYamlFile(): void
     {
         $reflectionClass = new ReflectionClass(YamlSpacesBetweenGroupsDataFactory::class);
         $reflectionMethod = $reflectionClass->getMethod('getLevelOfCurrentLine');

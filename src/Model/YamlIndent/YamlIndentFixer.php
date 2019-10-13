@@ -18,7 +18,7 @@ class YamlIndentFixer implements FixerInterface
     /**
      * @inheritDoc
      */
-    public function fix($pathToYamlFile, $pathToDumpFixedFile, InputSettingData $inputSettingData)
+    public function fix(string $pathToYamlFile, string $pathToDumpFixedFile, InputSettingData $inputSettingData): Result
     {
         $fileContent = file_get_contents($pathToYamlFile);
         $fileContent = str_replace("\r", '', $fileContent); // remove carriage returns

@@ -14,7 +14,7 @@ class YamlService
      * @throws \Symfony\Component\Yaml\Exception\ParseException
      * @return string[]
      */
-    public static function getYamlData($pathToYamlFile)
+    public static function getYamlData(string $pathToYamlFile): array
     {
         return (array)Yaml::parse(file_get_contents($pathToYamlFile), Yaml::PARSE_CUSTOM_TAGS);
     }
@@ -23,7 +23,7 @@ class YamlService
      * @param string $key
      * @return bool
      */
-    public static function hasArrayKeyUnderscoreAsFirstCharacter($key)
+    public static function hasArrayKeyUnderscoreAsFirstCharacter(string $key): bool
     {
         return strpos($key, '_') === 0;
     }
@@ -32,7 +32,7 @@ class YamlService
      * @param string $key
      * @return bool
      */
-    public static function hasNotArrayKeyUnderscoreAsFirstCharacter($key)
+    public static function hasNotArrayKeyUnderscoreAsFirstCharacter(string $key): bool
     {
         return strpos($key, '_') !== 0;
     }
@@ -41,7 +41,7 @@ class YamlService
      * @param string $yamlLine
      * @return bool
      */
-    public static function isLineNotBlank($yamlLine)
+    public static function isLineNotBlank(string $yamlLine): bool
     {
         return trim($yamlLine) !== '';
     }
@@ -50,7 +50,7 @@ class YamlService
      * @param string $yamlLine
      * @return bool
      */
-    public static function isLineComment($yamlLine)
+    public static function isLineComment(string $yamlLine): bool
     {
         return preg_match('/^\s*#/', $yamlLine) === 1;
     }
@@ -59,7 +59,7 @@ class YamlService
      * @param string $value
      * @return bool
      */
-    public static function isValueReuseVariable($value)
+    public static function isValueReuseVariable(string $value): bool
     {
         return strpos($value, '&') === 0;
     }
@@ -68,7 +68,7 @@ class YamlService
      * @param string $value
      * @return bool
      */
-    public static function hasLineDashOnStartOfLine($value)
+    public static function hasLineDashOnStartOfLine(string $value): bool
     {
         return strpos($value, '-') === 0;
     }
@@ -77,7 +77,7 @@ class YamlService
      * @param string $trimmedLine
      * @return bool
      */
-    public static function hasLineThreeDashesOnStartOfLine($trimmedLine)
+    public static function hasLineThreeDashesOnStartOfLine(string $trimmedLine): bool
     {
         return strpos($trimmedLine, '---') === 0;
     }
@@ -86,7 +86,7 @@ class YamlService
      * @param string $value
      * @return bool
      */
-    public static function isCurlyBracketInStartOfString($value)
+    public static function isCurlyBracketInStartOfString(string $value): bool
     {
         return strpos($value, '{') === 0;
     }
@@ -97,7 +97,7 @@ class YamlService
      * @param string $trimmedLine
      * @return bool
      */
-    public static function isLineStartOfArrayWithKeyAndValue($trimmedLine)
+    public static function isLineStartOfArrayWithKeyAndValue(string $trimmedLine): bool
     {
         return $trimmedLine !== '-' && self::hasLineDashOnStartOfLine($trimmedLine);
     }
@@ -108,7 +108,7 @@ class YamlService
      * @param string $value
      * @return bool
      */
-    public static function isKeyInStartOfString($value)
+    public static function isKeyInStartOfString(string $value): bool
     {
         return (bool)preg_match('~^(' . Inline::REGEX_QUOTED_STRING . '|[^ \'"{\[].*?) *:(\s|$)~u', $value);
     }
@@ -119,7 +119,7 @@ class YamlService
      * @param string $trimmedLine
      * @return bool
      */
-    public static function isLineOpeningAnArray($trimmedLine)
+    public static function isLineOpeningAnArray(string $trimmedLine): bool
     {
         return (bool)preg_match('~^(- +)*(' . Inline::REGEX_QUOTED_STRING . '|[^ \'"{\[].*?) *:$~u', $trimmedLine);
     }
@@ -128,7 +128,7 @@ class YamlService
      * @param string $line
      * @return int
      */
-    public static function rowIndentsOf($line)
+    public static function rowIndentsOf(string $line): int
     {
         return strlen($line) - strlen(ltrim($line));
     }
@@ -137,7 +137,7 @@ class YamlService
      * @param string $line
      * @return int
      */
-    public static function keyIndentsOf($line)
+    public static function keyIndentsOf(string $line): int
     {
         return strlen($line) - strlen(ltrim($line, '- '));
     }

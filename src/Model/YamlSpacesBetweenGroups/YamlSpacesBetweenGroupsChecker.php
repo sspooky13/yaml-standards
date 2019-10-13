@@ -19,7 +19,7 @@ class YamlSpacesBetweenGroupsChecker implements CheckerInterface
     /**
      * @inheritDoc
      */
-    public function check($pathToYamlFile, InputSettingData $inputSettingData)
+    public function check(string $pathToYamlFile, InputSettingData $inputSettingData): Result
     {
         $yamlContent = file_get_contents($pathToYamlFile);
         $yamlContent = str_replace("\r", '', $yamlContent); // remove carriage returns

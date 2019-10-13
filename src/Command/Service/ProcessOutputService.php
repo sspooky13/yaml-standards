@@ -12,7 +12,7 @@ class ProcessOutputService
      * @param \YamlStandards\Result\Result[] $results
      * @return int
      */
-    public static function getWorstStatusCodeByResults(array $results)
+    public static function getWorstStatusCodeByResults(array $results): int
     {
         $resultCode = ProcessOutput::STATUS_CODE_OK;
 

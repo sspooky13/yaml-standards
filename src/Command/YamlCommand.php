@@ -20,9 +20,9 @@ use YamlStandards\Result\Result;
 
 class YamlCommand extends Command
 {
-    const COMMAND_NAME = 'yaml-standards';
+    private const COMMAND_NAME = 'yaml-standards';
 
-    const
+    public const
         ARGUMENT_DIRS_OR_FILES = 'dirsOrFiles',
         OPTION_EXCLUDE_BY_NAME = 'exclude-by-name',
         OPTION_EXCLUDE_DIR = 'exclude-dir',
@@ -35,7 +35,7 @@ class YamlCommand extends Command
 
     protected static $defaultName = self::COMMAND_NAME;
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName(self::COMMAND_NAME) // set command name for symfony/console lower version as 3.4
@@ -54,7 +54,7 @@ class YamlCommand extends Command
     /**
      * @inheritDoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
         Reporting::startTiming();
 
@@ -111,7 +111,7 @@ class YamlCommand extends Command
      * @param \YamlStandards\Result\Result[] $results
      * @return int
      */
-    private function printOutput(OutputInterface $output, array $results)
+    private function printOutput(OutputInterface $output, array $results): int
     {
         foreach ($results as $result) {
             if ($result->getStatusCode() !== ProcessOutput::STATUS_CODE_OK) {
@@ -136,7 +136,7 @@ class YamlCommand extends Command
      * @param string[] $excludedFileMasks
      * @return bool
      */
-    private function isFileSkipped($pathToFile, array $pathToSkippedYamlFiles, array $excludedFileMasks = [])
+    private function isFileSkipped($pathToFile, array $pathToSkippedYamlFiles, array $excludedFileMasks = []): bool
     {
         if (in_array($pathToFile, $pathToSkippedYamlFiles, true)) {
             return true;

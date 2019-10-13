@@ -9,7 +9,7 @@ use YamlStandards\Command\InputSettingData;
 
 class YamlIndentFixerTest extends TestCase
 {
-    public function testFixUnfixedFile()
+    public function testFixUnfixedFile(): void
     {
         $inputSettingData = $this->getInputSettingDataMock();
         $pathToUnfixedFile = __DIR__ . '/resource/unfixed/yaml-getting-started.yml';
@@ -25,7 +25,7 @@ class YamlIndentFixerTest extends TestCase
         $this->assertSame($correctYamlFileContent, $yamlFileContent);
     }
 
-    public function testFixUnfixedFiles()
+    public function testFixUnfixedFiles(): void
     {
         $inputSettingData = $this->getInputSettingDataMock();
         $pathToUnfixedFiles = [
@@ -62,7 +62,7 @@ class YamlIndentFixerTest extends TestCase
     /**
      * @return string
      */
-    private function getTempCorrectYamlFile()
+    private function getTempCorrectYamlFile(): string
     {
         return __DIR__ . '/resource/temp/noName.yml';
     }

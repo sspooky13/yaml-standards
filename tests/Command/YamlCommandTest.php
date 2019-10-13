@@ -10,7 +10,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class YamlCommandTest extends TestCase
 {
-    public function testCorrectRunCommandForCheckAlphabeticalSort()
+    public function testCorrectRunCommandForCheckAlphabeticalSort(): void
     {
         $command = $this->createCommandTester();
         $commandExitCode = $command->execute([
@@ -21,7 +21,7 @@ class YamlCommandTest extends TestCase
         $this->assertEquals(0, $commandExitCode);
     }
 
-    public function testCorrectRunCommandForCheckIndent()
+    public function testCorrectRunCommandForCheckIndent(): void
     {
         $command = $this->createCommandTester();
         $commandExitCode = $command->execute([
@@ -32,7 +32,7 @@ class YamlCommandTest extends TestCase
         $this->assertEquals(0, $commandExitCode);
     }
 
-    public function testCorrectRunCommandForCheckInline()
+    public function testCorrectRunCommandForCheckInline(): void
     {
         $command = $this->createCommandTester();
         $commandExitCode = $command->execute([
@@ -43,7 +43,7 @@ class YamlCommandTest extends TestCase
         $this->assertEquals(0, $commandExitCode);
     }
 
-    public function testCorrectRunCommandForCheckSpaceBetweenGroup()
+    public function testCorrectRunCommandForCheckSpaceBetweenGroup(): void
     {
         $command = $this->createCommandTester();
         $commandExitCode = $command->execute([
@@ -54,7 +54,7 @@ class YamlCommandTest extends TestCase
         $this->assertEquals(0, $commandExitCode);
     }
 
-    public function testCorrectRunCommandForAllChecks()
+    public function testCorrectRunCommandForAllChecks(): void
     {
         $command = $this->createCommandTester();
         $commandExitCode = $command->execute([
@@ -71,7 +71,7 @@ class YamlCommandTest extends TestCase
     /**
      * @return \Symfony\Component\Console\Tester\CommandTester
      */
-    private function createCommandTester()
+    private function createCommandTester(): CommandTester
     {
         $application = new Application();
         $application->add(new YamlCommand());

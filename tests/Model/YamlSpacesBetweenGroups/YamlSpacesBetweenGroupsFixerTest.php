@@ -9,7 +9,7 @@ use YamlStandards\Command\InputSettingData;
 
 class YamlSpacesBetweenGroupsFixerTest extends TestCase
 {
-    public function testCheckFixedFilesIsCorrect()
+    public function testCheckFixedFilesIsCorrect(): void
     {
         $levels = [1, 2, 3, 3, 1];
         $pathToUnfixedFiles = [
@@ -43,7 +43,7 @@ class YamlSpacesBetweenGroupsFixerTest extends TestCase
     /**
      * @return string
      */
-    private function getTempCorrectYamlFile()
+    private function getTempCorrectYamlFile(): string
     {
         return __DIR__ . '/resource/temp/noName.yml';
     }

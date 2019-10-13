@@ -70,7 +70,7 @@ class InputSettingData
     /**
      * @return string[]
      */
-    public function getPathToDirsOrFiles()
+    public function getPathToDirsOrFiles(): array
     {
         return $this->pathToDirsOrFiles;
     }
@@ -78,7 +78,7 @@ class InputSettingData
     /**
      * @return string[]
      */
-    public function getExcludedFileMasks()
+    public function getExcludedFileMasks(): array
     {
         return $this->excludedFileMasks;
     }
@@ -86,7 +86,7 @@ class InputSettingData
     /**
      * @return string[]
      */
-    public function getExcludedPaths()
+    public function getExcludedPaths(): array
     {
         return $this->excludedPaths;
     }
@@ -94,7 +94,7 @@ class InputSettingData
     /**
      * @return int|null
      */
-    public function getAlphabeticalSortDepth()
+    public function getAlphabeticalSortDepth(): ?int
     {
         return $this->alphabeticalSortDepth === null ? null : (int)$this->alphabeticalSortDepth;
     }
@@ -102,7 +102,7 @@ class InputSettingData
     /**
      * @return int|null
      */
-    public function getCountOfIndents()
+    public function getCountOfIndents(): ?int
     {
         return $this->countOfIndents === null ? null : (int)$this->countOfIndents;
     }
@@ -110,7 +110,7 @@ class InputSettingData
     /**
      * @return bool
      */
-    public function checkInlineStandard()
+    public function checkInlineStandard(): bool
     {
         return $this->inlineStandard;
     }
@@ -118,7 +118,7 @@ class InputSettingData
     /**
      * @return int|null
      */
-    public function getLevelForCheckSpacesBetweenGroups()
+    public function getLevelForCheckSpacesBetweenGroups(): ?int
     {
         return $this->levelForCheckSpacesBetweenGroups === null ? null : (int)$this->levelForCheckSpacesBetweenGroups;
     }
@@ -126,7 +126,7 @@ class InputSettingData
     /**
      * @return bool
      */
-    public function isFixEnabled()
+    public function isFixEnabled(): bool
     {
         return $this->fixEnabled;
     }

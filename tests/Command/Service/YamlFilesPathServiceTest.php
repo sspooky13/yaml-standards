@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class YamlFilesPathServiceTest extends TestCase
 {
-    public function testFindAllYamlFilesInDir()
+    public function testFindAllYamlFilesInDir(): void
     {
         $pathToDir = ['./tests/yamlFiles/unSorted/'];
 
@@ -17,7 +17,7 @@ class YamlFilesPathServiceTest extends TestCase
         $this->assertCount(6, $yamlFiles);
     }
 
-    public function testFindAllYamlFilesInDirs()
+    public function testFindAllYamlFilesInDirs(): void
     {
         $pathToDirs = [
             './tests/yamlFiles/sorted/config',
@@ -29,7 +29,7 @@ class YamlFilesPathServiceTest extends TestCase
         $this->assertCount(3, $yamlFiles);
     }
 
-    public function testFindAllYamlFilesInPaths()
+    public function testFindAllYamlFilesInPaths(): void
     {
         $pathToFiles = [
             './tests/yamlFiles/sorted/config/symfony-config.yml',
@@ -41,7 +41,7 @@ class YamlFilesPathServiceTest extends TestCase
         $this->assertCount(2, $yamlFiles);
     }
 
-    public function testFindAllYamlFilesInPathsAndDirs()
+    public function testFindAllYamlFilesInPathsAndDirs(): void
     {
         $pathToDirsAndFiles = [
             './tests/yamlFiles/sorted/config/symfony-config.yml',
@@ -55,7 +55,7 @@ class YamlFilesPathServiceTest extends TestCase
         $this->assertCount(6, $yamlFiles);
     }
 
-    public function testReturnFullPathToFile()
+    public function testReturnFullPathToFile(): void
     {
         $pathToFile = ['./tests/yamlFiles/unSorted/yaml-getting-started.yml'];
 
@@ -64,7 +64,7 @@ class YamlFilesPathServiceTest extends TestCase
         $this->assertEquals($pathToFile, $yamlFiles);
     }
 
-    public function testReturnFullPathToFilesFromDir()
+    public function testReturnFullPathToFilesFromDir(): void
     {
         $pathToDirs = ['./tests/yamlFiles/unSorted/config/', './tests/yamlFiles/unSorted/route/'];
 
@@ -84,7 +84,7 @@ class YamlFilesPathServiceTest extends TestCase
      * @param string[] $actualPaths
      * @return bool
      */
-    private function arraysAreEqual(array $expectedPaths, array $actualPaths)
+    private function arraysAreEqual(array $expectedPaths, array $actualPaths): bool
     {
         $differentBetweenArrays = array_diff($actualPaths, $expectedPaths);
         if (count($differentBetweenArrays) > 0) {

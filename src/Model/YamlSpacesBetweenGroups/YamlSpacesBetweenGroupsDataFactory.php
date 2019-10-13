@@ -13,7 +13,7 @@ class YamlSpacesBetweenGroupsDataFactory
      * @param int $level
      * @return string
      */
-    public function getCorrectYamlContentWithSpacesBetweenGroups(array $yamlLines, $level)
+    public function getCorrectYamlContentWithSpacesBetweenGroups(array $yamlLines, int $level): string
     {
         $correctYamlLines = [];
 
@@ -43,7 +43,7 @@ class YamlSpacesBetweenGroupsDataFactory
      * @param int $currentLineLevel
      * @return int
      */
-    private function getLevelOfCurrentLine($key, array $yamlLines, $previousCountOfIndents, $currentLineLevel = 1)
+    private function getLevelOfCurrentLine(int $key, array $yamlLines, int $previousCountOfIndents, int $currentLineLevel = 1): int
     {
         $yamlLine = $yamlLines[$key];
         $countOfRowIndents = YamlService::rowIndentsOf($yamlLine);
@@ -76,7 +76,7 @@ class YamlSpacesBetweenGroupsDataFactory
      * @param int $key
      * @return string[]
      */
-    private function getCorrectYamlLinesWithSpace($correctYamlLines, $key)
+    private function getCorrectYamlLinesWithSpace(array $correctYamlLines, int $key): array
     {
         $yamlLine = $correctYamlLines[$key];
         $key--;

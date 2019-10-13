@@ -9,13 +9,13 @@ use YamlStandards\Result\Result;
 
 class ProcessOutput
 {
-    const
+    public const
         STATUS_CODE_OK = 0,
         STATUS_CODE_INVALID_FILE_SYNTAX = 1,
         STATUS_CODE_SKIPP = 2,
         STATUS_CODE_ERROR = 3;
 
-    private static $statusMap = [
+    private const STATUS_MAP = [
         self::STATUS_CODE_OK => ['symbol' => '.', 'format' => '%s', 'description' => 'OK'],
         self::STATUS_CODE_INVALID_FILE_SYNTAX => ['symbol' => 'I', 'format' => '<fg=red>%s</fg=red>', 'description' => 'Invalid file syntax'],
         self::STATUS_CODE_SKIPP => ['symbol' => 'S', 'format' => '<fg=cyan>%s</fg=cyan>', 'description' => 'Skipped'],
@@ -45,7 +45,7 @@ class ProcessOutput
     /**
      * @param int $countOfFiles
      */
-    public function __construct($countOfFiles)
+    public function __construct(int $countOfFiles)
     {
         $this->countOfFiles = $countOfFiles;
         $this->progressLine = [];
@@ -57,9 +57,9 @@ class ProcessOutput
      * @param int $statusCode
      * @return string
      */
-    public function process($statusCode)
+    public function process(int $statusCode): string
     {
-        $symbol = sprintf(self::$statusMap[$statusCode]['format'], self::$statusMap[$statusCode]['symbol']);
+        $symbol = sprintf(self::STATUS_MAP[$statusCode]['format'], self::STATUS_MAP[$statusCode]['symbol']);
         $this->progressLine[] = $symbol;
         $currentPosition = count($this->progressLine);
 
@@ -78,11 +78,11 @@ class ProcessOutput
     /**
      * @return string
      */
-    public function getLegend()
+    public function getLegend(): string
     {
         $symbols = [];
 
-        foreach (self::$statusMap as $status) {
+        foreach (self::STATUS_MAP as $status) {
             $symbol = $status['symbol'];
             $format = $status['format'];
             $description = $status['description'];

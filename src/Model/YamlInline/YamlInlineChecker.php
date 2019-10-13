@@ -20,7 +20,7 @@ class YamlInlineChecker implements CheckerInterface
     /**
      * @inheritDoc
      */
-    public function check($pathToYamlFile, InputSettingData $inputSettingData)
+    public function check(string $pathToYamlFile, InputSettingData $inputSettingData): Result
     {
         $yamlArrayData = YamlService::getYamlData($pathToYamlFile);
         $yamlStringData = Yaml::dump($yamlArrayData, 3);
@@ -52,7 +52,7 @@ class YamlInlineChecker implements CheckerInterface
      * @param string $yamlLine
      * @return bool
      */
-    private function removeCommentLine($yamlLine)
+    private function removeCommentLine(string $yamlLine): bool
     {
         return preg_match('/^\s*#/', $yamlLine) === 0;
     }
@@ -61,7 +61,7 @@ class YamlInlineChecker implements CheckerInterface
      * @param string $yamlLine
      * @return string
      */
-    private function removeComments($yamlLine)
+    private function removeComments(string $yamlLine): string
     {
         return preg_replace('/\s#.+/', '', $yamlLine);
     }
