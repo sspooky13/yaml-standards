@@ -1,14 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YamlStandards\Model\YamlSpacesBetweenGroups;
 
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
 use YamlStandards\Command\InputSettingData;
 
 class YamlSpacesBetweenGroupsFixerTest extends TestCase
 {
-    public function testCheckFixedFilesIsCorrect()
+    public function testCheckFixedFilesIsCorrect(): void
     {
         $levels = [1, 2, 3, 3, 1];
         $pathToUnfixedFiles = [
@@ -42,14 +43,14 @@ class YamlSpacesBetweenGroupsFixerTest extends TestCase
     /**
      * @return string
      */
-    private function getTempCorrectYamlFile()
+    private function getTempCorrectYamlFile(): string
     {
         return __DIR__ . '/resource/temp/noName.yml';
     }
 
     /**
      * @param int $level
-     * @return \YamlStandards\Command\InputSettingData|PHPUnit_Framework_MockObject_MockObject
+     * @return \YamlStandards\Command\InputSettingData|\PHPUnit_Framework_MockObject_MockObject
      */
     private function getInputSettingDataMock($level)
     {

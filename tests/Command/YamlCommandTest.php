@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YamlStandards\Command;
 
 use PHPUnit\Framework\TestCase;
@@ -8,7 +10,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class YamlCommandTest extends TestCase
 {
-    public function testCorrectRunCommandForCheckAlphabeticalSort()
+    public function testCorrectRunCommandForCheckAlphabeticalSort(): void
     {
         $command = $this->createCommandTester();
         $commandExitCode = $command->execute([
@@ -19,7 +21,7 @@ class YamlCommandTest extends TestCase
         $this->assertEquals(0, $commandExitCode);
     }
 
-    public function testCorrectRunCommandForCheckIndent()
+    public function testCorrectRunCommandForCheckIndent(): void
     {
         $command = $this->createCommandTester();
         $commandExitCode = $command->execute([
@@ -30,7 +32,7 @@ class YamlCommandTest extends TestCase
         $this->assertEquals(0, $commandExitCode);
     }
 
-    public function testCorrectRunCommandForCheckInline()
+    public function testCorrectRunCommandForCheckInline(): void
     {
         $command = $this->createCommandTester();
         $commandExitCode = $command->execute([
@@ -41,7 +43,7 @@ class YamlCommandTest extends TestCase
         $this->assertEquals(0, $commandExitCode);
     }
 
-    public function testCorrectRunCommandForCheckSpaceBetweenGroup()
+    public function testCorrectRunCommandForCheckSpaceBetweenGroup(): void
     {
         $command = $this->createCommandTester();
         $commandExitCode = $command->execute([
@@ -52,12 +54,11 @@ class YamlCommandTest extends TestCase
         $this->assertEquals(0, $commandExitCode);
     }
 
-    public function testCorrectRunCommandForAllChecks()
+    public function testCorrectRunCommandForAllChecks(): void
     {
         $command = $this->createCommandTester();
         $commandExitCode = $command->execute([
             YamlCommand::ARGUMENT_DIRS_OR_FILES => ['./tests/yamlFiles/sorted/service/symfony-service.yml'],
-            '--' . YamlCommand::OPTION_CHECK_ALPHABETICAL_SORT_DEPTH => 2,
             '--' . YamlCommand::OPTION_CHECK_ALPHABETICAL_SORT_DEPTH => 2,
             '--' . YamlCommand::OPTION_CHECK_YAML_COUNT_OF_INDENTS => 4,
             '--' . YamlCommand::OPTION_CHECK_INLINE,
@@ -70,7 +71,7 @@ class YamlCommandTest extends TestCase
     /**
      * @return \Symfony\Component\Console\Tester\CommandTester
      */
-    private function createCommandTester()
+    private function createCommandTester(): CommandTester
     {
         $application = new Application();
         $application->add(new YamlCommand());

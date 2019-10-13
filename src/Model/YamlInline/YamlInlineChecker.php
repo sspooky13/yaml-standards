@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YamlStandards\Model\YamlInline;
 
 use SebastianBergmann\Diff\Differ;
@@ -18,7 +20,7 @@ class YamlInlineChecker implements CheckerInterface
     /**
      * @inheritDoc
      */
-    public function check($pathToYamlFile, InputSettingData $inputSettingData)
+    public function check(string $pathToYamlFile, InputSettingData $inputSettingData): Result
     {
         $yamlArrayData = YamlService::getYamlData($pathToYamlFile);
         $yamlStringData = Yaml::dump($yamlArrayData, 3);
@@ -49,10 +51,8 @@ class YamlInlineChecker implements CheckerInterface
     /**
      * @param string $yamlLine
      * @return bool
-     *
-     * @SuppressWarnings("UnusedPrivateMethod") Method is used but PHPMD report he is not
      */
-    private function removeCommentLine($yamlLine)
+    private function removeCommentLine(string $yamlLine): bool
     {
         return preg_match('/^\s*#/', $yamlLine) === 0;
     }
@@ -60,10 +60,8 @@ class YamlInlineChecker implements CheckerInterface
     /**
      * @param string $yamlLine
      * @return string
-     *
-     * @SuppressWarnings("UnusedPrivateMethod") Method is used but PHPMD report he is not
      */
-    private function removeComments($yamlLine)
+    private function removeComments(string $yamlLine): string
     {
         return preg_replace('/\s#.+/', '', $yamlLine);
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YamlStandards\Model\YamlIndent;
 
 use SebastianBergmann\Diff\Differ;
@@ -16,7 +18,7 @@ class YamlIndentChecker implements CheckerInterface
     /**
      * @inheritDoc
      */
-    public function check($pathToYamlFile, InputSettingData $inputSettingData)
+    public function check(string $pathToYamlFile, InputSettingData $inputSettingData): Result
     {
         $fileContent = file_get_contents($pathToYamlFile);
         $fileContent = str_replace("\r", '', $fileContent); // remove carriage returns

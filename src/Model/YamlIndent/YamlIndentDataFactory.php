@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YamlStandards\Model\YamlIndent;
 
 use YamlStandards\Model\Component\YamlService;
@@ -13,11 +15,8 @@ class YamlIndentDataFactory
      * @param string $fileLine current checked line in loop
      * @param bool $isCommentLine
      * @return string
-     *
-     * @SuppressWarnings("CyclomaticComplexity")
-     * @SuppressWarnings("ExcessiveMethodLength")
      */
-    public function getRightFileLines(array $fileLines, $key, $countOfIndents, $fileLine, $isCommentLine = false)
+    public function getRightFileLines(array $fileLines, int $key, int $countOfIndents, string $fileLine, bool $isCommentLine = false): string
     {
         if (YamlService::isLineComment($fileLines[$key])) {
             $key++;
@@ -134,7 +133,7 @@ class YamlIndentDataFactory
      * @param int $countOfIndents
      * @return string
      */
-    private function getCorrectIndents($countOfIndents)
+    private function getCorrectIndents(int $countOfIndents): string
     {
         return str_repeat(' ', $countOfIndents);
     }
@@ -150,7 +149,7 @@ class YamlIndentDataFactory
      * @param int $key
      * @return bool
      */
-    private function belongLineToArray(array $fileLines, $key)
+    private function belongLineToArray(array $fileLines, int $key): bool
     {
         while ($key >= 0) {
             $line = $fileLines[$key];
@@ -185,7 +184,7 @@ class YamlIndentDataFactory
      * @param bool $isCommentLine
      * @return string
      */
-    private function getCorrectLineForArrayWithKeyAndValue($line, array $fileLines, $key, $countOfIndents, $fileLine, $isCommentLine)
+    private function getCorrectLineForArrayWithKeyAndValue(string $line, array $fileLines, int $key, int $countOfIndents, string $fileLine, bool $isCommentLine): string
     {
         $lineWithReplacedDashToSpace = preg_replace('/-/', ' ', $line, 1);
         $trimmedLineWithoutDash = trim($lineWithReplacedDashToSpace);
@@ -228,11 +227,8 @@ class YamlIndentDataFactory
      * @param string[] $fileLines
      * @param int $key
      * @return int
-     *
-     * @SuppressWarnings("CyclomaticComplexity")
-     * @SuppressWarnings("ExcessiveMethodLength")
      */
-    private function getCountOfParentsForLine(array $fileLines, $key)
+    private function getCountOfParentsForLine(array $fileLines, int $key): int
     {
         $countOfParents = 0;
         $line = $fileLines[$key];

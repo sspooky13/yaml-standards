@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YamlStandards\Command\Service;
 
 use RecursiveDirectoryIterator;
@@ -13,7 +15,7 @@ class YamlFilesPathService
      * @param string[] $pathToDirsOrFiles
      * @return string[]
      */
-    public static function getPathToYamlFiles(array $pathToDirsOrFiles)
+    public static function getPathToYamlFiles(array $pathToDirsOrFiles): array
     {
         $pathToFiles = [];
         foreach ($pathToDirsOrFiles as $pathToDirOrFile) {
@@ -47,7 +49,7 @@ class YamlFilesPathService
      * @param string $pathToDirOrFile
      * @return bool
      */
-    private static function existsDirectoryOrFile($pathToDirOrFile)
+    private static function existsDirectoryOrFile($pathToDirOrFile): bool
     {
         return is_dir($pathToDirOrFile) || is_file($pathToDirOrFile);
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YamlStandards\Command\Service;
 
 use YamlStandards\Command\InputSettingData;
@@ -16,7 +18,7 @@ class StandardClassesLoaderService
      * @param \YamlStandards\Command\InputSettingData $inputSettingData
      * @return \YamlStandards\Model\CheckerInterface[]
      */
-    public static function getCheckerClassesByInputSettingData(InputSettingData $inputSettingData)
+    public static function getCheckerClassesByInputSettingData(InputSettingData $inputSettingData): array
     {
         $checkerClasses = [];
 
@@ -45,7 +47,7 @@ class StandardClassesLoaderService
      * @param \YamlStandards\Command\InputSettingData $inputSettingData
      * @return \YamlStandards\Model\FixerInterface[]
      */
-    public static function getFixerClassesByInputSettingData(InputSettingData $inputSettingData)
+    public static function getFixerClassesByInputSettingData(InputSettingData $inputSettingData): array
     {
         $checkerClasses = [];
 

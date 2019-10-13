@@ -4,6 +4,9 @@
 ### Added
 - create fixer for yaml spaces between groups
 
+### Changed
+- remove support for php 5.6 version and php 7.0 version
+
 ## [4.2.5] - 2019-08-13
 ### Changed
 - [#31] Yaml files path service: ignore uniterable filepaths, Thanks to [@PetrHeinz]

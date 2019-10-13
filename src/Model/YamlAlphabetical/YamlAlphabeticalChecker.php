@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YamlStandards\Model\YamlAlphabetical;
 
 use SebastianBergmann\Diff\Differ;
@@ -18,7 +20,7 @@ class YamlAlphabeticalChecker implements CheckerInterface
     /**
      * @inheritDoc
      */
-    public function check($pathToYamlFile, InputSettingData $inputSettingData)
+    public function check(string $pathToYamlFile, InputSettingData $inputSettingData): Result
     {
         $yamlArrayData = YamlService::getYamlData($pathToYamlFile);
         $yamlArrayDataSorted = $this->sortArray($yamlArrayData, $inputSettingData->getAlphabeticalSortDepth());
@@ -41,7 +43,7 @@ class YamlAlphabeticalChecker implements CheckerInterface
      * @param int $depth
      * @return string[]
      */
-    private function sortArray(array $yamlArrayData, $depth)
+    private function sortArray(array $yamlArrayData, int $depth): array
     {
         if ($depth > 0) {
             $yamlArrayData = $this->sortArrayKeyWithUnderscoresAsFirst($yamlArrayData);
@@ -64,7 +66,7 @@ class YamlAlphabeticalChecker implements CheckerInterface
      * @param int $currentDepth
      * @return string[]
      */
-    private function recursiveKsort(array $yamlArrayData, $depth, $currentDepth = 1)
+    private function recursiveKsort(array $yamlArrayData, int $depth, int $currentDepth = 1): array
     {
         $yamlArrayData = $this->sortArrayKeyWithUnderscoresAsFirst($yamlArrayData);
         foreach ($yamlArrayData as $key => $value) {
@@ -82,9 +84,9 @@ class YamlAlphabeticalChecker implements CheckerInterface
 
     /**
      * @param string[] $yamlArrayData
-     * @return string[]
+     * @return string[]|string[][]
      */
-    private function sortArrayKeyWithUnderscoresAsFirst(array $yamlArrayData)
+    private function sortArrayKeyWithUnderscoresAsFirst(array $yamlArrayData): array
     {
         $arrayWithUnderscoreKeys = array_filter($yamlArrayData, [YamlService::class, 'hasArrayKeyUnderscoreAsFirstCharacter'], ARRAY_FILTER_USE_KEY);
         $arrayWithOtherKeys = array_filter($yamlArrayData, [YamlService::class, 'hasNotArrayKeyUnderscoreAsFirstCharacter'], ARRAY_FILTER_USE_KEY);

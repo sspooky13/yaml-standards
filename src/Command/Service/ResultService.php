@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YamlStandards\Command\Service;
 
 class ResultService
@@ -8,7 +10,7 @@ class ResultService
      * @param \YamlStandards\Result\Result[] $results
      * @return int
      */
-    public static function getResultCodeByResults(array $results)
+    public static function getResultCodeByResults(array $results): int
     {
         $resultCode = 0;
 

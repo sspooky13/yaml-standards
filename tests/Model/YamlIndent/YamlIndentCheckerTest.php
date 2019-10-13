@@ -1,15 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YamlStandards\Model\YamlIndent;
 
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
 use YamlStandards\Command\InputSettingData;
 use YamlStandards\Result\Result;
 
 class YamlIndentCheckerTest extends TestCase
 {
-    public function testCheckUnfixedFileIsNotCorrect()
+    public function testCheckUnfixedFileIsNotCorrect(): void
     {
         $inputSettingData = $this->getInputSettingDataMock();
         $pathToFile = __DIR__ . '/resource/unfixed/yaml-getting-started.yml';
@@ -20,7 +21,7 @@ class YamlIndentCheckerTest extends TestCase
         $this->assertSame(Result::RESULT_CODE_INVALID_FILE_SYNTAX, $result->getResultCode());
     }
 
-    public function testCheckUnfixedFilesIsNotCorrect()
+    public function testCheckUnfixedFilesIsNotCorrect(): void
     {
         $inputSettingData = $this->getInputSettingDataMock();
         $pathToFiles = [
@@ -40,7 +41,7 @@ class YamlIndentCheckerTest extends TestCase
         }
     }
 
-    public function testCheckFixedFileIsCorrect()
+    public function testCheckFixedFileIsCorrect(): void
     {
         $inputSettingData = $this->getInputSettingDataMock();
         $pathToFile = __DIR__ . '/resource/fixed/yaml-getting-started.yml';
@@ -51,7 +52,7 @@ class YamlIndentCheckerTest extends TestCase
         $this->assertSame(Result::RESULT_CODE_OK, $result->getResultCode());
     }
 
-    public function testCheckFixedFilesIsCorrect()
+    public function testCheckFixedFilesIsCorrect(): void
     {
         $inputSettingData = $this->getInputSettingDataMock();
         $pathToFiles = [
@@ -72,7 +73,7 @@ class YamlIndentCheckerTest extends TestCase
     }
 
     /**
-     * @return \YamlStandards\Command\InputSettingData|PHPUnit_Framework_MockObject_MockObject
+     * @return \YamlStandards\Command\InputSettingData|\PHPUnit_Framework_MockObject_MockObject
      */
     private function getInputSettingDataMock()
     {

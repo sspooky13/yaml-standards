@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YamlStandards\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
@@ -17,12 +19,12 @@ class InputSettingData
     private $excludedFileMasks;
 
     /**
-     * @var int|null
+     * @var string|null
      */
     private $alphabeticalSortDepth;
 
     /**
-     * @var int|null
+     * @var string|null
      */
     private $countOfIndents;
 
@@ -32,7 +34,7 @@ class InputSettingData
     private $inlineStandard;
 
     /**
-     * @var int|null
+     * @var string|null
      */
     private $levelForCheckSpacesBetweenGroups;
 
@@ -46,6 +48,9 @@ class InputSettingData
      */
     private $fixEnabled;
 
+    /**
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     */
     public function __construct(InputInterface $input)
     {
         $this->pathToDirsOrFiles = $input->getArgument(YamlCommand::ARGUMENT_DIRS_OR_FILES);
@@ -65,7 +70,7 @@ class InputSettingData
     /**
      * @return string[]
      */
-    public function getPathToDirsOrFiles()
+    public function getPathToDirsOrFiles(): array
     {
         return $this->pathToDirsOrFiles;
     }
@@ -73,7 +78,7 @@ class InputSettingData
     /**
      * @return string[]
      */
-    public function getExcludedFileMasks()
+    public function getExcludedFileMasks(): array
     {
         return $this->excludedFileMasks;
     }
@@ -81,7 +86,7 @@ class InputSettingData
     /**
      * @return string[]
      */
-    public function getExcludedPaths()
+    public function getExcludedPaths(): array
     {
         return $this->excludedPaths;
     }
@@ -89,23 +94,23 @@ class InputSettingData
     /**
      * @return int|null
      */
-    public function getAlphabeticalSortDepth()
+    public function getAlphabeticalSortDepth(): ?int
     {
-        return $this->alphabeticalSortDepth;
+        return $this->alphabeticalSortDepth === null ? null : (int)$this->alphabeticalSortDepth;
     }
 
     /**
      * @return int|null
      */
-    public function getCountOfIndents()
+    public function getCountOfIndents(): ?int
     {
-        return $this->countOfIndents;
+        return $this->countOfIndents === null ? null : (int)$this->countOfIndents;
     }
 
     /**
      * @return bool
      */
-    public function checkInlineStandard()
+    public function checkInlineStandard(): bool
     {
         return $this->inlineStandard;
     }
@@ -113,15 +118,15 @@ class InputSettingData
     /**
      * @return int|null
      */
-    public function getLevelForCheckSpacesBetweenGroups()
+    public function getLevelForCheckSpacesBetweenGroups(): ?int
     {
-        return $this->levelForCheckSpacesBetweenGroups;
+        return $this->levelForCheckSpacesBetweenGroups === null ? null : (int)$this->levelForCheckSpacesBetweenGroups;
     }
 
     /**
      * @return bool
      */
-    public function isFixEnabled()
+    public function isFixEnabled(): bool
     {
         return $this->fixEnabled;
     }

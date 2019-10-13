@@ -7,16 +7,6 @@ clone_folder: c:\projects\yaml-standards
 environment:
   # PHP version must be exactly defined because command `choco search PHP --exact --all-versions` returns only last version, I don't know why. I hope in near future this error will be fixed
   matrix:
-    - php_version: 5.6.40
-      dependencies: lowest
-    - php_version: 5.6.40
-      dependencies: highest
-
-    - php_version: 7.0.33
-      dependencies: lowest
-    - php_version: 7.0.33
-      dependencies: highest
-
     - php_version: 7.1.31
       dependencies: lowest
     - php_version: 7.1.31
@@ -35,7 +25,8 @@ environment:
 cache:
   - C:\ProgramData\chocolatey\bin -> appveyor.yml
   - C:\ProgramData\chocolatey\lib -> appveyor.yml
-  - c:\tools\php -> appveyor.yml
+  - C:\tools\php -> appveyor.yml
+  - C:\Users\appveyor\AppData\Local\Composer
 
 init:
   - SET PATH=C:\Program Files\OpenSSL;c:\tools\php;%PATH%
@@ -59,7 +50,6 @@ install:
   - appveyor-retry appveyor DownloadFile https://getcomposer.org/composer.phar
   - cd c:\projects\yaml-standards
   - composer self-update
-  - composer global require hirak/prestissimo
   - IF %dependencies%==lowest appveyor-retry composer update --prefer-lowest --prefer-dist --no-interaction --no-progress
   - IF %dependencies%==highest appveyor-retry composer update --prefer-dist --no-interaction --no-progress
 

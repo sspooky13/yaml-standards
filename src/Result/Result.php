@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YamlStandards\Result;
 
 class Result
 {
-    const
+    public const
         RESULT_CODE_OK = 0,
         RESULT_CODE_INVALID_FILE_SYNTAX = 1,
         RESULT_CODE_GENERAL_ERROR = 2;
@@ -42,11 +44,11 @@ class Result
      * @param bool $canBeFixedByFixer
      */
     public function __construct(
-        $pathToFile,
-        $resultCode,
-        $statusCode,
-        $message = null,
-        $canBeFixedByFixer = false
+        string $pathToFile,
+        int $resultCode,
+        int $statusCode,
+        ?string $message = null,
+        bool $canBeFixedByFixer = false
     ) {
         $this->pathToFile = $pathToFile;
         $this->resultCode = $resultCode;
@@ -58,7 +60,7 @@ class Result
     /**
      * @return string
      */
-    public function getPathToFile()
+    public function getPathToFile(): string
     {
         return $this->pathToFile;
     }
@@ -66,7 +68,7 @@ class Result
     /**
      * @return int
      */
-    public function getResultCode()
+    public function getResultCode(): int
     {
         return $this->resultCode;
     }
@@ -74,7 +76,7 @@ class Result
     /**
      * @return int
      */
-    public function getStatusCode()
+    public function getStatusCode(): int
     {
         return $this->statusCode;
     }
@@ -82,7 +84,7 @@ class Result
     /**
      * @return string|null
      */
-    public function getMessage()
+    public function getMessage(): ?string
     {
         return $this->message;
     }
@@ -90,7 +92,7 @@ class Result
     /**
      * @return bool
      */
-    public function canBeFixedByFixer()
+    public function canBeFixedByFixer(): bool
     {
         return $this->canBeFixedByFixer;
     }
