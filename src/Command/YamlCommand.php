@@ -10,12 +10,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Exception\ParseException;
-use Symfony\Component\Yaml\Yaml;
 use YamlStandards\Command\Service\ProcessOutputService;
 use YamlStandards\Command\Service\ResultService;
 use YamlStandards\Command\Service\StandardClassesLoaderService;
-use YamlStandards\Command\Service\YamlFilesPathService;
 use YamlStandards\Model\Component\YamlService;
+use YamlStandards\Model\Config\YamlStandardConfigLoader;
 use YamlStandards\Result\Result;
 
 class YamlCommand extends Command
@@ -59,46 +58,51 @@ class YamlCommand extends Command
         Reporting::startTiming();
 
         $inputSettingData = new InputSettingData($input);
+        $yamlStandardConfigLoader = new YamlStandardConfigLoader();
+        $yamlStandardConfigTotalData = $yamlStandardConfigLoader->loadFromYaml('./example/yaml-standards.yaml');
 
-        $pathToYamlFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData->getPathToDirsOrFiles());
-        $pathToSkippedYamlFiles = YamlFilesPathService::getPathToYamlFiles($inputSettingData->getExcludedPaths());
-        $processOutput = new ProcessOutput(count($pathToYamlFiles));
+        $processOutput = new ProcessOutput($yamlStandardConfigTotalData->getTotalCountOfYamlFiles());
 
         $fixerInterfaces = StandardClassesLoaderService::getFixerClassesByInputSettingData($inputSettingData);
         $checkerInterfaces = StandardClassesLoaderService::getCheckerClassesByInputSettingData($inputSettingData);
         $results = [[]];
 
-        foreach ($pathToYamlFiles as $pathToYamlFile) {
-            $fileResults = [];
-            if ($this->isFileSkipped($pathToYamlFile, $pathToSkippedYamlFiles, $inputSettingData->getExcludedFileMasks())) {
-                $output->write($processOutput->process(ProcessOutput::STATUS_CODE_SKIPP));
-                continue;
-            }
-
-            if (is_readable($pathToYamlFile) === false) {
-                $message = 'File is not readable.';
-                $fileResults[] = new Result($pathToYamlFile, Result::RESULT_CODE_GENERAL_ERROR, ProcessOutput::STATUS_CODE_ERROR, $message);
-                $output->write($processOutput->process(ProcessOutput::STATUS_CODE_ERROR));
-                continue;
-            }
-
-            try {
-                // check yaml is valid
-                YamlService::getYamlData($pathToYamlFile);
-
-                foreach ($fixerInterfaces as $fixerInterface) {
-                    $fileResults[] = $fixerInterface->fix($pathToYamlFile, $pathToYamlFile, $inputSettingData);
+        foreach ($yamlStandardConfigTotalData->getYamlStandardConfigsSingleData() as $yamlStandardConfigSingleData) {
+            foreach ($yamlStandardConfigSingleData->getPathToYamlFiles() as $pathToYamlFile) {
+                $fileResults = [];
+                if ($this->isFileExcluded($pathToYamlFile, $yamlStandardConfigSingleData->getPathToExcludedYamlFiles())) {
+                    $output->write($processOutput->process(ProcessOutput::STATUS_CODE_SKIPP));
+                    continue;
                 }
-                foreach ($checkerInterfaces as $checkerInterface) {
-                    $fileResults[] = $checkerInterface->check($pathToYamlFile, $inputSettingData);
-                }
-            } catch (ParseException $e) {
-                $message = sprintf('Unable to parse the YAML string: %s', $e->getMessage());
-                $fileResults[] = new Result($pathToYamlFile, Result::RESULT_CODE_GENERAL_ERROR, ProcessOutput::STATUS_CODE_ERROR, $message);
-            }
 
-            $results[] = $fileResults;
-            $output->write($processOutput->process(ProcessOutputService::getWorstStatusCodeByResults($fileResults)));
+                if (is_readable($pathToYamlFile) === false) {
+                    $message = 'File is not readable.';
+                    $fileResults[] = new Result($pathToYamlFile, Result::RESULT_CODE_GENERAL_ERROR, ProcessOutput::STATUS_CODE_ERROR, $message);
+                    $output->write($processOutput->process(ProcessOutput::STATUS_CODE_ERROR));
+                    continue;
+                }
+
+                try {
+                    // check yaml is valid
+                    YamlService::getYamlData($pathToYamlFile);
+
+                    foreach ($yamlStandardConfigSingleData->getYamlStandardConfigsSingleStandardData() as $yamlStandardConfigSingleCheckerData) {
+                        $standardParametersData = $yamlStandardConfigSingleCheckerData->getStandardParametersData();
+                        $fixer = $yamlStandardConfigSingleCheckerData->getFixer();
+                        if ($fixer !== null && $inputSettingData->isFixEnabled()) {
+                            $fileResults[] = $fixer->fix($pathToYamlFile, $pathToYamlFile, $standardParametersData);
+                        } else {
+                            $fileResults[] = $yamlStandardConfigSingleCheckerData->getChecker()->check($pathToYamlFile, $standardParametersData);
+                        }
+                    }
+                } catch (ParseException $e) {
+                    $message = sprintf('Unable to parse the YAML string: %s', $e->getMessage());
+                    $fileResults[] = new Result($pathToYamlFile, Result::RESULT_CODE_GENERAL_ERROR, ProcessOutput::STATUS_CODE_ERROR, $message);
+                }
+
+                $results[] = $fileResults;
+                $output->write($processOutput->process(ProcessOutputService::getWorstStatusCodeByResults($fileResults)));
+            }
         }
         $output->writeln($processOutput->getLegend());
         $results = array_merge(...$results); // add all results to one array instead of multidimensional array with results for every file
@@ -131,21 +135,14 @@ class YamlCommand extends Command
     }
 
     /**
-     * @param string $pathToFile
-     * @param string[] $pathToSkippedYamlFiles
-     * @param string[] $excludedFileMasks
+     * @param string $pathToYamlFile
+     * @param string[] $pathToExcludedYamlFiles
      * @return bool
      */
-    private function isFileSkipped($pathToFile, array $pathToSkippedYamlFiles, array $excludedFileMasks = []): bool
+    private function isFileExcluded($pathToYamlFile, array $pathToExcludedYamlFiles): bool
     {
-        if (in_array($pathToFile, $pathToSkippedYamlFiles, true)) {
+        if (in_array($pathToYamlFile, $pathToExcludedYamlFiles, true)) {
             return true;
-        }
-
-        foreach ($excludedFileMasks as $excludedFileMask) {
-            if (strpos($pathToFile, $excludedFileMask) !== false) {
-                return true;
-            }
         }
 
         return false;

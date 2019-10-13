@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace YamlStandards\Model\YamlSpacesBetweenGroups;
 
 use PHPUnit\Framework\TestCase;
-use YamlStandards\Command\InputSettingData;
+use YamlStandards\Model\Config\StandardParametersData;
 
 class YamlSpacesBetweenGroupsFixerTest extends TestCase
 {
@@ -31,8 +31,8 @@ class YamlSpacesBetweenGroupsFixerTest extends TestCase
         $yamlIndentChecker = new YamlSpacesBetweenGroupsFixer();
 
         foreach ($pathToUnfixedFiles as $key => $pathToUnfixedFile) {
-            $inputSettingData = $this->getInputSettingDataMock($levels[$key]);
-            $yamlIndentChecker->fix($pathToUnfixedFile, $tempCorrectYamlFile, $inputSettingData);
+            $standardParametersData = $this->getStandardsParametersData($levels[$key]);
+            $yamlIndentChecker->fix($pathToUnfixedFile, $tempCorrectYamlFile, $standardParametersData);
             $yamlFileContent = file_get_contents($tempCorrectYamlFile);
             $correctYamlFileContent = file_get_contents($pathToFixedFiles[$key]);
 
@@ -50,13 +50,10 @@ class YamlSpacesBetweenGroupsFixerTest extends TestCase
 
     /**
      * @param int $level
-     * @return \YamlStandards\Command\InputSettingData|\PHPUnit_Framework_MockObject_MockObject
+     * @return \YamlStandards\Model\Config\StandardParametersData|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function getInputSettingDataMock($level)
+    private function getStandardsParametersData(int $level)
     {
-        $inputSettingDataMock = $this->createMock(InputSettingData::class);
-        $inputSettingDataMock->method('getLevelForCheckSpacesBetweenGroups')->willReturn($level);
-
-        return $inputSettingDataMock;
+        return new StandardParametersData(4, 4, $level);
     }
 }

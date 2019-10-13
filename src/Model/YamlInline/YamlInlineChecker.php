@@ -6,10 +6,10 @@ namespace YamlStandards\Model\YamlInline;
 
 use SebastianBergmann\Diff\Differ;
 use Symfony\Component\Yaml\Yaml;
-use YamlStandards\Command\InputSettingData;
 use YamlStandards\Command\ProcessOutput;
 use YamlStandards\Model\CheckerInterface;
 use YamlStandards\Model\Component\YamlService;
+use YamlStandards\Model\Config\StandardParametersData;
 use YamlStandards\Result\Result;
 
 /**
@@ -20,7 +20,7 @@ class YamlInlineChecker implements CheckerInterface
     /**
      * @inheritDoc
      */
-    public function check(string $pathToYamlFile, InputSettingData $inputSettingData): Result
+    public function check(string $pathToYamlFile, StandardParametersData $standardParametersData): Result
     {
         $yamlArrayData = YamlService::getYamlData($pathToYamlFile);
         $yamlStringData = Yaml::dump($yamlArrayData, 3);

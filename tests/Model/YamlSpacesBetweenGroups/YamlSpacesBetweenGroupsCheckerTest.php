@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace YamlStandards\Model\YamlSpacesBetweenGroups;
 
 use PHPUnit\Framework\TestCase;
-use YamlStandards\Command\InputSettingData;
+use YamlStandards\Model\Config\StandardParametersData;
 use YamlStandards\Result\Result;
 
 class YamlSpacesBetweenGroupsCheckerTest extends TestCase
@@ -23,8 +23,8 @@ class YamlSpacesBetweenGroupsCheckerTest extends TestCase
         $yamlIndentChecker = new YamlSpacesBetweenGroupsChecker();
 
         foreach ($pathToFiles as $key => $pathToFile) {
-            $inputSettingData = $this->getInputSettingDataMock($levels[$key]);
-            $result = $yamlIndentChecker->check($pathToFile, $inputSettingData);
+            $standardParametersData = $this->getStandardsParametersData($levels[$key]);
+            $result = $yamlIndentChecker->check($pathToFile, $standardParametersData);
 
             $this->assertSame(Result::RESULT_CODE_INVALID_FILE_SYNTAX, $result->getResultCode());
         }
@@ -43,8 +43,8 @@ class YamlSpacesBetweenGroupsCheckerTest extends TestCase
         $yamlIndentChecker = new YamlSpacesBetweenGroupsChecker();
 
         foreach ($pathToFiles as $key => $pathToFile) {
-            $inputSettingData = $this->getInputSettingDataMock($levels[$key]);
-            $result = $yamlIndentChecker->check($pathToFile, $inputSettingData);
+            $standardParametersData = $this->getStandardsParametersData($levels[$key]);
+            $result = $yamlIndentChecker->check($pathToFile, $standardParametersData);
 
             $this->assertSame(Result::RESULT_CODE_OK, $result->getResultCode(), sprintf('YAML spaces between groups check of "%s" failed.', $pathToFile));
         }
@@ -52,13 +52,10 @@ class YamlSpacesBetweenGroupsCheckerTest extends TestCase
 
     /**
      * @param int $level
-     * @return \YamlStandards\Command\InputSettingData|\PHPUnit_Framework_MockObject_MockObject
+     * @return \YamlStandards\Model\Config\StandardParametersData|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function getInputSettingDataMock($level)
+    private function getStandardsParametersData(int $level)
     {
-        $inputSettingDataMock = $this->createMock(InputSettingData::class);
-        $inputSettingDataMock->method('getLevelForCheckSpacesBetweenGroups')->willReturn($level);
-
-        return $inputSettingDataMock;
+        return new StandardParametersData(4, 4, $level);
     }
 }
