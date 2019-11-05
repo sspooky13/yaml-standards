@@ -12,7 +12,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Exception\ParseException;
 use YamlStandards\Command\Service\ProcessOutputService;
 use YamlStandards\Command\Service\ResultService;
-use YamlStandards\Command\Service\StandardClassesLoaderService;
 use YamlStandards\Model\Component\YamlService;
 use YamlStandards\Model\Config\YamlStandardConfigLoader;
 use YamlStandards\Result\Result;
@@ -62,9 +61,6 @@ class YamlCommand extends Command
         $yamlStandardConfigTotalData = $yamlStandardConfigLoader->loadFromYaml('./example/yaml-standards.yaml');
 
         $processOutput = new ProcessOutput($yamlStandardConfigTotalData->getTotalCountOfYamlFiles());
-
-        $fixerInterfaces = StandardClassesLoaderService::getFixerClassesByInputSettingData($inputSettingData);
-        $checkerInterfaces = StandardClassesLoaderService::getCheckerClassesByInputSettingData($inputSettingData);
         $results = [[]];
 
         foreach ($yamlStandardConfigTotalData->getYamlStandardConfigsSingleData() as $yamlStandardConfigSingleData) {
