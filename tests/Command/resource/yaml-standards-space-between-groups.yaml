@@ -1,0 +1,9 @@
+-   pathsToCheck:
+        - tests/Command/resource/yamlFiles/sorted/yaml-getting-started.yml
+        - tests/Command/resource/yamlFiles/sorted/config
+        - tests/Command/resource/yamlFiles/sorted/route
+        - tests/Command/resource/yamlFiles/sorted/service
+    checkers:
+        -   pathToChecker: YamlStandards\Model\YamlSpacesBetweenGroups\YamlSpacesBetweenGroupsChecker
+            parameters:
+                { level: 2 }

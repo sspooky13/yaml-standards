@@ -20,16 +20,8 @@ class YamlCommand extends Command
 {
     private const COMMAND_NAME = 'yaml-standards';
 
-    public const
-        ARGUMENT_DIRS_OR_FILES = 'dirsOrFiles',
-        OPTION_EXCLUDE_BY_NAME = 'exclude-by-name',
-        OPTION_EXCLUDE_DIR = 'exclude-dir',
-        OPTION_EXCLUDE_FILE = 'exclude-file',
-        OPTION_CHECK_ALPHABETICAL_SORT_DEPTH = 'check-alphabetical-sort-depth',
-        OPTION_CHECK_YAML_COUNT_OF_INDENTS = 'check-indents-count-of-indents',
-        OPTION_CHECK_INLINE = 'check-inline',
-        OPTION_CHECK_LEVEL_FOR_SPACES_BETWEEN_GROUPS = 'check-spaces-between-groups-to-level',
-        OPTION_FIX = 'fix';
+    public const ARGUMENT_PATH_TO_CONFIG_FILE = 'pathToConfigFile';
+    public const OPTION_FIX = 'fix';
 
     protected static $defaultName = self::COMMAND_NAME;
 
@@ -38,14 +30,7 @@ class YamlCommand extends Command
         $this
             ->setName(self::COMMAND_NAME) // set command name for symfony/console lower version as 3.4
             ->setDescription('Check yaml files respect standards')
-            ->addArgument(self::ARGUMENT_DIRS_OR_FILES, InputArgument::REQUIRED | InputArgument::IS_ARRAY, 'Paths to directories or files to check')
-            ->addOption(self::OPTION_EXCLUDE_BY_NAME, null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Exclude file mask from check')
-            ->addOption(self::OPTION_EXCLUDE_DIR, null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Exclude path to dirs from check')
-            ->addOption(self::OPTION_EXCLUDE_FILE, null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Exclude path to files from check')
-            ->addOption(self::OPTION_CHECK_ALPHABETICAL_SORT_DEPTH, null, InputOption::VALUE_REQUIRED, 'Check yaml file is right sorted in set depth')
-            ->addOption(self::OPTION_CHECK_YAML_COUNT_OF_INDENTS, null, InputOption::VALUE_REQUIRED, 'Check count of indents in yaml file')
-            ->addOption(self::OPTION_CHECK_INLINE, null, InputOption::VALUE_NONE, 'Check yaml file complies inline standards')
-            ->addOption(self::OPTION_CHECK_LEVEL_FOR_SPACES_BETWEEN_GROUPS, null, InputOption::VALUE_REQUIRED, 'Check yaml file have correct space between groups for set level')
+            ->addArgument(self::ARGUMENT_PATH_TO_CONFIG_FILE, InputArgument::OPTIONAL, 'Path to configuration file. By default configuration file is looking in root directory', './yaml-standards.yaml')
             ->addOption(self::OPTION_FIX, null, InputOption::VALUE_NONE, 'Automatically fix problems');
     }
 
@@ -58,7 +43,7 @@ class YamlCommand extends Command
 
         $inputSettingData = new InputSettingData($input);
         $yamlStandardConfigLoader = new YamlStandardConfigLoader();
-        $yamlStandardConfigTotalData = $yamlStandardConfigLoader->loadFromYaml('./example/yaml-standards.yaml');
+        $yamlStandardConfigTotalData = $yamlStandardConfigLoader->loadFromYaml($inputSettingData->getPathToConfigFile());
 
         $processOutput = new ProcessOutput($yamlStandardConfigTotalData->getTotalCountOfYamlFiles());
         $results = [[]];

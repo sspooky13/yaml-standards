@@ -14,8 +14,7 @@ class YamlCommandTest extends TestCase
     {
         $command = $this->createCommandTester();
         $commandExitCode = $command->execute([
-            YamlCommand::ARGUMENT_DIRS_OR_FILES => ['./tests/yamlFiles/sorted/service/symfony-service.yml'],
-            '--' . YamlCommand::OPTION_CHECK_ALPHABETICAL_SORT_DEPTH => 2,
+            YamlCommand::ARGUMENT_PATH_TO_CONFIG_FILE => __DIR__ . '/resource/yaml-standards-alphabetical.yaml',
         ]);
 
         $this->assertEquals(0, $commandExitCode);
@@ -25,8 +24,7 @@ class YamlCommandTest extends TestCase
     {
         $command = $this->createCommandTester();
         $commandExitCode = $command->execute([
-            YamlCommand::ARGUMENT_DIRS_OR_FILES => ['./tests/yamlFiles/sorted/service/symfony-service.yml'],
-            '--' . YamlCommand::OPTION_CHECK_YAML_COUNT_OF_INDENTS => 4,
+            YamlCommand::ARGUMENT_PATH_TO_CONFIG_FILE => __DIR__ . '/resource/yaml-standards-indent.yaml',
         ]);
 
         $this->assertEquals(0, $commandExitCode);
@@ -36,8 +34,7 @@ class YamlCommandTest extends TestCase
     {
         $command = $this->createCommandTester();
         $commandExitCode = $command->execute([
-            YamlCommand::ARGUMENT_DIRS_OR_FILES => ['./tests/yamlFiles/sorted/service/symfony-service.yml'],
-            '--' . YamlCommand::OPTION_CHECK_INLINE,
+            YamlCommand::ARGUMENT_PATH_TO_CONFIG_FILE => __DIR__ . '/resource/yaml-standards-inline.yaml',
         ]);
 
         $this->assertEquals(0, $commandExitCode);
@@ -47,8 +44,28 @@ class YamlCommandTest extends TestCase
     {
         $command = $this->createCommandTester();
         $commandExitCode = $command->execute([
-            YamlCommand::ARGUMENT_DIRS_OR_FILES => ['./tests/yamlFiles/sorted/service/symfony-service.yml'],
-            '--' . YamlCommand::OPTION_CHECK_LEVEL_FOR_SPACES_BETWEEN_GROUPS => 2,
+            YamlCommand::ARGUMENT_PATH_TO_CONFIG_FILE => __DIR__ . '/resource/yaml-standards-space-between-groups.yaml',
+        ]);
+
+        $this->assertEquals(0, $commandExitCode);
+    }
+
+    public function testCorrectRunCommandForExcludedPaths(): void
+    {
+        $command = $this->createCommandTester();
+        $commandExitCode = $command->execute([
+            YamlCommand::ARGUMENT_PATH_TO_CONFIG_FILE => __DIR__ . '/resource/yaml-standards-exclude.yaml',
+        ]);
+
+        $this->assertEquals(0, $commandExitCode);
+    }
+
+    public function testCorrectRunCommandForFix(): void
+    {
+        $command = $this->createCommandTester();
+        $commandExitCode = $command->execute([
+            YamlCommand::ARGUMENT_PATH_TO_CONFIG_FILE => __DIR__ . '/resource/yaml-standards-all.yaml',
+            '--' . YamlCommand::OPTION_FIX,
         ]);
 
         $this->assertEquals(0, $commandExitCode);
@@ -58,11 +75,7 @@ class YamlCommandTest extends TestCase
     {
         $command = $this->createCommandTester();
         $commandExitCode = $command->execute([
-            YamlCommand::ARGUMENT_DIRS_OR_FILES => ['./tests/yamlFiles/sorted/service/symfony-service.yml'],
-            '--' . YamlCommand::OPTION_CHECK_ALPHABETICAL_SORT_DEPTH => 2,
-            '--' . YamlCommand::OPTION_CHECK_YAML_COUNT_OF_INDENTS => 4,
-            '--' . YamlCommand::OPTION_CHECK_INLINE,
-            '--' . YamlCommand::OPTION_CHECK_LEVEL_FOR_SPACES_BETWEEN_GROUPS => 2,
+            YamlCommand::ARGUMENT_PATH_TO_CONFIG_FILE => __DIR__ . '/resource/yaml-standards-all.yaml',
         ]);
 
         $this->assertEquals(0, $commandExitCode);
