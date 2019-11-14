@@ -1,0 +1,13 @@
+parameters:
+    reportUnmatchedIgnoredErrors: false # this is skipped because for symfony 4.2 and newer versions someone error doesn't showing
+    ignoreErrors:
+        -
+            message: '#^Call to an undefined method Symfony\\Component\\Config\\Definition\\Builder\\NodeParentInterface::end\(\)\.$#'
+            path: %currentWorkingDirectory%/src/Model/Config/YamlStandardConfigDefinition.php
+        # this is skipped because I want to support symfony 4.1 and lower versions
+        -
+            message: '#^Class Symfony\\Component\\Config\\Definition\\Builder\\TreeBuilder does not have a constructor and must be instantiated without any parameters\.$#'
+            path: %currentWorkingDirectory%/src/Model/Config/YamlStandardConfigDefinition.php
+        -
+            message: '#^Call to an undefined method Symfony\\Component\\Config\\Definition\\Builder\\TreeBuilder::getRootNode\(\)\.$#'
+            path: %currentWorkingDirectory%/src/Model/Config/YamlStandardConfigDefinition.php
