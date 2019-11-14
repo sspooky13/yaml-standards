@@ -10,7 +10,7 @@ class YamlFilesPathServiceTest extends TestCase
 {
     public function testFindAllYamlFilesInDir(): void
     {
-        $pathToDir = ['./tests/yamlFiles/unSorted/'];
+        $pathToDir = ['./tests/Command/resource/yamlFiles/unSorted/'];
 
         $yamlFiles = YamlFilesPathService::getPathToYamlFiles($pathToDir);
 
@@ -20,8 +20,8 @@ class YamlFilesPathServiceTest extends TestCase
     public function testFindAllYamlFilesInDirs(): void
     {
         $pathToDirs = [
-            './tests/yamlFiles/sorted/config',
-            './tests/yamlFiles/unSorted/route',
+            './tests/Command/resource/yamlFiles/sorted/config',
+            './tests/Command/resource/yamlFiles/unSorted/route',
         ];
 
         $yamlFiles = YamlFilesPathService::getPathToYamlFiles($pathToDirs);
@@ -32,8 +32,9 @@ class YamlFilesPathServiceTest extends TestCase
     public function testFindAllYamlFilesInPaths(): void
     {
         $pathToFiles = [
-            './tests/yamlFiles/sorted/config/symfony-config.yml',
-            './tests/yamlFiles/unSorted/route/symfony-route.yml',
+            './tests/Command/resource/yamlFiles/sorted/config/symfony-config.yml',
+            './tests/Command/resource/yamlFiles/sorted/config/symfony-config.yml',
+            './tests/Command/resource/yamlFiles/unSorted/route/symfony-route.yml',
         ];
 
         $yamlFiles = YamlFilesPathService::getPathToYamlFiles($pathToFiles);
@@ -44,10 +45,10 @@ class YamlFilesPathServiceTest extends TestCase
     public function testFindAllYamlFilesInPathsAndDirs(): void
     {
         $pathToDirsAndFiles = [
-            './tests/yamlFiles/sorted/config/symfony-config.yml',
-            './tests/yamlFiles/unSorted/route/symfony-route.yml',
-            './tests/yamlFiles/unSorted/config',
-            './tests/yamlFiles/unSorted/service',
+            './tests/Command/resource/yamlFiles/sorted/config/symfony-config.yml',
+            './tests/Command/resource/yamlFiles/unSorted/route/symfony-route.yml',
+            './tests/Command/resource/yamlFiles/unSorted/config',
+            './tests/Command/resource/yamlFiles/unSorted/service',
         ];
 
         $yamlFiles = YamlFilesPathService::getPathToYamlFiles($pathToDirsAndFiles);
@@ -57,7 +58,7 @@ class YamlFilesPathServiceTest extends TestCase
 
     public function testReturnFullPathToFile(): void
     {
-        $pathToFile = ['./tests/yamlFiles/unSorted/yaml-getting-started.yml'];
+        $pathToFile = ['./tests/Command/resource/yamlFiles/unSorted/yaml-getting-started.yml'];
 
         $yamlFiles = YamlFilesPathService::getPathToYamlFiles($pathToFile);
 
@@ -66,14 +67,14 @@ class YamlFilesPathServiceTest extends TestCase
 
     public function testReturnFullPathToFilesFromDir(): void
     {
-        $pathToDirs = ['./tests/yamlFiles/unSorted/config/', './tests/yamlFiles/unSorted/route/'];
+        $pathToDirs = ['./tests/Command/resource/yamlFiles/unSorted/config/', './tests/Command/resource/yamlFiles/unSorted/route/'];
 
         $yamlFiles = YamlFilesPathService::getPathToYamlFiles($pathToDirs);
 
         $expectedYamlFiles = [
-            './tests/yamlFiles/unSorted/config/symfony-config.yml',
-            './tests/yamlFiles/unSorted/config/symfony-security.yml',
-            './tests/yamlFiles/unSorted/route/symfony-route.yml',
+            './tests/Command/resource/yamlFiles/unSorted/config/symfony-config.yml',
+            './tests/Command/resource/yamlFiles/unSorted/config/symfony-security.yml',
+            './tests/Command/resource/yamlFiles/unSorted/route/symfony-route.yml',
         ];
 
         $this->assertTrue($this->arraysAreEqual($yamlFiles, $expectedYamlFiles)); // assert two arrays are equal, but order of elements is not important
