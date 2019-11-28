@@ -6,7 +6,6 @@ namespace YamlStandards\Model\YamlInline;
 
 use SebastianBergmann\Diff\Differ;
 use Symfony\Component\Yaml\Yaml;
-use YamlStandards\Command\ProcessOutput;
 use YamlStandards\Model\AbstractChecker;
 use YamlStandards\Model\Component\YamlService;
 use YamlStandards\Model\Config\StandardParametersData;
@@ -39,13 +38,13 @@ class YamlInlineChecker extends AbstractChecker
         $filteredYamlFile = implode("\n", $filteredYamlLines);
 
         if ($yamlStringData === $filteredYamlFile) {
-            return new Result($pathToYamlFile, Result::RESULT_CODE_OK, ProcessOutput::STATUS_CODE_OK);
+            return new Result($pathToYamlFile, Result::RESULT_CODE_OK);
         }
 
         $differ = new Differ();
         $diffBetweenStrings = $differ->diff($filteredYamlFile, $yamlStringData);
 
-        return new Result($pathToYamlFile, Result::RESULT_CODE_INVALID_FILE_SYNTAX, ProcessOutput::STATUS_CODE_INVALID_FILE_SYNTAX, $diffBetweenStrings);
+        return new Result($pathToYamlFile, Result::RESULT_CODE_INVALID_FILE_SYNTAX, $diffBetweenStrings);
     }
 
     /**

@@ -18,6 +18,6 @@ class ResultService
             $resultCode = $result->getResultCode() > $resultCode ? $result->getResultCode() : $resultCode;
         }
 
-        return $resultCode;
+        return (int)$resultCode;
     }
 }

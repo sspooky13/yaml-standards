@@ -6,7 +6,6 @@ namespace YamlStandards\Model\YamlAlphabetical;
 
 use SebastianBergmann\Diff\Differ;
 use Symfony\Component\Yaml\Yaml;
-use YamlStandards\Command\ProcessOutput;
 use YamlStandards\Model\AbstractFixer;
 use YamlStandards\Model\Config\StandardParametersData;
 use YamlStandards\Result\Result;
@@ -29,7 +28,7 @@ class YamlAlphabeticalFixer extends AbstractFixer
         $rightFileContent = implode("\n", $rightFileLines);
 
         if ($fileContent === $rightFileContent) {
-            return new Result($pathToYamlFile, Result::RESULT_CODE_OK, ProcessOutput::STATUS_CODE_OK);
+            return new Result($pathToYamlFile, Result::RESULT_CODE_OK);
         }
 
         file_put_contents($pathToDumpFixedFile, $rightFileContent);
@@ -37,6 +36,6 @@ class YamlAlphabeticalFixer extends AbstractFixer
         $differ = new Differ();
         $diffBetweenStrings = $differ->diff($fileContent, $rightFileContent);
 
-        return new Result($pathToYamlFile, Result::RESULT_CODE_OK, ProcessOutput::STATUS_CODE_INVALID_FILE_SYNTAX, $diffBetweenStrings);
+        return new Result($pathToYamlFile, Result::RESULT_CODE_FIXED_INVALID_FILE_SYNTAX, $diffBetweenStrings);
     }
 }

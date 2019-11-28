@@ -9,8 +9,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Yaml\Exception\ParseException;
-use YamlStandards\Command\Service\ProcessOutputService;
 use YamlStandards\Command\Service\ResultService;
 use YamlStandards\Model\Config\YamlStandardConfigLoader;
 use YamlStandards\Result\Result;
@@ -36,29 +36,30 @@ class YamlCommand extends Command
     /**
      * @inheritDoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output): ?int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        Reporting::startTiming();
-
         $inputSettingData = new InputSettingData($input);
+
         $yamlStandardConfigLoader = new YamlStandardConfigLoader();
         $yamlStandardConfigTotalData = $yamlStandardConfigLoader->loadFromYaml($inputSettingData->getPathToConfigFile());
 
-        $processOutput = new ProcessOutput($yamlStandardConfigTotalData->getTotalCountOfYamlFiles());
+        $symfonyStyle = new SymfonyStyle($input, $output);
+        $progressBar = $symfonyStyle->createProgressBar($yamlStandardConfigTotalData->getTotalCountOfYamlFiles());
+        $progressBar->setFormat('debug');
         $results = [[]];
 
         foreach ($yamlStandardConfigTotalData->getYamlStandardConfigsSingleData() as $yamlStandardConfigSingleData) {
             foreach ($yamlStandardConfigSingleData->getPathToYamlFiles() as $pathToYamlFile) {
                 $fileResults = [];
                 if ($this->isFileExcluded($pathToYamlFile, $yamlStandardConfigSingleData->getPathToExcludedYamlFiles())) {
-                    $output->write($processOutput->process(ProcessOutput::STATUS_CODE_SKIPP));
+                    $progressBar->advance();
                     continue;
                 }
 
                 if (is_readable($pathToYamlFile) === false) {
                     $message = 'File is not readable.';
-                    $fileResults[] = new Result($pathToYamlFile, Result::RESULT_CODE_GENERAL_ERROR, ProcessOutput::STATUS_CODE_ERROR, $message);
-                    $output->write($processOutput->process(ProcessOutput::STATUS_CODE_ERROR));
+                    $fileResults[] = new Result($pathToYamlFile, Result::RESULT_CODE_GENERAL_ERROR, $message);
+                    $progressBar->advance();
                     continue;
                 }
 
@@ -74,17 +75,18 @@ class YamlCommand extends Command
                     }
                 } catch (ParseException $e) {
                     $message = sprintf('Unable to parse the YAML string: %s', $e->getMessage());
-                    $fileResults[] = new Result($pathToYamlFile, Result::RESULT_CODE_GENERAL_ERROR, ProcessOutput::STATUS_CODE_ERROR, $message);
+                    $fileResults[] = new Result($pathToYamlFile, Result::RESULT_CODE_GENERAL_ERROR, $message);
                 }
 
                 $results[] = $fileResults;
-                $output->write($processOutput->process(ProcessOutputService::getWorstStatusCodeByResults($fileResults)));
+                $progressBar->advance();
             }
         }
-        $output->writeln($processOutput->getLegend());
-        $results = array_merge(...$results); // add all results to one array instead of multidimensional array with results for every file
+        $progressBar->finish();
+        /** @var \YamlStandards\Result\Result[] $mergedResult */
+        $mergedResult = array_merge(...$results); // add all results to one array instead of multidimensional array with results for every file
 
-        return $this->printOutput($output, $results);
+        return $this->printOutput($output, $mergedResult);
     }
 
     /**
@@ -94,8 +96,9 @@ class YamlCommand extends Command
      */
     private function printOutput(OutputInterface $output, array $results): int
     {
+        $output->writeln(PHP_EOL);
         foreach ($results as $result) {
-            if ($result->getStatusCode() !== ProcessOutput::STATUS_CODE_OK) {
+            if ($result->getResultCode() !== Result::RESULT_CODE_OK) {
                 $output->writeln(sprintf('FILE: %s', $result->getPathToFile()));
                 $output->writeln('-------------------------------------------------');
                 $output->writeln($result->getMessage() . PHP_EOL);
@@ -106,8 +109,6 @@ class YamlCommand extends Command
             }
         }
 
-        $output->writeln(Reporting::printRunTime());
-
         return ResultService::getResultCodeByResults($results);
     }
 
@@ -116,7 +117,7 @@ class YamlCommand extends Command
      * @param string[] $pathToExcludedYamlFiles
      * @return bool
      */
-    private function isFileExcluded($pathToYamlFile, array $pathToExcludedYamlFiles): bool
+    private function isFileExcluded(string $pathToYamlFile, array $pathToExcludedYamlFiles): bool
     {
         if (in_array($pathToYamlFile, $pathToExcludedYamlFiles, true)) {
             return true;

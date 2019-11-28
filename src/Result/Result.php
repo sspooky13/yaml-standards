@@ -7,24 +7,20 @@ namespace YamlStandards\Result;
 class Result
 {
     public const
-        RESULT_CODE_OK = 0,
-        RESULT_CODE_INVALID_FILE_SYNTAX = 1,
-        RESULT_CODE_GENERAL_ERROR = 2;
+        RESULT_CODE_OK = 0.0,
+        RESULT_CODE_FIXED_INVALID_FILE_SYNTAX = 0.1,
+        RESULT_CODE_INVALID_FILE_SYNTAX = 1.0,
+        RESULT_CODE_GENERAL_ERROR = 2.0;
 
     /**
-     * string
+     * @var string
      */
     private $pathToFile;
 
     /**
-     * int
+     * @var float
      */
     private $resultCode;
-
-    /**
-     * @var int
-     */
-    private $statusCode;
 
     /**
      * @var string|null
@@ -38,21 +34,18 @@ class Result
 
     /**
      * @param string $pathToFile
-     * @param int $resultCode
-     * @param int $statusCode
+     * @param float $resultCode
      * @param string|null $message
      * @param bool $canBeFixedByFixer
      */
     public function __construct(
         string $pathToFile,
-        int $resultCode,
-        int $statusCode,
+        float $resultCode,
         ?string $message = null,
         bool $canBeFixedByFixer = false
     ) {
         $this->pathToFile = $pathToFile;
         $this->resultCode = $resultCode;
-        $this->statusCode = $statusCode;
         $this->message = $message;
         $this->canBeFixedByFixer = $canBeFixedByFixer;
     }
@@ -66,19 +59,11 @@ class Result
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getResultCode(): int
+    public function getResultCode(): float
     {
         return $this->resultCode;
-    }
-
-    /**
-     * @return int
-     */
-    public function getStatusCode(): int
-    {
-        return $this->statusCode;
     }
 
     /**
