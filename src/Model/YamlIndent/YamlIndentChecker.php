@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace YamlStandards\Model\YamlIndent;
 
 use SebastianBergmann\Diff\Differ;
-use YamlStandards\Command\InputSettingData;
 use YamlStandards\Command\ProcessOutput;
 use YamlStandards\Model\CheckerInterface;
+use YamlStandards\Model\Config\StandardParametersData;
 use YamlStandards\Result\Result;
 
 /**
@@ -18,7 +18,7 @@ class YamlIndentChecker implements CheckerInterface
     /**
      * @inheritDoc
      */
-    public function check(string $pathToYamlFile, InputSettingData $inputSettingData): Result
+    public function check(string $pathToYamlFile, StandardParametersData $standardParametersData): Result
     {
         $fileContent = file_get_contents($pathToYamlFile);
         $fileContent = str_replace("\r", '', $fileContent); // remove carriage returns
@@ -27,7 +27,7 @@ class YamlIndentChecker implements CheckerInterface
         $rightFileLines = [];
 
         foreach ($fileLines as $key => $fileLine) {
-            $rightFileLines[] = $yamlIndentDataFactory->getRightFileLines($fileLines, $key, $inputSettingData->getCountOfIndents(), $fileLine);
+            $rightFileLines[] = $yamlIndentDataFactory->getRightFileLines($fileLines, $key, $standardParametersData->getIndents(), $fileLine);
         }
 
         $rightFileContent = implode("\n", $rightFileLines);

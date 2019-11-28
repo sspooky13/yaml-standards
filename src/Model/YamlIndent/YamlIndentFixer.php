@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace YamlStandards\Model\YamlIndent;
 
 use SebastianBergmann\Diff\Differ;
-use YamlStandards\Command\InputSettingData;
 use YamlStandards\Command\ProcessOutput;
+use YamlStandards\Model\Config\StandardParametersData;
 use YamlStandards\Model\FixerInterface;
 use YamlStandards\Result\Result;
 
@@ -18,7 +18,7 @@ class YamlIndentFixer implements FixerInterface
     /**
      * @inheritDoc
      */
-    public function fix(string $pathToYamlFile, string $pathToDumpFixedFile, InputSettingData $inputSettingData): Result
+    public function fix(string $pathToYamlFile, string $pathToDumpFixedFile, StandardParametersData $standardParametersData): Result
     {
         $fileContent = file_get_contents($pathToYamlFile);
         $fileContent = str_replace("\r", '', $fileContent); // remove carriage returns
@@ -27,7 +27,7 @@ class YamlIndentFixer implements FixerInterface
         $rightFileLines = [];
 
         foreach ($fileLines as $key => $fileLine) {
-            $rightFileLines[] = $yamlIndentDataFactory->getRightFileLines($fileLines, $key, $inputSettingData->getCountOfIndents(), $fileLine);
+            $rightFileLines[] = $yamlIndentDataFactory->getRightFileLines($fileLines, $key, $standardParametersData->getIndents(), $fileLine);
         }
 
         $rightFileContent = implode("\n", $rightFileLines);

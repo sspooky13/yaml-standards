@@ -5,19 +5,19 @@ declare(strict_types=1);
 namespace YamlStandards\Model\YamlIndent;
 
 use PHPUnit\Framework\TestCase;
-use YamlStandards\Command\InputSettingData;
+use YamlStandards\Model\Config\StandardParametersData;
 
 class YamlIndentFixerTest extends TestCase
 {
     public function testFixUnfixedFile(): void
     {
-        $inputSettingData = $this->getInputSettingDataMock();
+        $standardParametersData = $this->getStandardsParametersData();
         $pathToUnfixedFile = __DIR__ . '/resource/unfixed/yaml-getting-started.yml';
         $pathToFixedFile = __DIR__ . '/resource/fixed/yaml-getting-started.yml';
         $tempCorrectYamlFile = $this->getTempCorrectYamlFile();
 
         $yamlIndentChecker = new YamlIndentFixer();
-        $yamlIndentChecker->fix($pathToUnfixedFile, $tempCorrectYamlFile, $inputSettingData);
+        $yamlIndentChecker->fix($pathToUnfixedFile, $tempCorrectYamlFile, $standardParametersData);
 
         $yamlFileContent = file_get_contents($tempCorrectYamlFile);
         $correctYamlFileContent = file_get_contents($pathToFixedFile);
@@ -27,7 +27,7 @@ class YamlIndentFixerTest extends TestCase
 
     public function testFixUnfixedFiles(): void
     {
-        $inputSettingData = $this->getInputSettingDataMock();
+        $standardParametersData = $this->getStandardsParametersData();
         $pathToUnfixedFiles = [
             __DIR__ . '/resource/unfixed/kustomization.yaml',
             __DIR__ . '/resource/unfixed/shopsys-service.yml',
@@ -51,7 +51,7 @@ class YamlIndentFixerTest extends TestCase
         $yamlIndentChecker = new YamlIndentFixer();
 
         foreach ($pathToUnfixedFiles as $key => $pathToUnfixedFile) {
-            $yamlIndentChecker->fix($pathToUnfixedFile, $tempCorrectYamlFile, $inputSettingData);
+            $yamlIndentChecker->fix($pathToUnfixedFile, $tempCorrectYamlFile, $standardParametersData);
             $yamlFileContent = file_get_contents($tempCorrectYamlFile);
             $correctYamlFileContent = file_get_contents($pathToFixedFiles[$key]);
 
@@ -68,13 +68,10 @@ class YamlIndentFixerTest extends TestCase
     }
 
     /**
-     * @return \YamlStandards\Command\InputSettingData|\PHPUnit_Framework_MockObject_MockObject
+     * @return \YamlStandards\Model\Config\StandardParametersData|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function getInputSettingDataMock()
+    private function getStandardsParametersData()
     {
-        $inputSettingDataMock = $this->createMock(InputSettingData::class);
-        $inputSettingDataMock->method('getCountOfIndents')->willReturn(4);
-
-        return $inputSettingDataMock;
+        return new StandardParametersData(4, 4, 4);
     }
 }

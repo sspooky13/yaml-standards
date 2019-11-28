@@ -14,8 +14,8 @@ parameters:
 
 services:
     _defaults:
-        autowire: true
         autoconfigure: true
+        autowire: true
         public: false
 
     CommerceGuys\Intl\Currency\CurrencyRepositoryInterface:

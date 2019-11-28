@@ -1,0 +1,40 @@
+bill-to:
+    address:
+        city: 'Royal Oak'
+        family: Dumars
+        given: Chris
+        lines: '458 Walkman Dr.Suite'
+        postal: 48046
+        state: MI
+
+comments: 'Late afternoon is best.Backup contact is Nancy Billsmer @ 338-4338.'
+
+date: 980208000
+
+invoice: 34843
+
+product:
+    -
+        description: Basketball
+        price: !!float 450
+        quantity: 4
+        sku: BL394D
+
+    -
+        description: 'Super Hoop'
+        price: !!float 2392
+        quantity: 1
+        sku: BL4438H
+
+ship-to:
+    address:
+        city: 'Royal Oak'
+        family: Dumars
+        given: Chris
+        lines: '458 Walkman Dr.Suite'
+        postal: 48046
+        state: MI
+
+tax: 251.42
+
+total: 4443.52

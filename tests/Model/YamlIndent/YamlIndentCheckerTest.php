@@ -5,25 +5,25 @@ declare(strict_types=1);
 namespace YamlStandards\Model\YamlIndent;
 
 use PHPUnit\Framework\TestCase;
-use YamlStandards\Command\InputSettingData;
+use YamlStandards\Model\Config\StandardParametersData;
 use YamlStandards\Result\Result;
 
 class YamlIndentCheckerTest extends TestCase
 {
     public function testCheckUnfixedFileIsNotCorrect(): void
     {
-        $inputSettingData = $this->getInputSettingDataMock();
+        $standardParametersData = $this->getStandardsParametersData();
         $pathToFile = __DIR__ . '/resource/unfixed/yaml-getting-started.yml';
 
         $yamlIndentChecker = new YamlIndentChecker();
-        $result = $yamlIndentChecker->check($pathToFile, $inputSettingData);
+        $result = $yamlIndentChecker->check($pathToFile, $standardParametersData);
 
         $this->assertSame(Result::RESULT_CODE_INVALID_FILE_SYNTAX, $result->getResultCode());
     }
 
     public function testCheckUnfixedFilesIsNotCorrect(): void
     {
-        $inputSettingData = $this->getInputSettingDataMock();
+        $standardParametersData = $this->getStandardsParametersData();
         $pathToFiles = [
             __DIR__ . '/resource/unfixed/kustomization.yaml',
             __DIR__ . '/resource/unfixed/shopsys-service.yml',
@@ -36,25 +36,25 @@ class YamlIndentCheckerTest extends TestCase
         $yamlIndentChecker = new YamlIndentChecker();
 
         foreach ($pathToFiles as $pathToFile) {
-            $result = $yamlIndentChecker->check($pathToFile, $inputSettingData);
+            $result = $yamlIndentChecker->check($pathToFile, $standardParametersData);
             $this->assertSame(Result::RESULT_CODE_INVALID_FILE_SYNTAX, $result->getResultCode());
         }
     }
 
     public function testCheckFixedFileIsCorrect(): void
     {
-        $inputSettingData = $this->getInputSettingDataMock();
+        $standardParametersData = $this->getStandardsParametersData();
         $pathToFile = __DIR__ . '/resource/fixed/yaml-getting-started.yml';
 
         $yamlIndentChecker = new YamlIndentChecker();
-        $result = $yamlIndentChecker->check($pathToFile, $inputSettingData);
+        $result = $yamlIndentChecker->check($pathToFile, $standardParametersData);
 
         $this->assertSame(Result::RESULT_CODE_OK, $result->getResultCode());
     }
 
     public function testCheckFixedFilesIsCorrect(): void
     {
-        $inputSettingData = $this->getInputSettingDataMock();
+        $standardParametersData = $this->getStandardsParametersData();
         $pathToFiles = [
             __DIR__ . '/resource/fixed/kustomization.yaml',
             __DIR__ . '/resource/fixed/shopsys-service.yml',
@@ -67,19 +67,16 @@ class YamlIndentCheckerTest extends TestCase
         $yamlIndentChecker = new YamlIndentChecker();
 
         foreach ($pathToFiles as $pathToFile) {
-            $result = $yamlIndentChecker->check($pathToFile, $inputSettingData);
+            $result = $yamlIndentChecker->check($pathToFile, $standardParametersData);
             $this->assertSame(Result::RESULT_CODE_OK, $result->getResultCode(), sprintf('YAML indent check of "%s" failed.', $pathToFile));
         }
     }
 
     /**
-     * @return \YamlStandards\Command\InputSettingData|\PHPUnit_Framework_MockObject_MockObject
+     * @return \YamlStandards\Model\Config\StandardParametersData|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function getInputSettingDataMock()
+    private function getStandardsParametersData()
     {
-        $inputSettingDataMock = $this->createMock(InputSettingData::class);
-        $inputSettingDataMock->method('getCountOfIndents')->willReturn(4);
-
-        return $inputSettingDataMock;
+        return new StandardParametersData(4, 4, 4);
     }
 }

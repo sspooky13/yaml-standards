@@ -6,10 +6,10 @@ namespace YamlStandards\Model\YamlAlphabetical;
 
 use SebastianBergmann\Diff\Differ;
 use Symfony\Component\Yaml\Yaml;
-use YamlStandards\Command\InputSettingData;
 use YamlStandards\Command\ProcessOutput;
 use YamlStandards\Model\CheckerInterface;
 use YamlStandards\Model\Component\YamlService;
+use YamlStandards\Model\Config\StandardParametersData;
 use YamlStandards\Result\Result;
 
 /**
@@ -20,10 +20,10 @@ class YamlAlphabeticalChecker implements CheckerInterface
     /**
      * @inheritDoc
      */
-    public function check(string $pathToYamlFile, InputSettingData $inputSettingData): Result
+    public function check(string $pathToYamlFile, StandardParametersData $standardParametersData): Result
     {
         $yamlArrayData = YamlService::getYamlData($pathToYamlFile);
-        $yamlArrayDataSorted = $this->sortArray($yamlArrayData, $inputSettingData->getAlphabeticalSortDepth());
+        $yamlArrayDataSorted = $this->sortArray($yamlArrayData, $standardParametersData->getDepth());
 
         $yamlStringData = Yaml::dump($yamlArrayData, PHP_INT_MAX);
         $yamlStringDataSorted = Yaml::dump($yamlArrayDataSorted, PHP_INT_MAX);

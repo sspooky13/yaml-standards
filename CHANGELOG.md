@@ -3,9 +3,16 @@
 ## [Unreleased]
 ### Added
 - create fixer for yaml spaces between groups
+- from now project can set different and more options for yaml standards
+    - create config file with options
+- whoever can create own checker and fixer and add it to config file
 
 ### Changed
+- remove command options and move it to config file
+
+### Removed
 - remove support for php 5.6 version and php 7.0 version
+- exclude files by name is no longer implemented
 
 ## [4.2.5] - 2019-08-13
 ### Changed

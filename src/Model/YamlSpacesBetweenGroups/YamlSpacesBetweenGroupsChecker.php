@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace YamlStandards\Model\YamlSpacesBetweenGroups;
 
 use SebastianBergmann\Diff\Differ;
-use YamlStandards\Command\InputSettingData;
 use YamlStandards\Command\ProcessOutput;
 use YamlStandards\Model\CheckerInterface;
 use YamlStandards\Model\Component\YamlService;
+use YamlStandards\Model\Config\StandardParametersData;
 use YamlStandards\Result\Result;
 
 /**
@@ -19,7 +19,7 @@ class YamlSpacesBetweenGroupsChecker implements CheckerInterface
     /**
      * @inheritDoc
      */
-    public function check(string $pathToYamlFile, InputSettingData $inputSettingData): Result
+    public function check(string $pathToYamlFile, StandardParametersData $standardParametersData): Result
     {
         $yamlContent = file_get_contents($pathToYamlFile);
         $yamlContent = str_replace("\r", '', $yamlContent); // remove carriage returns
@@ -28,7 +28,7 @@ class YamlSpacesBetweenGroupsChecker implements CheckerInterface
         $filteredYamlLines = array_values(array_filter($yamlLines, [YamlService::class, 'isLineNotBlank']));
         $yamlSpacesBetweenGroupsDataFactory = new YamlSpacesBetweenGroupsDataFactory();
 
-        $correctYamlContent = $yamlSpacesBetweenGroupsDataFactory->getCorrectYamlContentWithSpacesBetweenGroups($filteredYamlLines, $inputSettingData->getLevelForCheckSpacesBetweenGroups());
+        $correctYamlContent = $yamlSpacesBetweenGroupsDataFactory->getCorrectYamlContentWithSpacesBetweenGroups($filteredYamlLines, $standardParametersData->getLevel());
 
         if (trim($lastYamlElement) === '') {
             $correctYamlContent .= "\n";
