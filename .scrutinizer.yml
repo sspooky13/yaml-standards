@@ -7,4 +7,3 @@ build:
                         coverage:
                             file: 'some-file'
                             format: 'clover'
-
