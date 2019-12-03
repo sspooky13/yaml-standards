@@ -15,3 +15,4 @@
             parameters:
                 { level: 4 } # max level to check
         -   pathToChecker: YamlStandards\Model\YamlInline\YamlInlineChecker # only for turn it on
+        -   pathToChecker: YamlStandards\Model\YamlEmptyLineAtEnd\YamlEmptyLineAtEndChecker # only for turn it on
