@@ -50,6 +50,16 @@ class YamlCommandTest extends TestCase
         $this->assertEquals(0, $commandExitCode);
     }
 
+    public function testCorrectRunCommandForCheckEmptyLineAtEnd(): void
+    {
+        $command = $this->createCommandTester();
+        $commandExitCode = $command->execute([
+            YamlCommand::ARGUMENT_PATH_TO_CONFIG_FILE => __DIR__ . '/resource/yaml-standards-empty-line-at-end.yaml',
+        ]);
+
+        $this->assertEquals(0, $commandExitCode);
+    }
+
     public function testCorrectRunCommandForExcludedPaths(): void
     {
         $command = $this->createCommandTester();

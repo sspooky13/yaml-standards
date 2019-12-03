@@ -20,3 +20,4 @@
             parameters:
                 { level: 2 }
         -   pathToChecker: YamlStandards\Model\YamlInline\YamlInlineChecker
+        -   pathToChecker: YamlStandards\Model\YamlEmptyLineAtEnd\YamlEmptyLineAtEndChecker
