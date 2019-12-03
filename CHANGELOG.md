@@ -6,6 +6,8 @@
 - from now project can set different and more options for yaml standards
     - create config file with options
 - whoever can create own checker and fixer and add it to config file
+- create new standards: YamlEmptyLineAtEnd
+    - Check yaml file has empty line at end of file
 
 ### Changed
 - remove command options and move it to config file
