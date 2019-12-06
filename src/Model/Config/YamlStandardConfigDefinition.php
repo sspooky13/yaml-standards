@@ -19,6 +19,10 @@ class YamlStandardConfigDefinition implements ConfigurationInterface
     public const CONFIG_PARAMETERS_DEPTH = 'depth';
     public const CONFIG_PARAMETERS_INDENTS = 'indents';
     public const CONFIG_PARAMETERS_LEVEL = 'level';
+    public const CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE = 'serviceAliasingType';
+
+    public const CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_SHORT = 'short';
+    public const CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_LONG = 'long';
 
     /**
      * @inheritDoc
@@ -66,6 +70,10 @@ class YamlStandardConfigDefinition implements ConfigurationInterface
                                         ->scalarNode(self::CONFIG_PARAMETERS_DEPTH)->defaultNull()->end()
                                         ->scalarNode(self::CONFIG_PARAMETERS_INDENTS)->defaultNull()->end()
                                         ->scalarNode(self::CONFIG_PARAMETERS_LEVEL)->defaultNull()->end()
+                                        ->enumNode(self::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE)->defaultNull()->values([
+                                            self::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_SHORT,
+                                            self::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_LONG,
+                                        ])->end()
                                     ->end()
                                 ->end()
                             ->end()

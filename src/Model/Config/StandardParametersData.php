@@ -22,15 +22,22 @@ class StandardParametersData
     private $level;
 
     /**
+     * @var string|null
+     */
+    private $serviceAliasingType;
+
+    /**
      * @param int|null $depth
      * @param int|null $indents
      * @param int|null $level
+     * @param string|null $serviceAliasingType
      */
-    public function __construct(?int $depth, ?int $indents, ?int $level)
+    public function __construct(?int $depth, ?int $indents, ?int $level, ?string $serviceAliasingType)
     {
         $this->depth = $depth;
         $this->indents = $indents;
         $this->level = $level;
+        $this->serviceAliasingType = $serviceAliasingType;
     }
 
     /**
@@ -55,5 +62,13 @@ class StandardParametersData
     public function getLevel(): ?int
     {
         return $this->level;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getServiceAliasingType(): ?string
+    {
+        return $this->serviceAliasingType;
     }
 }

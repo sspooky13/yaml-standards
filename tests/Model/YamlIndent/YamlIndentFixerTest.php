@@ -72,6 +72,6 @@ class YamlIndentFixerTest extends TestCase
      */
     private function getStandardsParametersData()
     {
-        return new StandardParametersData(4, 4, 4);
+        return new StandardParametersData(4, 4, 4, null);
     }
 }

@@ -25,7 +25,7 @@ class YamlEmptyLineAtEndCheckerTest extends TestCase
         $yamlEmptyLineAtEndChecker = new YamlEmptyLineAtEndChecker();
 
         foreach ($pathToFiles as $key => $pathToFile) {
-            $standardParametersData = new StandardParametersData(null, null, null);
+            $standardParametersData = new StandardParametersData(null, null, null, null);
             $result = $yamlEmptyLineAtEndChecker->check($pathToFile, $standardParametersData);
 
             $this->assertSame(Result::RESULT_CODE_INVALID_FILE_SYNTAX, $result->getResultCode());
@@ -44,7 +44,7 @@ class YamlEmptyLineAtEndCheckerTest extends TestCase
         $yamlEmptyLineAtEndChecker = new YamlEmptyLineAtEndChecker();
 
         foreach ($pathToFiles as $key => $pathToFile) {
-            $standardParametersData = new StandardParametersData(null, null, null);
+            $standardParametersData = new StandardParametersData(null, null, null, null);
             $result = $yamlEmptyLineAtEndChecker->check($pathToFile, $standardParametersData);
 
             $this->assertSame(Result::RESULT_CODE_OK, $result->getResultCode(), sprintf('YAML empty line at end check of "%s" failed.', $pathToFile));

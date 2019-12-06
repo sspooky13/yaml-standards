@@ -69,7 +69,8 @@ class YamlStandardConfigLoader
             $depth = $parameters[YamlStandardConfigDefinition::CONFIG_PARAMETERS_DEPTH];
             $indents = $parameters[YamlStandardConfigDefinition::CONFIG_PARAMETERS_INDENTS];
             $level = $parameters[YamlStandardConfigDefinition::CONFIG_PARAMETERS_LEVEL];
-            $parametersClass = new StandardParametersData($depth, $indents, $level);
+            $serviceAliasingType = $parameters[YamlStandardConfigDefinition::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE];
+            $parametersClass = new StandardParametersData($depth, $indents, $level, $serviceAliasingType);
 
             $yamlStandardConfigsSingleCheckerData[] = new YamlStandardConfigSingleStandardData($checkerClass, $fixerClass, $parametersClass);
         }
