@@ -60,6 +60,16 @@ class YamlCommandTest extends TestCase
         $this->assertEquals(0, $commandExitCode);
     }
 
+    public function testCorrectRunCommandForCheckServiceAliasing(): void
+    {
+        $command = $this->createCommandTester();
+        $commandExitCode = $command->execute([
+            YamlCommand::ARGUMENT_PATH_TO_CONFIG_FILE => __DIR__ . '/resource/yaml-standards-service-aliasing.yaml',
+        ]);
+
+        $this->assertEquals(0, $commandExitCode);
+    }
+
     public function testCorrectRunCommandForExcludedPaths(): void
     {
         $command = $this->createCommandTester();
