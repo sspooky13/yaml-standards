@@ -2,7 +2,7 @@
     "name": "sspooky13/yaml-standards",
     "type": "library",
     "description": "Standards for yaml files ",
-    "keywords": ["yaml", "standards", "indent", "alphabetical", "inline", "space-between-groups", "emptyLineAtEnd", "checker", "yaml-standards", "fixer"],
+    "keywords": ["yaml", "standards", "indent", "alphabetical", "inline", "space-between-groups", "empty-line-at-end", "service-aliasing", "checker", "yaml-standards", "fixer"],
     "homepage": "https://github.com/sspooky13/yaml-standards",
     "license": "MIT",
     "authors": [
