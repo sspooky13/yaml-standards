@@ -141,4 +141,13 @@ class YamlService
     {
         return strlen($line) - strlen(ltrim($line, '- '));
     }
+
+    /**
+     * @param int $countOfIndents
+     * @return string
+     */
+    public static function createCorrectIndentsByCountOfIndents(int $countOfIndents): string
+    {
+        return str_repeat(' ', $countOfIndents);
+    }
 }
