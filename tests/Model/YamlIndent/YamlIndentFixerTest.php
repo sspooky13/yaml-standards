@@ -36,6 +36,7 @@ class YamlIndentFixerTest extends TestCase
             __DIR__ . '/resource/unfixed/symfony-security.yml',
             __DIR__ . '/resource/unfixed/symfony-service.yml',
             __DIR__ . '/resource/unfixed/yaml-getting-started.yml',
+            __DIR__ . '/resource/unfixed/yaml-standards.yaml',
         ];
         $pathToFixedFiles = [
             __DIR__ . '/resource/fixed/kustomization.yaml',
@@ -45,6 +46,7 @@ class YamlIndentFixerTest extends TestCase
             __DIR__ . '/resource/fixed/symfony-security.yml',
             __DIR__ . '/resource/fixed/symfony-service.yml',
             __DIR__ . '/resource/fixed/yaml-getting-started.yml',
+            __DIR__ . '/resource/fixed/yaml-standards.yaml',
         ];
         $tempCorrectYamlFile = $this->getTempCorrectYamlFile();
 
