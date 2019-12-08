@@ -48,6 +48,7 @@ Tips:
 - **YamlSpacesBetweenGroupsChecker** - Check yaml file has empty line between every group to selected level. **This checker has fixer**.
 - **YamlInlineChecker** - Check yaml file observe standards by symfony yaml parser.
 - **YamlEmptyLineAtEnd** - Check yaml file has empty line at end of file. **This checker has fixer**.
+- **YamlServiceAliasing** - Check yaml service file observe short or long code style aliasing. **This checker has fixer**.
 
 ## PHPStorm Integration
 You can integrate YAML standards into PHPStorm by using File Watcher.

@@ -43,7 +43,7 @@ class YamlIndentDataFactory
                 return $this->getRightFileLines($fileLines, $key, $countOfIndents, $fileLine, true);
             }
 
-            $correctIndents = $this->getCorrectIndents(0);
+            $correctIndents = YamlService::createCorrectIndentsByCountOfIndents(0);
             $trimmedFileLine = trim($fileLine);
 
             return $correctIndents . $trimmedFileLine;
@@ -53,7 +53,7 @@ class YamlIndentDataFactory
         if ($countOfRowIndents === 0) {
             // line is directive
             if (YamlService::hasLineThreeDashesOnStartOfLine($trimmedLine)) {
-                $correctIndents = $this->getCorrectIndents($countOfRowIndents);
+                $correctIndents = YamlService::createCorrectIndentsByCountOfIndents($countOfRowIndents);
                 $trimmedFileLine = trim($fileLine);
 
                 return $correctIndents . $trimmedFileLine;
@@ -65,7 +65,7 @@ class YamlIndentDataFactory
                 return $this->getCorrectLineForArrayWithKeyAndValue($line, $fileLines, $key, $countOfIndents, $fileLine, $isCommentLine);
             }
 
-            $correctIndents = $this->getCorrectIndents($countOfRowIndents);
+            $correctIndents = YamlService::createCorrectIndentsByCountOfIndents($countOfRowIndents);
             $trimmedFileLine = trim($fileLine);
 
             return $correctIndents . $trimmedFileLine;
@@ -79,7 +79,7 @@ class YamlIndentDataFactory
         // children of array, description over name of function
         if ($this->belongLineToArray($fileLines, $key)) {
             $countOfParents = $this->getCountOfParentsForLine($fileLines, $key);
-            $correctIndents = $this->getCorrectIndents($countOfParents * $countOfIndents);
+            $correctIndents = YamlService::createCorrectIndentsByCountOfIndents($countOfParents * $countOfIndents);
             $trimmedFileLine = trim($fileLine);
 
             return $correctIndents . $trimmedFileLine;
@@ -91,7 +91,7 @@ class YamlIndentDataFactory
             if ($trimmedLine === '-') {
                 $countOfParents = $this->getCountOfParentsForLine($fileLines, $key);
 
-                $correctIndents = $this->getCorrectIndents($countOfParents * $countOfIndents);
+                $correctIndents = YamlService::createCorrectIndentsByCountOfIndents($countOfParents * $countOfIndents);
                 $trimmedFileLine = trim($fileLine);
 
                 return $correctIndents . $trimmedFileLine;
@@ -99,7 +99,7 @@ class YamlIndentDataFactory
 
             // is array or string?
             $countOfParents = $this->getCountOfParentsForLine($fileLines, $key);
-            $correctIndents = $this->getCorrectIndents($countOfParents * $countOfIndents);
+            $correctIndents = YamlService::createCorrectIndentsByCountOfIndents($countOfParents * $countOfIndents);
             $trimmedFileLine = trim($fileLine);
 
             return $correctIndents . $trimmedFileLine;
@@ -115,7 +115,7 @@ class YamlIndentDataFactory
             if (YamlService::rowIndentsOf($nextLine) > $countOfRowIndents) {
                 $countOfParents = $this->getCountOfParentsForLine($fileLines, $key);
 
-                $correctIndents = $this->getCorrectIndents($countOfParents * $countOfIndents);
+                $correctIndents = YamlService::createCorrectIndentsByCountOfIndents($countOfParents * $countOfIndents);
                 $trimmedFileLine = trim($fileLine);
 
                 return $correctIndents . $trimmedFileLine;
@@ -123,19 +123,10 @@ class YamlIndentDataFactory
         }
 
         $countOfParents = $this->getCountOfParentsForLine($fileLines, $key);
-        $correctIndents = $this->getCorrectIndents($countOfParents * $countOfIndents);
+        $correctIndents = YamlService::createCorrectIndentsByCountOfIndents($countOfParents * $countOfIndents);
         $trimmedFileLine = trim($fileLine);
 
         return $correctIndents . $trimmedFileLine;
-    }
-
-    /**
-     * @param int $countOfIndents
-     * @return string
-     */
-    private function getCorrectIndents(int $countOfIndents): string
-    {
-        return str_repeat(' ', $countOfIndents);
     }
 
     /**
@@ -190,7 +181,7 @@ class YamlIndentDataFactory
         $trimmedLineWithoutDash = trim($lineWithReplacedDashToSpace);
 
         $countOfParents = $this->getCountOfParentsForLine($fileLines, $key);
-        $correctIndentsOnStartOfLine = $this->getCorrectIndents($countOfParents * $countOfIndents);
+        $correctIndentsOnStartOfLine = YamlService::createCorrectIndentsByCountOfIndents($countOfParents * $countOfIndents);
 
         $trimmedFileLine = trim($fileLine);
         if ($isCommentLine) {
@@ -199,14 +190,14 @@ class YamlIndentDataFactory
 
         // solution "- { foo: bar }"
         if (YamlService::isCurlyBracketInStartOfString($trimmedLineWithoutDash)) {
-            $correctIndentsBetweenDashAndBracket = $this->getCorrectIndents(1);
+            $correctIndentsBetweenDashAndBracket = YamlService::createCorrectIndentsByCountOfIndents(1);
 
             return $correctIndentsOnStartOfLine . '-' . $correctIndentsBetweenDashAndBracket . $trimmedLineWithoutDash;
         }
 
         // solution "- foo" (single value of an array)
         if (YamlService::isKeyInStartOfString($trimmedLineWithoutDash) === false) {
-            $correctIndentsBetweenDashAndKey = $this->getCorrectIndents(1);
+            $correctIndentsBetweenDashAndKey = YamlService::createCorrectIndentsByCountOfIndents(1);
 
             return $correctIndentsOnStartOfLine . '-' . $correctIndentsBetweenDashAndKey . $trimmedLineWithoutDash;
         }
@@ -216,7 +207,7 @@ class YamlIndentDataFactory
          * "- foo: bar"
          * "  baz: qux"
          */
-        $correctIndentsBetweenDashAndKey = $this->getCorrectIndents($countOfIndents - 1); // 1 space is dash, dash is as indent
+        $correctIndentsBetweenDashAndKey = YamlService::createCorrectIndentsByCountOfIndents($countOfIndents - 1); // 1 space is dash, dash is as indent
 
         return $correctIndentsOnStartOfLine . '-' . $correctIndentsBetweenDashAndKey . $trimmedLineWithoutDash;
     }

@@ -33,7 +33,7 @@ class YamlEmptyLineAtEndFixerTest extends TestCase
         $yamlEmptyLineAtEndFixer = new YamlEmptyLineAtEndFixer();
 
         foreach ($pathToUnfixedFiles as $key => $pathToUnfixedFile) {
-            $standardParametersData = new StandardParametersData(null, null, null);
+            $standardParametersData = new StandardParametersData(null, null, null, null);
             $yamlEmptyLineAtEndFixer->fix($pathToUnfixedFile, $tempCorrectYamlFile, $standardParametersData);
             $yamlFileContent = file_get_contents($tempCorrectYamlFile);
             $correctYamlFileContent = file_get_contents($pathToFixedFiles[$key]);

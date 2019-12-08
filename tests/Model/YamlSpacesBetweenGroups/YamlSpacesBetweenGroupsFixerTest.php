@@ -54,6 +54,6 @@ class YamlSpacesBetweenGroupsFixerTest extends TestCase
      */
     private function getStandardsParametersData(int $level)
     {
-        return new StandardParametersData(4, 4, $level);
+        return new StandardParametersData(4, 4, $level, null);
     }
 }

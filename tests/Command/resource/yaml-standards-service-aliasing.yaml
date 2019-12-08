@@ -1,0 +1,6 @@
+-   pathsToCheck:
+        - tests/Command/resource/yamlFiles/sorted/service
+    checkers:
+        -   pathToChecker: YamlStandards\Model\YamlServiceAliasing\YamlServiceAliasingChecker
+            parameters:
+                { serviceAliasingType: short }

@@ -14,5 +14,8 @@
         -   pathToChecker: YamlStandards\Model\YamlSpacesBetweenGroups\YamlSpacesBetweenGroupsChecker
             parameters:
                 { level: 4 } # max level to check
+        -   pathToChecker: YamlStandards\Model\YamlServiceAliasing\YamlServiceAliasingChecker
+            parameters:
+                { serviceAliasingType: short/long, indents: 4 } # select your code style for aliases https://symfony.com/doc/master/service_container/alias_private.html#aliasing, set indents for show/fix right result (default is 4)
         -   pathToChecker: YamlStandards\Model\YamlInline\YamlInlineChecker # only for turn it on
         -   pathToChecker: YamlStandards\Model\YamlEmptyLineAtEnd\YamlEmptyLineAtEndChecker # only for turn it on

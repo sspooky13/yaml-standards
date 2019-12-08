@@ -51,8 +51,7 @@ services:
         arguments:
             - '%shopsys.root_dir%/var/lock'
 
-    Shopsys\FormTypesBundle\Domain\DomainIdsProviderInterface:
-        alias: Shopsys\FrameworkBundle\Component\Domain\Domain
+    Shopsys\FormTypesBundle\Domain\DomainIdsProviderInterface: '@Shopsys\FrameworkBundle\Component\Domain\Domain'
 
     Shopsys\FrameworkBundle\:
         resource: '../../**/*{Calculation,Facade,Factory,Generator,Handler,InlineEdit,Listener,Loader,Mapper,Parser,Provider,Recalculator,Registry,Repository,Resolver,Service,Scheduler,Subscriber,Transformer}.php'
@@ -72,8 +71,7 @@ services:
         arguments:
             - '@monolog.logger.cron'
 
-    Shopsys\FrameworkBundle\Component\Cron\CronModuleFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Component\Cron\CronModuleFactory
+    Shopsys\FrameworkBundle\Component\Cron\CronModuleFactoryInterface: '@Shopsys\FrameworkBundle\Component\Cron\CronModuleFactory'
 
     Shopsys\FrameworkBundle\Component\Css\CssFacade:
         arguments:
@@ -84,8 +82,7 @@ services:
     Shopsys\FrameworkBundle\Component\DataFixture\PersistentReferenceFacade:
         public: true
 
-    Shopsys\FrameworkBundle\Component\DataFixture\PersistentReferenceFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Component\DataFixture\PersistentReferenceFactory
+    Shopsys\FrameworkBundle\Component\DataFixture\PersistentReferenceFactoryInterface: '@Shopsys\FrameworkBundle\Component\DataFixture\PersistentReferenceFactory'
 
     Shopsys\FrameworkBundle\Component\Doctrine\DatabaseSchemaFacade:
         arguments:
@@ -119,8 +116,7 @@ services:
 
     Shopsys\FrameworkBundle\Component\Domain\Multidomain\MultiDomainEntityClassProvider: ~
 
-    Shopsys\FrameworkBundle\Component\Domain\Multidomain\MultiDomainEntityClassProviderInterface:
-        alias: Shopsys\FrameworkBundle\Model\MultiDomainEntityClassProvider
+    Shopsys\FrameworkBundle\Component\Domain\Multidomain\MultiDomainEntityClassProviderInterface: '@Shopsys\FrameworkBundle\Model\MultiDomainEntityClassProvider'
 
     Shopsys\FrameworkBundle\Component\Domain\Multidomain\MultidomainEntityClassFinder: ~
 
@@ -225,8 +221,7 @@ services:
     Shopsys\FrameworkBundle\Component\Image\ImageFacade:
         arguments: ['%shopsys.image_url_prefix%']
 
-    Shopsys\FrameworkBundle\Component\Image\ImageFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Component\Image\ImageFactory
+    Shopsys\FrameworkBundle\Component\Image\ImageFactoryInterface: '@Shopsys\FrameworkBundle\Component\Image\ImageFactory'
 
     Shopsys\FrameworkBundle\Component\Image\ImageLocator:
         arguments: ['%shopsys.image_dir%']
@@ -268,11 +263,9 @@ services:
 
     Shopsys\FrameworkBundle\Component\Router\FriendlyUrl\CompilerPass\FriendlyUrlDataProviderConfig: ~
 
-    Shopsys\FrameworkBundle\Component\Router\FriendlyUrl\FriendlyUrlDataFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Component\Router\FriendlyUrl\FriendlyUrlDataFactory
+    Shopsys\FrameworkBundle\Component\Router\FriendlyUrl\FriendlyUrlDataFactoryInterface: '@Shopsys\FrameworkBundle\Component\Router\FriendlyUrl\FriendlyUrlDataFactory'
 
-    Shopsys\FrameworkBundle\Component\Router\FriendlyUrl\FriendlyUrlFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Component\Router\FriendlyUrl\FriendlyUrlFactory
+    Shopsys\FrameworkBundle\Component\Router\FriendlyUrl\FriendlyUrlFactoryInterface: '@Shopsys\FrameworkBundle\Component\Router\FriendlyUrl\FriendlyUrlFactory'
 
     Shopsys\FrameworkBundle\Component\Router\FriendlyUrl\FriendlyUrlRouterFactory:
         arguments: ['%shopsys.router.friendly_url_router_filepath%']
@@ -289,8 +282,7 @@ services:
 
     Shopsys\FrameworkBundle\Component\Setting\Setting: ~
 
-    Shopsys\FrameworkBundle\Component\Setting\SettingValueFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Component\Setting\SettingValueFactory
+    Shopsys\FrameworkBundle\Component\Setting\SettingValueFactoryInterface: '@Shopsys\FrameworkBundle\Component\Setting\SettingValueFactory'
 
     Shopsys\FrameworkBundle\Component\System\System: ~
 
@@ -343,8 +335,7 @@ services:
         tags:
             - { name: doctrine.event_listener, event: preRemove }
 
-    Shopsys\FrameworkBundle\Component\UploadedFile\UploadedFileFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Component\UploadedFile\UploadedFileFactory
+    Shopsys\FrameworkBundle\Component\UploadedFile\UploadedFileFactoryInterface: '@Shopsys\FrameworkBundle\Component\UploadedFile\UploadedFileFactory'
 
     Shopsys\FrameworkBundle\Component\UploadedFile\UploadedFileLocator:
         arguments:
@@ -403,17 +394,13 @@ services:
         tags:
             - { name: knp_menu.menu_builder, method: createMenu, alias: admin_side_menu }
 
-    Shopsys\FrameworkBundle\Model\Administrator\Activity\AdministratorActivityFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Administrator\Activity\AdministratorActivityFactory
+    Shopsys\FrameworkBundle\Model\Administrator\Activity\AdministratorActivityFactoryInterface: '@Shopsys\FrameworkBundle\Model\Administrator\Activity\AdministratorActivityFactory'
 
-    Shopsys\FrameworkBundle\Model\Administrator\AdministratorDataFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Administrator\AdministratorDataFactory
+    Shopsys\FrameworkBundle\Model\Administrator\AdministratorDataFactoryInterface: '@Shopsys\FrameworkBundle\Model\Administrator\AdministratorDataFactory'
 
-    Shopsys\FrameworkBundle\Model\Administrator\AdministratorFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Administrator\AdministratorFactory
+    Shopsys\FrameworkBundle\Model\Administrator\AdministratorFactoryInterface: '@Shopsys\FrameworkBundle\Model\Administrator\AdministratorFactory'
 
-    Shopsys\FrameworkBundle\Model\Administrator\AdministratorGridLimitFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Administrator\AdministratorGridLimitFactory
+    Shopsys\FrameworkBundle\Model\Administrator\AdministratorGridLimitFactoryInterface: '@Shopsys\FrameworkBundle\Model\Administrator\AdministratorGridLimitFactory'
 
     Shopsys\FrameworkBundle\Model\Administrator\Security\AdministratorUserProvider: ~
 
@@ -427,83 +414,66 @@ services:
 
     Shopsys\FrameworkBundle\Model\AdvancedSearch\ProductAdvancedSearchConfig: ~
 
-    Shopsys\FrameworkBundle\Model\Advert\AdvertDataFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Advert\AdvertDataFactory
+    Shopsys\FrameworkBundle\Model\Advert\AdvertDataFactoryInterface: '@Shopsys\FrameworkBundle\Model\Advert\AdvertDataFactory'
 
-    Shopsys\FrameworkBundle\Model\Advert\AdvertFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Advert\AdvertFactory
+    Shopsys\FrameworkBundle\Model\Advert\AdvertFactoryInterface: '@Shopsys\FrameworkBundle\Model\Advert\AdvertFactory'
 
-    Shopsys\FrameworkBundle\Model\Article\ArticleDataFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Article\ArticleDataFactory
+    Shopsys\FrameworkBundle\Model\Article\ArticleDataFactoryInterface: '@Shopsys\FrameworkBundle\Model\Article\ArticleDataFactory'
 
     Shopsys\FrameworkBundle\Model\Article\ArticleDetailFriendlyUrlDataProvider:
         tags:
             - {name: shopsys.friendly_url_provider}
 
-    Shopsys\FrameworkBundle\Model\Article\ArticleFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Article\ArticleFactory
+    Shopsys\FrameworkBundle\Model\Article\ArticleFactoryInterface: '@Shopsys\FrameworkBundle\Model\Article\ArticleFactory'
 
     Shopsys\FrameworkBundle\Model\Cart\CartMigrationFacade:
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
 
-    Shopsys\FrameworkBundle\Model\Cart\Item\CartItemFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Cart\Item\CartItemFactory
+    Shopsys\FrameworkBundle\Model\Cart\Item\CartItemFactoryInterface: '@Shopsys\FrameworkBundle\Model\Cart\Item\CartItemFactory'
 
     Shopsys\FrameworkBundle\Model\Cart\Watcher\CartWatcherFacade:
         arguments:
             - '@shopsys.shop.component.flash_message.sender.front'
 
-    Shopsys\FrameworkBundle\Model\Category\CategoryDataFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Category\CategoryDataFactory
+    Shopsys\FrameworkBundle\Model\Category\CategoryDataFactoryInterface: '@Shopsys\FrameworkBundle\Model\Category\CategoryDataFactory'
 
-    Shopsys\FrameworkBundle\Model\Category\CategoryFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Category\CategoryFactory
+    Shopsys\FrameworkBundle\Model\Category\CategoryFactoryInterface: '@Shopsys\FrameworkBundle\Model\Category\CategoryFactory'
 
     Shopsys\FrameworkBundle\Model\Category\CategoryVisibilityRepository:
         tags:
             # must be ran before ProductVisibilityFacade
             - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority: 20 }
 
-    Shopsys\FrameworkBundle\Model\Category\TopCategory\TopCategoryFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Category\TopCategory\TopCategoryFactory
+    Shopsys\FrameworkBundle\Model\Category\TopCategory\TopCategoryFactoryInterface: '@Shopsys\FrameworkBundle\Model\Category\TopCategory\TopCategoryFactory'
 
     Shopsys\FrameworkBundle\Model\Cookies\CookiesFacade:
         arguments:
             - '%kernel.environment%'
 
-    Shopsys\FrameworkBundle\Model\Country\CountryDataFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Country\CountryDataFactory
+    Shopsys\FrameworkBundle\Model\Country\CountryDataFactoryInterface: '@Shopsys\FrameworkBundle\Model\Country\CountryDataFactory'
 
-    Shopsys\FrameworkBundle\Model\Country\CountryFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Country\CountryFactory
+    Shopsys\FrameworkBundle\Model\Country\CountryFactoryInterface: '@Shopsys\FrameworkBundle\Model\Country\CountryFactory'
 
-    Shopsys\FrameworkBundle\Model\Customer\BillingAddressDataFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Customer\BillingAddressDataFactory
+    Shopsys\FrameworkBundle\Model\Customer\BillingAddressDataFactoryInterface: '@Shopsys\FrameworkBundle\Model\Customer\BillingAddressDataFactory'
 
-    Shopsys\FrameworkBundle\Model\Customer\BillingAddressFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Customer\BillingAddressFactory
+    Shopsys\FrameworkBundle\Model\Customer\BillingAddressFactoryInterface: '@Shopsys\FrameworkBundle\Model\Customer\BillingAddressFactory'
 
     Shopsys\FrameworkBundle\Model\Customer\CurrentCustomer: ~
 
-    Shopsys\FrameworkBundle\Model\Customer\CustomerDataFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Customer\CustomerDataFactory
+    Shopsys\FrameworkBundle\Model\Customer\CustomerDataFactoryInterface: '@Shopsys\FrameworkBundle\Model\Customer\CustomerDataFactory'
 
-    Shopsys\FrameworkBundle\Model\Customer\DeliveryAddressDataFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Customer\DeliveryAddressDataFactory
+    Shopsys\FrameworkBundle\Model\Customer\DeliveryAddressDataFactoryInterface: '@Shopsys\FrameworkBundle\Model\Customer\DeliveryAddressDataFactory'
 
-    Shopsys\FrameworkBundle\Model\Customer\DeliveryAddressFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Customer\DeliveryAddressFactory
+    Shopsys\FrameworkBundle\Model\Customer\DeliveryAddressFactoryInterface: '@Shopsys\FrameworkBundle\Model\Customer\DeliveryAddressFactory'
 
     Shopsys\FrameworkBundle\Model\Customer\FrontendUserProvider: ~
 
     Shopsys\FrameworkBundle\Model\Customer\Mail\ResetPasswordMail: ~
 
-    Shopsys\FrameworkBundle\Model\Customer\UserDataFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Customer\UserDataFactory
+    Shopsys\FrameworkBundle\Model\Customer\UserDataFactoryInterface: '@Shopsys\FrameworkBundle\Model\Customer\UserDataFactory'
 
-    Shopsys\FrameworkBundle\Model\Customer\UserFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Customer\UserFactory
+    Shopsys\FrameworkBundle\Model\Customer\UserFactoryInterface: '@Shopsys\FrameworkBundle\Model\Customer\UserFactory'
 
     Shopsys\FrameworkBundle\Model\Feed\FeedConfigFacade:
         arguments:
@@ -528,94 +498,68 @@ services:
 
     Shopsys\FrameworkBundle\Model\Localization\Localization: ~
 
-    Shopsys\FrameworkBundle\Model\Mail\MailTemplateDataFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Mail\MailTemplateDataFactory
+    Shopsys\FrameworkBundle\Model\Mail\MailTemplateDataFactoryInterface: '@Shopsys\FrameworkBundle\Model\Mail\MailTemplateDataFactory'
 
-    Shopsys\FrameworkBundle\Model\Mail\MailTemplateFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Mail\MailTemplateFactory
+    Shopsys\FrameworkBundle\Model\Mail\MailTemplateFactoryInterface: '@Shopsys\FrameworkBundle\Model\Mail\MailTemplateFactory'
 
     Shopsys\FrameworkBundle\Model\Mail\MailerService:
         arguments: ['@mailer']
 
-    Shopsys\FrameworkBundle\Model\Module\EnabledModuleFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Module\EnabledModuleFactory
+    Shopsys\FrameworkBundle\Model\Module\EnabledModuleFactoryInterface: '@Shopsys\FrameworkBundle\Model\Module\EnabledModuleFactory'
 
     Shopsys\FrameworkBundle\Model\Module\ModuleList: ~
 
-    Shopsys\FrameworkBundle\Model\Newsletter\NewsletterSubscriberFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Newsletter\NewsletterSubscriberFactory
+    Shopsys\FrameworkBundle\Model\Newsletter\NewsletterSubscriberFactoryInterface: '@Shopsys\FrameworkBundle\Model\Newsletter\NewsletterSubscriberFactory'
 
-    Shopsys\FrameworkBundle\Model\Order\Item\OrderItemDataFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Order\Item\OrderItemDataFactory
+    Shopsys\FrameworkBundle\Model\Order\Item\OrderItemDataFactoryInterface: '@Shopsys\FrameworkBundle\Model\Order\Item\OrderItemDataFactory'
 
-    Shopsys\FrameworkBundle\Model\Order\Item\OrderPaymentDataFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Order\Item\OrderPaymentDataFactory
+    Shopsys\FrameworkBundle\Model\Order\Item\OrderPaymentDataFactoryInterface: '@Shopsys\FrameworkBundle\Model\Order\Item\OrderPaymentDataFactory'
 
-    Shopsys\FrameworkBundle\Model\Order\Item\OrderPaymentFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Order\Item\OrderPaymentFactory
+    Shopsys\FrameworkBundle\Model\Order\Item\OrderPaymentFactoryInterface: '@Shopsys\FrameworkBundle\Model\Order\Item\OrderPaymentFactory'
 
-    Shopsys\FrameworkBundle\Model\Order\Item\OrderProductFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Order\Item\OrderProductFactory
+    Shopsys\FrameworkBundle\Model\Order\Item\OrderProductFactoryInterface: '@Shopsys\FrameworkBundle\Model\Order\Item\OrderProductFactory'
 
-    Shopsys\FrameworkBundle\Model\Order\Item\OrderTransportDataFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Order\Item\OrderTransportDataFactory
+    Shopsys\FrameworkBundle\Model\Order\Item\OrderTransportDataFactoryInterface: '@Shopsys\FrameworkBundle\Model\Order\Item\OrderTransportDataFactory'
 
-    Shopsys\FrameworkBundle\Model\Order\Item\OrderTransportFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Order\Item\OrderTransportFactory
+    Shopsys\FrameworkBundle\Model\Order\Item\OrderTransportFactoryInterface: '@Shopsys\FrameworkBundle\Model\Order\Item\OrderTransportFactory'
 
-    Shopsys\FrameworkBundle\Model\Order\OrderDataFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Order\OrderDataFactory
+    Shopsys\FrameworkBundle\Model\Order\OrderDataFactoryInterface: '@Shopsys\FrameworkBundle\Model\Order\OrderDataFactory'
 
-    Shopsys\FrameworkBundle\Model\Order\OrderFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Order\OrderFactory
+    Shopsys\FrameworkBundle\Model\Order\OrderFactoryInterface: '@Shopsys\FrameworkBundle\Model\Order\OrderFactory'
 
-    Shopsys\FrameworkBundle\Model\Order\OrderNumberSequenceFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Order\OrderNumberSequenceFactory
+    Shopsys\FrameworkBundle\Model\Order\OrderNumberSequenceFactoryInterface: '@Shopsys\FrameworkBundle\Model\Order\OrderNumberSequenceFactory'
 
-    Shopsys\FrameworkBundle\Model\Order\PromoCode\PromoCodeDataFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Order\PromoCode\PromoCodeDataFactory
+    Shopsys\FrameworkBundle\Model\Order\PromoCode\PromoCodeDataFactoryInterface: '@Shopsys\FrameworkBundle\Model\Order\PromoCode\PromoCodeDataFactory'
 
-    Shopsys\FrameworkBundle\Model\Order\PromoCode\PromoCodeFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Order\PromoCode\PromoCodeFactory
+    Shopsys\FrameworkBundle\Model\Order\PromoCode\PromoCodeFactoryInterface: '@Shopsys\FrameworkBundle\Model\Order\PromoCode\PromoCodeFactory'
 
-    Shopsys\FrameworkBundle\Model\Order\Status\OrderStatusDataFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Order\Status\OrderStatusDataFactory
+    Shopsys\FrameworkBundle\Model\Order\Status\OrderStatusDataFactoryInterface: '@Shopsys\FrameworkBundle\Model\Order\Status\OrderStatusDataFactory'
 
-    Shopsys\FrameworkBundle\Model\Order\Status\OrderStatusFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Order\Status\OrderStatusFactory
+    Shopsys\FrameworkBundle\Model\Order\Status\OrderStatusFactoryInterface: '@Shopsys\FrameworkBundle\Model\Order\Status\OrderStatusFactory'
 
-    Shopsys\FrameworkBundle\Model\Payment\PaymentDataFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Payment\PaymentDataFactory
+    Shopsys\FrameworkBundle\Model\Payment\PaymentDataFactoryInterface: '@Shopsys\FrameworkBundle\Model\Payment\PaymentDataFactory'
 
-    Shopsys\FrameworkBundle\Model\Payment\PaymentFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Payment\PaymentFactory
+    Shopsys\FrameworkBundle\Model\Payment\PaymentFactoryInterface: '@Shopsys\FrameworkBundle\Model\Payment\PaymentFactory'
 
-    Shopsys\FrameworkBundle\Model\Payment\PaymentPriceFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Payment\PaymentPriceFactory
+    Shopsys\FrameworkBundle\Model\Payment\PaymentPriceFactoryInterface: '@Shopsys\FrameworkBundle\Model\Payment\PaymentPriceFactory'
 
     Shopsys\FrameworkBundle\Model\PersonalData\Mail\PersonalDataAccessMail: ~
 
     Shopsys\FrameworkBundle\Model\PersonalData\Mail\PersonalDataExportMail: ~
 
-    Shopsys\FrameworkBundle\Model\PersonalData\PersonalDataAccessRequestDataFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\PersonalData\PersonalDataAccessRequestDataFactory
+    Shopsys\FrameworkBundle\Model\PersonalData\PersonalDataAccessRequestDataFactoryInterface: '@Shopsys\FrameworkBundle\Model\PersonalData\PersonalDataAccessRequestDataFactory'
 
-    Shopsys\FrameworkBundle\Model\PersonalData\PersonalDataAccessRequestFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\PersonalData\PersonalDataAccessRequestFactory
+    Shopsys\FrameworkBundle\Model\PersonalData\PersonalDataAccessRequestFactoryInterface: '@Shopsys\FrameworkBundle\Model\PersonalData\PersonalDataAccessRequestFactory'
 
-    Shopsys\FrameworkBundle\Model\Pricing\Currency\CurrencyDataFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Pricing\Currency\CurrencyDataFactory
+    Shopsys\FrameworkBundle\Model\Pricing\Currency\CurrencyDataFactoryInterface: '@Shopsys\FrameworkBundle\Model\Pricing\Currency\CurrencyDataFactory'
 
-    Shopsys\FrameworkBundle\Model\Pricing\Currency\CurrencyFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Pricing\Currency\CurrencyFactory
+    Shopsys\FrameworkBundle\Model\Pricing\Currency\CurrencyFactoryInterface: '@Shopsys\FrameworkBundle\Model\Pricing\Currency\CurrencyFactory'
 
     Shopsys\FrameworkBundle\Model\Pricing\DelayedPricingSetting: ~
 
-    Shopsys\FrameworkBundle\Model\Pricing\Group\PricingGroupDataFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Pricing\Group\PricingGroupDataFactory
+    Shopsys\FrameworkBundle\Model\Pricing\Group\PricingGroupDataFactoryInterface: '@Shopsys\FrameworkBundle\Model\Pricing\Group\PricingGroupDataFactory'
 
-    Shopsys\FrameworkBundle\Model\Pricing\Group\PricingGroupFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Pricing\Group\PricingGroupFactory
+    Shopsys\FrameworkBundle\Model\Pricing\Group\PricingGroupFactoryInterface: '@Shopsys\FrameworkBundle\Model\Pricing\Group\PricingGroupFactory'
 
     Shopsys\FrameworkBundle\Model\Pricing\InputPriceRecalculationScheduler:
         tags:
@@ -625,20 +569,15 @@ services:
 
     Shopsys\FrameworkBundle\Model\Pricing\Rounding: ~
 
-    Shopsys\FrameworkBundle\Model\Pricing\Vat\VatDataFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Pricing\Vat\VatDataFactory
+    Shopsys\FrameworkBundle\Model\Pricing\Vat\VatDataFactoryInterface: '@Shopsys\FrameworkBundle\Model\Pricing\Vat\VatDataFactory'
 
-    Shopsys\FrameworkBundle\Model\Pricing\Vat\VatFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Pricing\Vat\VatFactory
+    Shopsys\FrameworkBundle\Model\Pricing\Vat\VatFactoryInterface: '@Shopsys\FrameworkBundle\Model\Pricing\Vat\VatFactory'
 
-    Shopsys\FrameworkBundle\Model\Product\Accessory\ProductAccessoryFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Product\Accessory\ProductAccessoryFactory
+    Shopsys\FrameworkBundle\Model\Product\Accessory\ProductAccessoryFactoryInterface: '@Shopsys\FrameworkBundle\Model\Product\Accessory\ProductAccessoryFactory'
 
-    Shopsys\FrameworkBundle\Model\Product\Availability\AvailabilityDataFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Product\Availability\AvailabilityDataFactory
+    Shopsys\FrameworkBundle\Model\Product\Availability\AvailabilityDataFactoryInterface: '@Shopsys\FrameworkBundle\Model\Product\Availability\AvailabilityDataFactory'
 
-    Shopsys\FrameworkBundle\Model\Product\Availability\AvailabilityFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Product\Availability\AvailabilityFactory
+    Shopsys\FrameworkBundle\Model\Product\Availability\AvailabilityFactoryInterface: '@Shopsys\FrameworkBundle\Model\Product\Availability\AvailabilityFactory'
 
     Shopsys\FrameworkBundle\Model\Product\Availability\ProductAvailabilityRecalculator:
         tags:
@@ -648,48 +587,35 @@ services:
         arguments:
             - '@shopsys.shop.product.bestselling_product.cache_provider'
 
-    Shopsys\FrameworkBundle\Model\Product\BestsellingProduct\ManualBestsellingProductFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Product\BestsellingProduct\ManualBestsellingProductFactory
+    Shopsys\FrameworkBundle\Model\Product\BestsellingProduct\ManualBestsellingProductFactoryInterface: '@Shopsys\FrameworkBundle\Model\Product\BestsellingProduct\ManualBestsellingProductFactory'
 
-    Shopsys\FrameworkBundle\Model\Product\Brand\BrandDataFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Product\Brand\BrandDataFactory
+    Shopsys\FrameworkBundle\Model\Product\Brand\BrandDataFactoryInterface: '@Shopsys\FrameworkBundle\Model\Product\Brand\BrandDataFactory'
 
     Shopsys\FrameworkBundle\Model\Product\Brand\BrandDetailFriendlyUrlDataProvider:
         tags:
             - {name: shopsys.friendly_url_provider}
 
-    Shopsys\FrameworkBundle\Model\Product\Brand\BrandFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Product\Brand\BrandFactory
+    Shopsys\FrameworkBundle\Model\Product\Brand\BrandFactoryInterface: '@Shopsys\FrameworkBundle\Model\Product\Brand\BrandFactory'
 
-    Shopsys\FrameworkBundle\Model\Product\Flag\FlagDataFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Product\Flag\FlagDataFactory
+    Shopsys\FrameworkBundle\Model\Product\Flag\FlagDataFactoryInterface: '@Shopsys\FrameworkBundle\Model\Product\Flag\FlagDataFactory'
 
-    Shopsys\FrameworkBundle\Model\Product\Flag\FlagFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Product\Flag\FlagFactory
+    Shopsys\FrameworkBundle\Model\Product\Flag\FlagFactoryInterface: '@Shopsys\FrameworkBundle\Model\Product\Flag\FlagFactory'
 
-    Shopsys\FrameworkBundle\Model\Product\Parameter\ParameterDataFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Product\Parameter\ParameterDataFactory
+    Shopsys\FrameworkBundle\Model\Product\Parameter\ParameterDataFactoryInterface: '@Shopsys\FrameworkBundle\Model\Product\Parameter\ParameterDataFactory'
 
-    Shopsys\FrameworkBundle\Model\Product\Parameter\ParameterFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Product\Parameter\ParameterFactory
+    Shopsys\FrameworkBundle\Model\Product\Parameter\ParameterFactoryInterface: '@Shopsys\FrameworkBundle\Model\Product\Parameter\ParameterFactory'
 
-    Shopsys\FrameworkBundle\Model\Product\Parameter\ParameterValueDataFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Product\Parameter\ParameterValueDataFactory
+    Shopsys\FrameworkBundle\Model\Product\Parameter\ParameterValueDataFactoryInterface: '@Shopsys\FrameworkBundle\Model\Product\Parameter\ParameterValueDataFactory'
 
-    Shopsys\FrameworkBundle\Model\Product\Parameter\ParameterValueFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Product\Parameter\ParameterValueFactory
+    Shopsys\FrameworkBundle\Model\Product\Parameter\ParameterValueFactoryInterface: '@Shopsys\FrameworkBundle\Model\Product\Parameter\ParameterValueFactory'
 
-    Shopsys\FrameworkBundle\Model\Product\Parameter\ProductParameterValueDataFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Product\Parameter\ProductParameterValueDataFactory
+    Shopsys\FrameworkBundle\Model\Product\Parameter\ProductParameterValueDataFactoryInterface: '@Shopsys\FrameworkBundle\Model\Product\Parameter\ProductParameterValueDataFactory'
 
-    Shopsys\FrameworkBundle\Model\Product\Parameter\ProductParameterValueFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Product\Parameter\ProductParameterValueFactory
+    Shopsys\FrameworkBundle\Model\Product\Parameter\ProductParameterValueFactoryInterface: '@Shopsys\FrameworkBundle\Model\Product\Parameter\ProductParameterValueFactory'
 
-    Shopsys\FrameworkBundle\Model\Product\Pricing\ProductCalculatedPriceFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Product\Pricing\ProductCalculatedPriceFactory
+    Shopsys\FrameworkBundle\Model\Product\Pricing\ProductCalculatedPriceFactoryInterface: '@Shopsys\FrameworkBundle\Model\Product\Pricing\ProductCalculatedPriceFactory'
 
-    Shopsys\FrameworkBundle\Model\Product\Pricing\ProductManualInputPriceFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Product\Pricing\ProductManualInputPriceFactory
+    Shopsys\FrameworkBundle\Model\Product\Pricing\ProductManualInputPriceFactoryInterface: '@Shopsys\FrameworkBundle\Model\Product\Pricing\ProductManualInputPriceFactory'
 
     Shopsys\FrameworkBundle\Model\Product\Pricing\ProductPriceCalculationForUser: ~
 
@@ -698,18 +624,15 @@ services:
             # must be run before ProductVisibilityFacade
             - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority: 20 }
 
-    Shopsys\FrameworkBundle\Model\Product\ProductCategoryDomainFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Product\ProductCategoryDomainFactory
+    Shopsys\FrameworkBundle\Model\Product\ProductCategoryDomainFactoryInterface: '@Shopsys\FrameworkBundle\Model\Product\ProductCategoryDomainFactory'
 
-    Shopsys\FrameworkBundle\Model\Product\ProductDataFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Product\ProductDataFactory
+    Shopsys\FrameworkBundle\Model\Product\ProductDataFactoryInterface: '@Shopsys\FrameworkBundle\Model\Product\ProductDataFactory'
 
     Shopsys\FrameworkBundle\Model\Product\ProductDetailFriendlyUrlDataProvider:
         tags:
             - {name: shopsys.friendly_url_provider}
 
-    Shopsys\FrameworkBundle\Model\Product\ProductFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Product\ProductFactory
+    Shopsys\FrameworkBundle\Model\Product\ProductFactoryInterface: '@Shopsys\FrameworkBundle\Model\Product\ProductFactory'
 
     Shopsys\FrameworkBundle\Model\Product\ProductListFriendlyUrlDataProvider:
         tags:
@@ -726,30 +649,24 @@ services:
             # must be ran after CategoryVisibilityRepository and ProductPriceRecalculator
             - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority: 10 }
 
-    Shopsys\FrameworkBundle\Model\Product\ProductVisibilityFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Product\ProductVisibilityFactory
+    Shopsys\FrameworkBundle\Model\Product\ProductVisibilityFactoryInterface: '@Shopsys\FrameworkBundle\Model\Product\ProductVisibilityFactory'
 
     Shopsys\FrameworkBundle\Model\Product\Search\ProductSearchRepository:
         arguments:
             $microserviceProductSearchClient: '@shopsys.microservice_client.product_search'
 
-    Shopsys\FrameworkBundle\Model\Product\TopProduct\TopProductFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Product\TopProduct\TopProductFactory
+    Shopsys\FrameworkBundle\Model\Product\TopProduct\TopProductFactoryInterface: '@Shopsys\FrameworkBundle\Model\Product\TopProduct\TopProductFactory'
 
-    Shopsys\FrameworkBundle\Model\Product\Unit\UnitDataFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Product\Unit\UnitDataFactory
+    Shopsys\FrameworkBundle\Model\Product\Unit\UnitDataFactoryInterface: '@Shopsys\FrameworkBundle\Model\Product\Unit\UnitDataFactory'
 
-    Shopsys\FrameworkBundle\Model\Product\Unit\UnitFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Product\Unit\UnitFactory
+    Shopsys\FrameworkBundle\Model\Product\Unit\UnitFactoryInterface: '@Shopsys\FrameworkBundle\Model\Product\Unit\UnitFactory'
 
-    Shopsys\FrameworkBundle\Model\Script\ScriptDataFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Script\ScriptDataFactory
+    Shopsys\FrameworkBundle\Model\Script\ScriptDataFactoryInterface: '@Shopsys\FrameworkBundle\Model\Script\ScriptDataFactory'
 
     Shopsys\FrameworkBundle\Model\Script\ScriptFacade:
         public: true
 
-    Shopsys\FrameworkBundle\Model\Script\ScriptFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Script\ScriptFactory
+    Shopsys\FrameworkBundle\Model\Script\ScriptFactoryInterface: '@Shopsys\FrameworkBundle\Model\Script\ScriptFactory'
 
     Shopsys\FrameworkBundle\Model\Security\Filesystem\FilemanagerAccess:
         public: true
@@ -783,20 +700,15 @@ services:
         tags:
             - { name: 'kernel.event_subscriber', priority: 100 }
 
-    Shopsys\FrameworkBundle\Model\Slider\SliderItemDataFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Slider\SliderItemDataFactory
+    Shopsys\FrameworkBundle\Model\Slider\SliderItemDataFactoryInterface: '@Shopsys\FrameworkBundle\Model\Slider\SliderItemDataFactory'
 
-    Shopsys\FrameworkBundle\Model\Slider\SliderItemFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Slider\SliderItemFactory
+    Shopsys\FrameworkBundle\Model\Slider\SliderItemFactoryInterface: '@Shopsys\FrameworkBundle\Model\Slider\SliderItemFactory'
 
-    Shopsys\FrameworkBundle\Model\Transport\TransportDataFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Transport\TransportDataFactory
+    Shopsys\FrameworkBundle\Model\Transport\TransportDataFactoryInterface: '@Shopsys\FrameworkBundle\Model\Transport\TransportDataFactory'
 
-    Shopsys\FrameworkBundle\Model\Transport\TransportFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Transport\TransportFactory
+    Shopsys\FrameworkBundle\Model\Transport\TransportFactoryInterface: '@Shopsys\FrameworkBundle\Model\Transport\TransportFactory'
 
-    Shopsys\FrameworkBundle\Model\Transport\TransportPriceFactoryInterface:
-        alias: Shopsys\FrameworkBundle\Model\Transport\TransportPriceFactory
+    Shopsys\FrameworkBundle\Model\Transport\TransportPriceFactoryInterface: '@Shopsys\FrameworkBundle\Model\Transport\TransportPriceFactory'
 
     Shopsys\FrameworkBundle\Twig\Javascript\JavascriptCompilerService:
         arguments:
@@ -840,12 +752,10 @@ services:
             - '%kernel.debug%'
 
     # disable original DefaultPhpFileExtractor
-    jms_translation.extractor.file.default_php_extractor:
-        alias: Shopsys\FrameworkBundle\Component\Translation\PhpFileExtractor
+    jms_translation.extractor.file.default_php_extractor: '@Shopsys\FrameworkBundle\Component\Translation\PhpFileExtractor'
 
     # normalize translation messages during extraction
-    jms_translation.extractor_manager:
-        alias: Shopsys\FrameworkBundle\Component\Translation\NormalizingExtractorManager
+    jms_translation.extractor_manager: '@Shopsys\FrameworkBundle\Component\Translation\NormalizingExtractorManager'
 
     joschi127_doctrine_entity_override.event_subscriber.load_orm_metadata:
         class: Joschi127\DoctrineEntityOverrideBundle\EventListener\LoadORMMetadataSubscriber

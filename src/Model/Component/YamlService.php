@@ -12,7 +12,7 @@ class YamlService
     /**
      * @param string $pathToYamlFile
      * @throws \Symfony\Component\Yaml\Exception\ParseException
-     * @return string[]
+     * @return string[]|string[][]
      */
     public static function getYamlData(string $pathToYamlFile): array
     {
@@ -140,5 +140,34 @@ class YamlService
     public static function keyIndentsOf(string $line): int
     {
         return strlen($line) - strlen(ltrim($line, '- '));
+    }
+
+    /**
+     * @param int $countOfIndents
+     * @return string
+     */
+    public static function createCorrectIndentsByCountOfIndents(int $countOfIndents): string
+    {
+        return str_repeat(' ', $countOfIndents);
+    }
+
+    /**
+     * @param string $line
+     * @return bool
+     */
+    public static function hasLineValue(string $line): bool
+    {
+        $explodedLine = explode(':', $line);
+
+        return array_key_exists(1, $explodedLine) && self::isLineNotBlank($explodedLine[1]);
+    }
+
+    /**
+     * @param string $line
+     * @return bool
+     */
+    public static function hasLineColon(string $line): bool
+    {
+        return strpos($line, ':') !== false;
     }
 }
