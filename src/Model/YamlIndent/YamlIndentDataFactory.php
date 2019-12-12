@@ -240,23 +240,7 @@ class YamlIndentDataFactory
                 continue;
             }
 
-            if (/* is start of array in array, e.g.
-                   foo:
-                     - bar:
-                       - 'any text'
-                */
-                ($isArrayLine && $countOfPrevRowIndents < $countOfRowIndents && $isPrevLineArrayLine) ||
-                /* is start of array, e.g.
-                   foo:
-                     - bar: baz
-                */
-                ($isArrayLine && $countOfPrevRowIndents <= $countOfRowIndents && $isPrevLineArrayLine === false) ||
-                /* is classic hierarchy, e.g.
-                   foo:
-                     bar: baz
-                */
-                ($isArrayLine === false && $countOfPrevRowIndents < $countOfRowIndents)
-            ) {
+            if ($this->isPrevLineNextParent($isArrayLine, $countOfPrevRowIndents, $countOfRowIndents, $isPrevLineArrayLine)) {
                 $line = $fileLines[$key];
                 $countOfRowIndents = YamlService::rowIndentsOf($line);
                 $trimmedLine = trim($line);
@@ -301,5 +285,67 @@ class YamlIndentDataFactory
         }
 
         return $countOfParents;
+    }
+
+    /**
+     * @param bool $isArrayLine
+     * @param int $countOfPrevRowIndents
+     * @param int $countOfRowIndents
+     * @param bool $isPrevLineArrayLine
+     * @return bool
+     */
+    private function isPrevLineNextParent(bool $isArrayLine, int $countOfPrevRowIndents, int $countOfRowIndents, bool $isPrevLineArrayLine): bool
+    {
+        return $this->isClassicHierarchy($isArrayLine, $countOfPrevRowIndents, $countOfRowIndents) ||
+            $this->isStartOfArray($isArrayLine, $countOfPrevRowIndents, $countOfRowIndents, $isPrevLineArrayLine) ||
+            $this->isStartOfArrayInArray($isArrayLine, $countOfPrevRowIndents, $countOfRowIndents, $isPrevLineArrayLine);
+    }
+
+    /**
+     * @param bool $isArrayLine
+     * @param int $countOfPrevRowIndents
+     * @param int $countOfRowIndents
+     * @return bool
+     *
+     * @example
+     * foo:
+     *     bar: baz
+     */
+    private function isClassicHierarchy(bool $isArrayLine, int $countOfPrevRowIndents, int $countOfRowIndents): bool
+    {
+        return $isArrayLine === false && $countOfPrevRowIndents < $countOfRowIndents;
+    }
+
+    /**
+     * @param bool $isArrayLine
+     * @param int $countOfPrevRowIndents
+     * @param int $countOfRowIndents
+     * @param bool $isPrevLineArrayLine
+     * @return bool
+     *
+     * @example
+     * foo:
+     *     - bar: baz
+     */
+    private function isStartOfArray(bool $isArrayLine, int $countOfPrevRowIndents, int $countOfRowIndents, bool $isPrevLineArrayLine): bool
+    {
+        return $isArrayLine && $countOfPrevRowIndents <= $countOfRowIndents && $isPrevLineArrayLine === false;
+    }
+
+    /**
+     * @param bool $isArrayLine
+     * @param int $countOfPrevRowIndents
+     * @param int $countOfRowIndents
+     * @param bool $isPrevLineArrayLine
+     * @return bool
+     *
+     * @example
+     * foo:
+     *     - bar:
+     *         - 'any text'
+     */
+    private function isStartOfArrayInArray(bool $isArrayLine, int $countOfPrevRowIndents, int $countOfRowIndents, bool $isPrevLineArrayLine): bool
+    {
+        return $isArrayLine && $countOfPrevRowIndents < $countOfRowIndents && $isPrevLineArrayLine;
     }
 }
