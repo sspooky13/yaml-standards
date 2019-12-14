@@ -71,7 +71,7 @@ class YamlIndentDataFactory
             return $correctIndents . $trimmedFileLine;
         }
 
-        // line start of array, e.g. "- foo: bar" or "- foo" or "- { foo: bar }"
+        // line start of array, e.g. "- foo: bar" or "- foo" or "- { foo: bar }" or "- foo:"
         if (YamlService::isLineStartOfArrayWithKeyAndValue($trimmedLine)) {
             return $this->getCorrectLineForArrayWithKeyAndValue($line, $fileLines, $key, $countOfIndents, $fileLine, $isCommentLine);
         }
@@ -229,6 +229,8 @@ class YamlIndentDataFactory
         $isArrayLine = YamlService::hasLineDashOnStartOfLine($trimmedLine);
 
         while ($key > 0) {
+            $currentLine = $fileLines[$key];
+            $countOfCurrentRowIndents = YamlService::rowIndentsOf($currentLine);
             $key--;
             $prevLine = $fileLines[$key];
             $trimmedPrevLine = trim($prevLine);
@@ -246,6 +248,19 @@ class YamlIndentDataFactory
                 $trimmedLine = trim($line);
                 $isArrayLine = YamlService::hasLineDashOnStartOfLine($trimmedLine);
 
+                /*
+                 * array has array values at beginning and is not first element in array, e.g.
+                 *  -  pathsToCheck:
+                 *      - path/to/file
+                 */
+                if ($isArrayLine &&
+                    YamlService::isLineOpeningAnArray($trimmedLine) &&
+                    YamlService::rowIndentsOf($line) === 0 &&
+                    $countOfParents > 0
+                ) {
+                    $countOfParents--;
+                }
+
                 $countOfParents++;
 
                 /* nested hierarchy in array fix, eg.
@@ -260,21 +275,44 @@ class YamlIndentDataFactory
 
             // if line has zero counts of indents then it's highest parent and should be ended
             if ($countOfRowIndents === 0) {
-                // find parent if line belong to array, if it exists then add one parent to count of parents variable
+                /**
+                 * find parent if line belong to array, if it exists then add one parent to count of parents variable, e.g.
+                 * foo:
+                 * - bar
+                 */
                 if (YamlService::isLineStartOfArrayWithKeyAndValue($trimmedLine)) {
-                    while ($key > 0) {
-                        $key--;
+                    while ($key >= 0) {
                         $prevLine = $fileLines[$key];
+                        $countOfPrevRowIndents = YamlService::rowIndentsOf($prevLine);
                         if (YamlService::isLineBlank($prevLine) || YamlService::isLineComment($prevLine)) {
+                            $key--;
                             continue;
                         }
 
-                        $countOfRowIndents = YamlService::rowIndentsOf($prevLine);
-                        if ($countOfRowIndents === 0 && YamlService::hasLineColon($prevLine) && YamlService::hasLineValue($prevLine) === false) {
+                        /**
+                         * 'qux' is highest parent, so skip this, e.g.
+                         * - foo:
+                         *      bar: baz
+                         * - qux:
+                         *      - quux: quuz
+                         */
+                        if ($countOfPrevRowIndents > $countOfCurrentRowIndents) {
+                            break;
+                        }
+
+                        if ($countOfPrevRowIndents === 0 &&
+                            $countOfPrevRowIndents === $countOfCurrentRowIndents &&
+                            YamlService::hasLineColon($prevLine) &&
+                            YamlService::hasLineValue($prevLine) === false
+                        ) {
                             $countOfParents++;
 
                             break;
                         }
+
+                        $currentLine = $fileLines[$key];
+                        $countOfCurrentRowIndents = YamlService::rowIndentsOf($currentLine);
+                        $key--;
                     }
                 }
 
