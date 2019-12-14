@@ -75,9 +75,9 @@ class YamlIndentCheckerTest extends TestCase
     }
 
     /**
-     * @return \YamlStandards\Model\Config\StandardParametersData|\PHPUnit_Framework_MockObject_MockObject
+     * @return \YamlStandards\Model\Config\StandardParametersData
      */
-    private function getStandardsParametersData()
+    private function getStandardsParametersData(): StandardParametersData
     {
         return new StandardParametersData(4, 4, 4, null);
     }

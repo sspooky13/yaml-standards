@@ -52,9 +52,9 @@ class YamlSpacesBetweenGroupsCheckerTest extends TestCase
 
     /**
      * @param int $level
-     * @return \YamlStandards\Model\Config\StandardParametersData|\PHPUnit_Framework_MockObject_MockObject
+     * @return \YamlStandards\Model\Config\StandardParametersData
      */
-    private function getStandardsParametersData(int $level)
+    private function getStandardsParametersData(int $level): StandardParametersData
     {
         return new StandardParametersData(4, 4, $level, null);
     }

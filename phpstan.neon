@@ -11,3 +11,12 @@ parameters:
         -
             message: '#^Call to an undefined method Symfony\\Component\\Config\\Definition\\Builder\\TreeBuilder::getRootNode\(\)\.$#'
             path: %currentWorkingDirectory%/src/Model/Config/YamlStandardConfigDefinition.php
+        -
+            message: '#^Comparison operation ">=" between \d+ and \d+ is always (?:true|false)\.$#'
+            path: %currentWorkingDirectory%/src/Model/Config/YamlStandardConfigDefinition.php
+        -
+            message: '#^Else branch is unreachable because previous condition is always (?:true|false)\.$#'
+            path: %currentWorkingDirectory%/src/Model/Config/YamlStandardConfigDefinition.php
+
+includes:
+    - vendor/phpstan/phpstan-phpunit/extension.neon
