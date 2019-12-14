@@ -18,6 +18,9 @@
 - remove support for php 5.6 version and php 7.0 version
 - exclude files by name is no longer implemented
 
+### Fixed
+- Yaml indent: fix scenario for array as it is used in example file `example/yaml-standards.yaml`
+
 ## [4.2.5] - 2019-08-13
 ### Changed
 - [#31] Yaml files path service: ignore uniterable filepaths, Thanks to [@PetrHeinz]

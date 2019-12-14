@@ -29,7 +29,7 @@ class YamlIndentDataFactory
         $explodedLine = explode(':', $line);
 
         // empty line
-        if ($trimmedLine === '') {
+        if (YamlService::isLineBlank($line)) {
             $fileRows = array_keys($fileLines);
             $lastFileRow = end($fileRows);
             /* set comment line indents by next non-empty line, e.g
@@ -71,7 +71,7 @@ class YamlIndentDataFactory
             return $correctIndents . $trimmedFileLine;
         }
 
-        // line start of array, e.g. "- foo: bar" or "- foo" or "- { foo: bar }"
+        // line start of array, e.g. "- foo: bar" or "- foo" or "- { foo: bar }" or "- foo:"
         if (YamlService::isLineStartOfArrayWithKeyAndValue($trimmedLine)) {
             return $this->getCorrectLineForArrayWithKeyAndValue($line, $fileLines, $key, $countOfIndents, $fileLine, $isCommentLine);
         }
@@ -109,7 +109,7 @@ class YamlIndentDataFactory
         $trimmedLineValue = trim($lineValue);
 
         // parent, not comment line
-        if ($isCommentLine === false && ($trimmedLineValue === '' || YamlService::isValueReuseVariable($trimmedLineValue))) {
+        if ($isCommentLine === false && (YamlService::isLineBlank($lineValue) || YamlService::isValueReuseVariable($trimmedLineValue))) {
             // fix situation when key is without value and is not parent, e.g.: "   foo:"
             $nextLine = array_key_exists($key + 1, $fileLines) ? $fileLines[$key + 1] : '';
             if (YamlService::rowIndentsOf($nextLine) > $countOfRowIndents) {
@@ -229,6 +229,8 @@ class YamlIndentDataFactory
         $isArrayLine = YamlService::hasLineDashOnStartOfLine($trimmedLine);
 
         while ($key > 0) {
+            $currentLine = $fileLines[$key];
+            $countOfCurrentRowIndents = YamlService::rowIndentsOf($currentLine);
             $key--;
             $prevLine = $fileLines[$key];
             $trimmedPrevLine = trim($prevLine);
@@ -236,31 +238,28 @@ class YamlIndentDataFactory
             $countOfPrevRowIndents = YamlService::rowIndentsOf($prevLine);
 
             // ignore comment line and empty line
-            if ($trimmedPrevLine === '' || YamlService::isLineComment($prevLine)) {
+            if (YamlService::isLineBlank($prevLine) || YamlService::isLineComment($prevLine)) {
                 continue;
             }
 
-            if (/* is start of array in array, e.g.
-                   foo:
-                     - bar:
-                       - 'any text'
-                */
-                ($isArrayLine && $countOfPrevRowIndents < $countOfRowIndents && $isPrevLineArrayLine) ||
-                /* is start of array, e.g.
-                   foo:
-                     - bar: baz
-                */
-                ($isArrayLine && $countOfPrevRowIndents <= $countOfRowIndents && $isPrevLineArrayLine === false) ||
-                /* is classic hierarchy, e.g.
-                   foo:
-                     bar: baz
-                */
-                ($isArrayLine === false && $countOfPrevRowIndents < $countOfRowIndents)
-            ) {
+            if ($this->isPrevLineNextParent($isArrayLine, $countOfPrevRowIndents, $countOfRowIndents, $isPrevLineArrayLine)) {
                 $line = $fileLines[$key];
                 $countOfRowIndents = YamlService::rowIndentsOf($line);
                 $trimmedLine = trim($line);
                 $isArrayLine = YamlService::hasLineDashOnStartOfLine($trimmedLine);
+
+                /*
+                 * array has array values at beginning and is not first element in array, e.g.
+                 *  -  pathsToCheck:
+                 *      - path/to/file
+                 */
+                if ($isArrayLine &&
+                    YamlService::isLineOpeningAnArray($trimmedLine) &&
+                    YamlService::rowIndentsOf($line) === 0 &&
+                    $countOfParents > 0
+                ) {
+                    $countOfParents--;
+                }
 
                 $countOfParents++;
 
@@ -276,23 +275,44 @@ class YamlIndentDataFactory
 
             // if line has zero counts of indents then it's highest parent and should be ended
             if ($countOfRowIndents === 0) {
-                // find parent if line belong to array, if it exists then add one parent to count of parents variable
+                /**
+                 * find parent if line belong to array, if it exists then add one parent to count of parents variable, e.g.
+                 * foo:
+                 * - bar
+                 */
                 if (YamlService::isLineStartOfArrayWithKeyAndValue($trimmedLine)) {
-                    while ($key > 0) {
-                        $key--;
+                    while ($key >= 0) {
                         $prevLine = $fileLines[$key];
-                        $trimmedPrevLine = trim($prevLine);
-                        if ($trimmedPrevLine === '' || YamlService::isLineComment($prevLine)) {
+                        $countOfPrevRowIndents = YamlService::rowIndentsOf($prevLine);
+                        if (YamlService::isLineBlank($prevLine) || YamlService::isLineComment($prevLine)) {
+                            $key--;
                             continue;
                         }
 
-                        $countOfRowIndents = YamlService::rowIndentsOf($prevLine);
-                        $explodedPrevLine = explode(':', $prevLine);
-                        if ($countOfRowIndents === 0 && array_key_exists(1, $explodedPrevLine) && trim($explodedPrevLine[1]) === '') {
+                        /**
+                         * 'qux' is highest parent, so skip this, e.g.
+                         * - foo:
+                         *      bar: baz
+                         * - qux:
+                         *      - quux: quuz
+                         */
+                        if ($countOfPrevRowIndents > $countOfCurrentRowIndents) {
+                            break;
+                        }
+
+                        if ($countOfPrevRowIndents === 0 &&
+                            $countOfPrevRowIndents === $countOfCurrentRowIndents &&
+                            YamlService::hasLineColon($prevLine) &&
+                            YamlService::hasLineValue($prevLine) === false
+                        ) {
                             $countOfParents++;
 
                             break;
                         }
+
+                        $currentLine = $fileLines[$key];
+                        $countOfCurrentRowIndents = YamlService::rowIndentsOf($currentLine);
+                        $key--;
                     }
                 }
 
@@ -301,5 +321,67 @@ class YamlIndentDataFactory
         }
 
         return $countOfParents;
+    }
+
+    /**
+     * @param bool $isArrayLine
+     * @param int $countOfPrevRowIndents
+     * @param int $countOfRowIndents
+     * @param bool $isPrevLineArrayLine
+     * @return bool
+     */
+    private function isPrevLineNextParent(bool $isArrayLine, int $countOfPrevRowIndents, int $countOfRowIndents, bool $isPrevLineArrayLine): bool
+    {
+        return $this->isClassicHierarchy($isArrayLine, $countOfPrevRowIndents, $countOfRowIndents) ||
+            $this->isStartOfArray($isArrayLine, $countOfPrevRowIndents, $countOfRowIndents, $isPrevLineArrayLine) ||
+            $this->isStartOfArrayInArray($isArrayLine, $countOfPrevRowIndents, $countOfRowIndents, $isPrevLineArrayLine);
+    }
+
+    /**
+     * @param bool $isArrayLine
+     * @param int $countOfPrevRowIndents
+     * @param int $countOfRowIndents
+     * @return bool
+     *
+     * @example
+     * foo:
+     *     bar: baz
+     */
+    private function isClassicHierarchy(bool $isArrayLine, int $countOfPrevRowIndents, int $countOfRowIndents): bool
+    {
+        return $isArrayLine === false && $countOfPrevRowIndents < $countOfRowIndents;
+    }
+
+    /**
+     * @param bool $isArrayLine
+     * @param int $countOfPrevRowIndents
+     * @param int $countOfRowIndents
+     * @param bool $isPrevLineArrayLine
+     * @return bool
+     *
+     * @example
+     * foo:
+     *     - bar: baz
+     */
+    private function isStartOfArray(bool $isArrayLine, int $countOfPrevRowIndents, int $countOfRowIndents, bool $isPrevLineArrayLine): bool
+    {
+        return $isArrayLine && $countOfPrevRowIndents <= $countOfRowIndents && $isPrevLineArrayLine === false;
+    }
+
+    /**
+     * @param bool $isArrayLine
+     * @param int $countOfPrevRowIndents
+     * @param int $countOfRowIndents
+     * @param bool $isPrevLineArrayLine
+     * @return bool
+     *
+     * @example
+     * foo:
+     *     - bar:
+     *         - 'any text'
+     */
+    private function isStartOfArrayInArray(bool $isArrayLine, int $countOfPrevRowIndents, int $countOfRowIndents, bool $isPrevLineArrayLine): bool
+    {
+        return $isArrayLine && $countOfPrevRowIndents < $countOfRowIndents && $isPrevLineArrayLine;
     }
 }

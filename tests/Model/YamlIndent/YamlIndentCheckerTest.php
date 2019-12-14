@@ -32,6 +32,7 @@ class YamlIndentCheckerTest extends TestCase
             __DIR__ . '/resource/unfixed/symfony-security.yml',
             __DIR__ . '/resource/unfixed/symfony-service.yml',
             __DIR__ . '/resource/unfixed/yaml-getting-started.yml',
+            __DIR__ . '/resource/unfixed/yaml-standards.yaml',
         ];
         $yamlIndentChecker = new YamlIndentChecker();
 
@@ -63,6 +64,7 @@ class YamlIndentCheckerTest extends TestCase
             __DIR__ . '/resource/fixed/symfony-security.yml',
             __DIR__ . '/resource/fixed/symfony-service.yml',
             __DIR__ . '/resource/fixed/yaml-getting-started.yml',
+            __DIR__ . '/resource/fixed/yaml-standards.yaml',
         ];
         $yamlIndentChecker = new YamlIndentChecker();
 

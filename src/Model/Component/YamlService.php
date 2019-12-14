@@ -50,6 +50,15 @@ class YamlService
      * @param string $yamlLine
      * @return bool
      */
+    public static function isLineBlank(string $yamlLine): bool
+    {
+        return trim($yamlLine) === '';
+    }
+
+    /**
+     * @param string $yamlLine
+     * @return bool
+     */
     public static function isLineComment(string $yamlLine): bool
     {
         return preg_match('/^\s*#/', $yamlLine) === 1;
