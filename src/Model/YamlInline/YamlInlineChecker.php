@@ -32,7 +32,7 @@ class YamlInlineChecker implements CheckerInterface
         $filteredYamlLines = array_filter($yamlLines, [YamlService::class, 'isLineNotBlank']);
         $filteredYamlLines = array_filter($filteredYamlLines, ['self', 'removeCommentLine']);
         $filteredYamlLines = array_map(['self', 'removeComments'], $filteredYamlLines);
-        if (trim($lastYamlElement) === '') {
+        if (YamlService::isLineBlank($lastYamlElement)) {
             $filteredYamlLines[] = '';
         }
 

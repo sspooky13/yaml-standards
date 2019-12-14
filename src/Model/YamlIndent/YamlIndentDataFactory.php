@@ -29,7 +29,7 @@ class YamlIndentDataFactory
         $explodedLine = explode(':', $line);
 
         // empty line
-        if ($trimmedLine === '') {
+        if (YamlService::isLineBlank($line)) {
             $fileRows = array_keys($fileLines);
             $lastFileRow = end($fileRows);
             /* set comment line indents by next non-empty line, e.g
@@ -109,7 +109,7 @@ class YamlIndentDataFactory
         $trimmedLineValue = trim($lineValue);
 
         // parent, not comment line
-        if ($isCommentLine === false && ($trimmedLineValue === '' || YamlService::isValueReuseVariable($trimmedLineValue))) {
+        if ($isCommentLine === false && (YamlService::isLineBlank($lineValue) || YamlService::isValueReuseVariable($trimmedLineValue))) {
             // fix situation when key is without value and is not parent, e.g.: "   foo:"
             $nextLine = array_key_exists($key + 1, $fileLines) ? $fileLines[$key + 1] : '';
             if (YamlService::rowIndentsOf($nextLine) > $countOfRowIndents) {
@@ -236,7 +236,7 @@ class YamlIndentDataFactory
             $countOfPrevRowIndents = YamlService::rowIndentsOf($prevLine);
 
             // ignore comment line and empty line
-            if ($trimmedPrevLine === '' || YamlService::isLineComment($prevLine)) {
+            if (YamlService::isLineBlank($prevLine) || YamlService::isLineComment($prevLine)) {
                 continue;
             }
 
@@ -265,14 +265,12 @@ class YamlIndentDataFactory
                     while ($key > 0) {
                         $key--;
                         $prevLine = $fileLines[$key];
-                        $trimmedPrevLine = trim($prevLine);
-                        if ($trimmedPrevLine === '' || YamlService::isLineComment($prevLine)) {
+                        if (YamlService::isLineBlank($prevLine) || YamlService::isLineComment($prevLine)) {
                             continue;
                         }
 
                         $countOfRowIndents = YamlService::rowIndentsOf($prevLine);
-                        $explodedPrevLine = explode(':', $prevLine);
-                        if ($countOfRowIndents === 0 && array_key_exists(1, $explodedPrevLine) && trim($explodedPrevLine[1]) === '') {
+                        if ($countOfRowIndents === 0 && YamlService::hasLineColon($prevLine) && YamlService::hasLineValue($prevLine) === false) {
                             $countOfParents++;
 
                             break;

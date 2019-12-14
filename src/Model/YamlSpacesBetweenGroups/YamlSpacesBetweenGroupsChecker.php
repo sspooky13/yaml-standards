@@ -30,7 +30,7 @@ class YamlSpacesBetweenGroupsChecker implements CheckerInterface
 
         $correctYamlContent = $yamlSpacesBetweenGroupsDataFactory->getCorrectYamlContentWithSpacesBetweenGroups($filteredYamlLines, $standardParametersData->getLevel());
 
-        if (trim($lastYamlElement) === '') {
+        if (YamlService::isLineBlank($lastYamlElement)) {
             $correctYamlContent .= "\n";
         }
 
