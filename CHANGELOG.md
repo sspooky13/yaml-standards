@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [5.0.0] - 2019-12-15
 ### Added
 - create fixer for yaml spaces between groups
 - from now project can set different and more options for yaml standards
@@ -166,7 +168,8 @@ patchesJson6902:
 [#14]: https://github.com/sspooky13/yaml-standards/issues/14
 [#13]: https://github.com/sspooky13/yaml-standards/pull/13
 
-[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/4.2.5...HEAD
+[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/5.0.0...HEAD
+[5.0.0]: https://github.com/sspooky13/yaml-standards/compare/4.2.5...5.0.0
 [4.2.5]: https://github.com/sspooky13/yaml-standards/compare/4.2.4...4.2.5
 [4.2.4]: https://github.com/sspooky13/yaml-standards/compare/4.2.3...4.2.4
 [4.2.3]: https://github.com/sspooky13/yaml-standards/compare/4.2.2...4.2.3
