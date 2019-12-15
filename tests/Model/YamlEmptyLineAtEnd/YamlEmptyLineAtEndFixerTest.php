@@ -6,6 +6,7 @@ namespace YamlStandards\Model\YamlEmptyLineAtEnd;
 
 use PHPUnit\Framework\TestCase;
 use YamlStandards\Model\Config\StandardParametersData;
+use YamlStandards\Model\Config\YamlStandardConfigDefinition;
 
 /**
  * Fix yaml file has empty line at end of file
@@ -33,7 +34,7 @@ class YamlEmptyLineAtEndFixerTest extends TestCase
         $yamlEmptyLineAtEndFixer = new YamlEmptyLineAtEndFixer();
 
         foreach ($pathToUnfixedFiles as $key => $pathToUnfixedFile) {
-            $standardParametersData = new StandardParametersData(null, null, null, null);
+            $standardParametersData = $this->getStandardsParametersData();
             $yamlEmptyLineAtEndFixer->fix($pathToUnfixedFile, $tempCorrectYamlFile, $standardParametersData);
             $yamlFileContent = file_get_contents($tempCorrectYamlFile);
             $correctYamlFileContent = file_get_contents($pathToFixedFiles[$key]);
@@ -48,5 +49,13 @@ class YamlEmptyLineAtEndFixerTest extends TestCase
     private function getTempCorrectYamlFile(): string
     {
         return __DIR__ . '/resource/temp/noName.yml';
+    }
+
+    /**
+     * @return \YamlStandards\Model\Config\StandardParametersData
+     */
+    private function getStandardsParametersData(): StandardParametersData
+    {
+        return new StandardParametersData(4, 4, 2, YamlStandardConfigDefinition::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_SHORT);
     }
 }

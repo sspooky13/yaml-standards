@@ -72,6 +72,6 @@ class YamlServiceAliasingFixerTest extends TestCase
      */
     private function getStandardsParametersData(string $type): StandardParametersData
     {
-        return new StandardParametersData(null, null, null, $type);
+        return new StandardParametersData(4, 4, 2, $type);
     }
 }

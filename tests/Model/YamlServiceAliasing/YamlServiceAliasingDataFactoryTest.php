@@ -48,7 +48,7 @@ services:
         $yamlLines = ['foo:', '    bar: baz', '    qux: quux', 'services:', '    firstNameOfService: \'@secondNameOfService\'', '    secondNameOfService:', '        alias: thirdNameOfService', '        public: false', '    thirdNameOfService:', '        arguments:', '            $foo: \'@bar\'', '    fourthNameOfService:', '        alias: thirdNameOfService'];
         $correctYamlLines = ['foo:', '    bar: baz', '    qux: quux', 'services:', '    firstNameOfService: \'@secondNameOfService\'', '    secondNameOfService:', '        alias: thirdNameOfService', '        public: false', '    thirdNameOfService:', '        arguments:', '            $foo: \'@bar\'', '    fourthNameOfService: \'@thirdNameOfService\''];
 
-        $standardParametersData = new StandardParametersData(null, null, null, YamlStandardConfigDefinition::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_SHORT);
+        $standardParametersData = $this->getStandardsParametersData(YamlStandardConfigDefinition::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_SHORT);
         $yamlParsedData = Yaml::parse($yamlContent);
         $yamlLines = YamlServiceAliasingDataFactory::getCorrectYamlLines($yamlLines, $yamlParsedData, $standardParametersData);
 
@@ -73,7 +73,7 @@ services:
         $yamlLines = ['foo:', '    bar: baz', '    qux: quux', 'services:', '    firstNameOfService: \'@secondNameOfService\'', '    secondNameOfService:', '        alias: thirdNameOfService', '        public: false', '    thirdNameOfService:', '        arguments:', '            $foo: \'@bar\'', '    fourthNameOfService:', '        alias: thirdNameOfService'];
         $correctYamlLines = ['foo:', '    bar: baz', '    qux: quux', 'services:', '    firstNameOfService:', '        alias: secondNameOfService', '    secondNameOfService:', '        alias: thirdNameOfService', '        public: false', '    thirdNameOfService:', '        arguments:', '            $foo: \'@bar\'', '    fourthNameOfService:', '        alias: thirdNameOfService'];
 
-        $standardParametersData = new StandardParametersData(null, null, null, YamlStandardConfigDefinition::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_LONG);
+        $standardParametersData = $this->getStandardsParametersData(YamlStandardConfigDefinition::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_LONG);
         $yamlParsedData = Yaml::parse($yamlContent);
         $yamlLines = YamlServiceAliasingDataFactory::getCorrectYamlLines($yamlLines, $yamlParsedData, $standardParametersData);
 
@@ -199,5 +199,14 @@ services:
         $isAliasStandalone = $reflectionMethod->invokeArgs(new YamlServiceAliasingDataFactory(), [$yamlLines, $yamlParsedData, 3, YamlStandardConfigDefinition::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_LONG]);
 
         $this->assertFalse($isAliasStandalone);
+    }
+
+    /**
+     * @param string $aliasingType
+     * @return \YamlStandards\Model\Config\StandardParametersData
+     */
+    private function getStandardsParametersData(string $aliasingType): StandardParametersData
+    {
+        return new StandardParametersData(4, 4, 2, $aliasingType);
     }
 }

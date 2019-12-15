@@ -6,6 +6,7 @@ namespace YamlStandards\Model\YamlSpacesBetweenGroups;
 
 use PHPUnit\Framework\TestCase;
 use YamlStandards\Model\Config\StandardParametersData;
+use YamlStandards\Model\Config\YamlStandardConfigDefinition;
 
 class YamlSpacesBetweenGroupsFixerTest extends TestCase
 {
@@ -54,6 +55,6 @@ class YamlSpacesBetweenGroupsFixerTest extends TestCase
      */
     private function getStandardsParametersData(int $level): StandardParametersData
     {
-        return new StandardParametersData(4, 4, $level, null);
+        return new StandardParametersData(4, 4, $level, YamlStandardConfigDefinition::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_SHORT);
     }
 }

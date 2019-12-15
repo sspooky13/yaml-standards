@@ -6,6 +6,7 @@ namespace YamlStandards\Model\YamlIndent;
 
 use PHPUnit\Framework\TestCase;
 use YamlStandards\Model\Config\StandardParametersData;
+use YamlStandards\Model\Config\YamlStandardConfigDefinition;
 
 class YamlIndentFixerTest extends TestCase
 {
@@ -74,6 +75,6 @@ class YamlIndentFixerTest extends TestCase
      */
     private function getStandardsParametersData(): StandardParametersData
     {
-        return new StandardParametersData(4, 4, 4, null);
+        return new StandardParametersData(4, 4, 4, YamlStandardConfigDefinition::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_SHORT);
     }
 }

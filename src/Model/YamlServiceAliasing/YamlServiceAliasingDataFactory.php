@@ -52,7 +52,7 @@ class YamlServiceAliasingDataFactory
                     unset($yamlLines[$key + 1]); // remove `alias:` line
                 } else {
                     $countOfRowIndents = YamlService::rowIndentsOf($yamlLine);
-                    $nextIndents = $standardParametersData->getIndents() ?? 4; // `alias:` is child so I need add extra indents
+                    $nextIndents = $standardParametersData->getIndents(); // `alias:` is child so I need add extra indents
                     $indents = YamlService::createCorrectIndentsByCountOfIndents($countOfRowIndents + $nextIndents);
                     $replacedLineValue = str_replace(['@', '\''], '', $trimmedLineValue);
                     $yamlLines[$key] = $lineKey . ':';

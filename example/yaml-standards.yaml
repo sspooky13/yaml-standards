@@ -7,15 +7,15 @@
     checkers:
         -   pathToChecker: YamlStandards\Model\YamlAlphabetical\YamlAlphabeticalChecker # path to checker
             parameters:
-                { depth: 4 } # max depth to check
+                { depth: 4 } # max depth to check, optional, by default it is 4
         -   pathToChecker: YamlStandards\Model\YamlIndent\YamlIndentChecker
             parameters:
-                { indents: 4 } # count of indents which files must observe
+                { indents: 4 } # count of indents which files must observe, optional, by default it is 4
         -   pathToChecker: YamlStandards\Model\YamlSpacesBetweenGroups\YamlSpacesBetweenGroupsChecker
             parameters:
-                { level: 4 } # max level to check
+                { level: 2 } # max level to check, optional, by default it is 2
         -   pathToChecker: YamlStandards\Model\YamlServiceAliasing\YamlServiceAliasingChecker
             parameters:
-                { serviceAliasingType: short/long, indents: 4 } # select your code style for aliases https://symfony.com/doc/master/service_container/alias_private.html#aliasing, set indents for show/fix right result (default is 4)
+                { serviceAliasingType: short/long, indents: 4 } # select your code style for aliases https://symfony.com/doc/master/service_container/alias_private.html#aliasing, by default it is 'short', set indents for show/fix right result, by default it is 4, all are optional
         -   pathToChecker: YamlStandards\Model\YamlInline\YamlInlineChecker # only for turn it on
         -   pathToChecker: YamlStandards\Model\YamlEmptyLineAtEnd\YamlEmptyLineAtEndChecker # only for turn it on

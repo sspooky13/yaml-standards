@@ -19,5 +19,8 @@
         -   pathToChecker: YamlStandards\Model\YamlSpacesBetweenGroups\YamlSpacesBetweenGroupsChecker
             parameters:
                 { level: 2 }
+        -   pathToChecker: YamlStandards\Model\YamlServiceAliasing\YamlServiceAliasingChecker
+            parameters:
+                { serviceAliasingType: short }
         -   pathToChecker: YamlStandards\Model\YamlInline\YamlInlineChecker
         -   pathToChecker: YamlStandards\Model\YamlEmptyLineAtEnd\YamlEmptyLineAtEndChecker

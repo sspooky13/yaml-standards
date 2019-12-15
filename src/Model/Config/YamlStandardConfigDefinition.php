@@ -67,10 +67,10 @@ class YamlStandardConfigDefinition implements ConfigurationInterface
                             ->arrayNode(self::CONFIG_PARAMETERS_FOR_CHECKER)
                                 ->addDefaultsIfNotSet()
                                     ->children()
-                                        ->scalarNode(self::CONFIG_PARAMETERS_DEPTH)->defaultNull()->end()
-                                        ->scalarNode(self::CONFIG_PARAMETERS_INDENTS)->defaultNull()->end()
-                                        ->scalarNode(self::CONFIG_PARAMETERS_LEVEL)->defaultNull()->end()
-                                        ->enumNode(self::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE)->defaultNull()->values([
+                                        ->scalarNode(self::CONFIG_PARAMETERS_DEPTH)->defaultValue(4)->end()
+                                        ->scalarNode(self::CONFIG_PARAMETERS_INDENTS)->defaultValue(4)->end()
+                                        ->scalarNode(self::CONFIG_PARAMETERS_LEVEL)->defaultValue(2)->end()
+                                        ->enumNode(self::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE)->defaultValue(self::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_SHORT)->values([
                                             self::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_SHORT,
                                             self::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_LONG,
                                         ])->end()
