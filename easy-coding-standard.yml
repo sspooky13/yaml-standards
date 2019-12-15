@@ -9,6 +9,7 @@ parameters:
     skip:
         ObjectCalisthenics\Sniffs\Files\FunctionLengthSniff:
             - '*/src/Model/YamlIndent/YamlIndentDataFactory.php'
+            - '*/src/Model/Component/YamlCountOfParents.php'
 
         SlevomatCodingStandard\Sniffs\Classes\UnusedPrivateElementsSniff.UnusedMethod:
             - '*/src/Model/YamlInline/YamlInlineChecker.php'
