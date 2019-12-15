@@ -7,32 +7,32 @@ namespace YamlStandards\Model\Config;
 class StandardParametersData
 {
     /**
-     * @var int|null
+     * @var int
      */
     private $depth;
 
     /**
-     * @var int|null
+     * @var int
      */
     private $indents;
 
     /**
-     * @var int|null
+     * @var int
      */
     private $level;
 
     /**
-     * @var string|null
+     * @var string
      */
     private $serviceAliasingType;
 
     /**
-     * @param int|null $depth
-     * @param int|null $indents
-     * @param int|null $level
-     * @param string|null $serviceAliasingType
+     * @param int $depth
+     * @param int $indents
+     * @param int $level
+     * @param string $serviceAliasingType
      */
-    public function __construct(?int $depth, ?int $indents, ?int $level, ?string $serviceAliasingType)
+    public function __construct(int $depth, int $indents, int $level, string $serviceAliasingType)
     {
         $this->depth = $depth;
         $this->indents = $indents;
@@ -41,33 +41,33 @@ class StandardParametersData
     }
 
     /**
-     * @return int|null
+     * @return int
      */
-    public function getDepth(): ?int
+    public function getDepth(): int
     {
         return $this->depth;
     }
 
     /**
-     * @return int|null
+     * @return int
      */
-    public function getIndents(): ?int
+    public function getIndents(): int
     {
         return $this->indents;
     }
 
     /**
-     * @return int|null
+     * @return int
      */
-    public function getLevel(): ?int
+    public function getLevel(): int
     {
         return $this->level;
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getServiceAliasingType(): ?string
+    public function getServiceAliasingType(): string
     {
         return $this->serviceAliasingType;
     }

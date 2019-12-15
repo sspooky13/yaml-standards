@@ -1,11 +1,12 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace YamlStandards\Model\YamlEmptyLineAtEnd;
 
 use PHPUnit\Framework\TestCase;
 use YamlStandards\Model\Config\StandardParametersData;
+use YamlStandards\Model\Config\YamlStandardConfigDefinition;
 use YamlStandards\Result\Result;
 
 /**
@@ -24,8 +25,8 @@ class YamlEmptyLineAtEndCheckerTest extends TestCase
         ];
         $yamlEmptyLineAtEndChecker = new YamlEmptyLineAtEndChecker();
 
-        foreach ($pathToFiles as $key => $pathToFile) {
-            $standardParametersData = new StandardParametersData(null, null, null, null);
+        foreach ($pathToFiles as $pathToFile) {
+            $standardParametersData = $this->getStandardsParametersData();
             $result = $yamlEmptyLineAtEndChecker->check($pathToFile, $standardParametersData);
 
             $this->assertSame(Result::RESULT_CODE_INVALID_FILE_SYNTAX, $result->getResultCode());
@@ -43,11 +44,19 @@ class YamlEmptyLineAtEndCheckerTest extends TestCase
         ];
         $yamlEmptyLineAtEndChecker = new YamlEmptyLineAtEndChecker();
 
-        foreach ($pathToFiles as $key => $pathToFile) {
-            $standardParametersData = new StandardParametersData(null, null, null, null);
+        foreach ($pathToFiles as $pathToFile) {
+            $standardParametersData = $this->getStandardsParametersData();
             $result = $yamlEmptyLineAtEndChecker->check($pathToFile, $standardParametersData);
 
             $this->assertSame(Result::RESULT_CODE_OK, $result->getResultCode(), sprintf('YAML empty line at end check of "%s" failed.', $pathToFile));
         }
+    }
+
+    /**
+     * @return \YamlStandards\Model\Config\StandardParametersData
+     */
+    private function getStandardsParametersData(): StandardParametersData
+    {
+        return new StandardParametersData(4, 4, 2, YamlStandardConfigDefinition::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_SHORT);
     }
 }

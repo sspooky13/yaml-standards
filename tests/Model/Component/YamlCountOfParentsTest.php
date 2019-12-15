@@ -2,19 +2,15 @@
 
 declare(strict_types=1);
 
-namespace YamlStandards\Model\YamlIndent;
+namespace YamlStandards\Model\Component;
 
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class YamlIndentDataFactoryTest extends TestCase
+class YamlCountOfParentsTest extends TestCase
 {
     public function testGetRightCountOfParents(): void
     {
-        $reflectionClass = new ReflectionClass(YamlIndentDataFactory::class);
-        $reflectionMethod = $reflectionClass->getMethod('getCountOfParentsForLine');
-        $reflectionMethod->setAccessible(true);
-
         $groupOfYamlLines = [
             ['- foo:', '        - bar'],
             ['- foo:', '        - bar', 'baz: qux'],
@@ -33,7 +29,7 @@ class YamlIndentDataFactoryTest extends TestCase
         $rightCountOfParents = [2, 2, 2, 2, 2, 3, 1, 1, 2, 1, 3, 0];
 
         foreach ($groupOfYamlLines as $key => $yamlLines) {
-            $countOfParents = $reflectionMethod->invokeArgs(new YamlIndentDataFactory(), [$yamlLines, $keyToCheck[$key]]);
+            $countOfParents = YamlCountOfParents::getCountOfParentsForLine($yamlLines, $keyToCheck[$key]);
 
             $this->assertSame($rightCountOfParents[$key], $countOfParents, sprintf('`%s` has wrong count of parents', implode(',', $yamlLines)));
         }
@@ -41,47 +37,47 @@ class YamlIndentDataFactoryTest extends TestCase
 
     public function testIsPrevLineNextParent(): void
     {
-        $reflectionClass = new ReflectionClass(YamlIndentDataFactory::class);
+        $reflectionClass = new ReflectionClass(YamlCountOfParents::class);
         $reflectionMethod = $reflectionClass->getMethod('isPrevLineNextParent');
         $reflectionMethod->setAccessible(true);
 
-        $isNextParent = $reflectionMethod->invokeArgs(new YamlIndentDataFactory(), [false, 2, 4, false]);
+        $isNextParent = $reflectionMethod->invokeArgs(null, [false, 2, 4, false]);
         $this->assertTrue($isNextParent);
 
-        $isNextParent = $reflectionMethod->invokeArgs(new YamlIndentDataFactory(), [true, 2, 4, false]);
+        $isNextParent = $reflectionMethod->invokeArgs(null, [true, 2, 4, false]);
         $this->assertTrue($isNextParent);
 
-        $isNextParent = $reflectionMethod->invokeArgs(new YamlIndentDataFactory(), [true, 2, 4, true]);
+        $isNextParent = $reflectionMethod->invokeArgs(null, [true, 2, 4, true]);
         $this->assertTrue($isNextParent);
     }
 
     public function testIsClassicHierarchy(): void
     {
-        $reflectionClass = new ReflectionClass(YamlIndentDataFactory::class);
+        $reflectionClass = new ReflectionClass(YamlCountOfParents::class);
         $reflectionMethod = $reflectionClass->getMethod('isClassicHierarchy');
         $reflectionMethod->setAccessible(true);
 
-        $isNextParent = $reflectionMethod->invokeArgs(new YamlIndentDataFactory(), [false, 2, 4]);
+        $isNextParent = $reflectionMethod->invokeArgs(null, [false, 2, 4]);
         $this->assertTrue($isNextParent);
     }
 
     public function testIsStartOfArray(): void
     {
-        $reflectionClass = new ReflectionClass(YamlIndentDataFactory::class);
+        $reflectionClass = new ReflectionClass(YamlCountOfParents::class);
         $reflectionMethod = $reflectionClass->getMethod('isStartOfArray');
         $reflectionMethod->setAccessible(true);
 
-        $isNextParent = $reflectionMethod->invokeArgs(new YamlIndentDataFactory(), [true, 2, 3, false]);
+        $isNextParent = $reflectionMethod->invokeArgs(null, [true, 2, 3, false]);
         $this->assertTrue($isNextParent);
     }
 
     public function testIsStartOfArrayInArray(): void
     {
-        $reflectionClass = new ReflectionClass(YamlIndentDataFactory::class);
+        $reflectionClass = new ReflectionClass(YamlCountOfParents::class);
         $reflectionMethod = $reflectionClass->getMethod('isStartOfArrayInArray');
         $reflectionMethod->setAccessible(true);
 
-        $isNextParent = $reflectionMethod->invokeArgs(new YamlIndentDataFactory(), [true, 2, 3, true]);
+        $isNextParent = $reflectionMethod->invokeArgs(null, [true, 2, 3, true]);
         $this->assertTrue($isNextParent);
     }
 }

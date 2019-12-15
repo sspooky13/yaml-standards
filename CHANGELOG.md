@@ -10,9 +10,11 @@
     - Check yaml file has empty line at end of file
 - create new standards: YamlServiceAliasing
     - Check yaml service file observe short or long code style aliasing
+- added support for symfony 5
 
 ### Changed
 - remove command options and move it to config file
+- config: all parameters are now optional and have default value
 
 ### Removed
 - remove support for php 5.6 version and php 7.0 version

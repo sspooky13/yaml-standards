@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace YamlStandards\Model\YamlServiceAliasing;
 
@@ -19,7 +19,7 @@ class YamlServiceAliasingCheckerTest extends TestCase
         ];
         $yamlServiceAliasingChecker = new YamlServiceAliasingChecker();
 
-        foreach ($pathToFiles as $key => $pathToFile) {
+        foreach ($pathToFiles as $pathToFile) {
             $standardParametersData = $this->getStandardsParametersData(YamlStandardConfigDefinition::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_SHORT);
             $result = $yamlServiceAliasingChecker->check($pathToFile, $standardParametersData);
 
@@ -37,7 +37,7 @@ class YamlServiceAliasingCheckerTest extends TestCase
         ];
         $yamlServiceAliasingChecker = new YamlServiceAliasingChecker();
 
-        foreach ($pathToFiles as $key => $pathToFile) {
+        foreach ($pathToFiles as $pathToFile) {
             $standardParametersData = $this->getStandardsParametersData(YamlStandardConfigDefinition::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_SHORT);
             $result = $yamlServiceAliasingChecker->check($pathToFile, $standardParametersData);
 
@@ -53,7 +53,7 @@ class YamlServiceAliasingCheckerTest extends TestCase
         ];
         $yamlServiceAliasingChecker = new YamlServiceAliasingChecker();
 
-        foreach ($pathToFiles as $key => $pathToFile) {
+        foreach ($pathToFiles as $pathToFile) {
             $standardParametersData = $this->getStandardsParametersData(YamlStandardConfigDefinition::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_SHORT);
             $result = $yamlServiceAliasingChecker->check($pathToFile, $standardParametersData);
 
@@ -69,7 +69,7 @@ class YamlServiceAliasingCheckerTest extends TestCase
         ];
         $yamlServiceAliasingChecker = new YamlServiceAliasingChecker();
 
-        foreach ($pathToFiles as $key => $pathToFile) {
+        foreach ($pathToFiles as $pathToFile) {
             $standardParametersData = $this->getStandardsParametersData(YamlStandardConfigDefinition::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_LONG);
             $result = $yamlServiceAliasingChecker->check($pathToFile, $standardParametersData);
 
@@ -83,6 +83,6 @@ class YamlServiceAliasingCheckerTest extends TestCase
      */
     private function getStandardsParametersData(string $type): StandardParametersData
     {
-        return new StandardParametersData(null, null, null, $type);
+        return new StandardParametersData(4, 4, 2, $type);
     }
 }

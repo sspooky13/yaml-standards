@@ -23,7 +23,9 @@ class InputSettingData
      */
     public function __construct(InputInterface $input)
     {
-        $this->pathToConfigFile = $input->getArgument(YamlCommand::ARGUMENT_PATH_TO_CONFIG_FILE);
+        /** @var string $pathToConfigFile */
+        $pathToConfigFile = $input->getArgument(YamlCommand::ARGUMENT_PATH_TO_CONFIG_FILE);
+        $this->pathToConfigFile = $pathToConfigFile;
         $this->fixEnabled = $input->getOption(YamlCommand::OPTION_FIX);
     }
 
