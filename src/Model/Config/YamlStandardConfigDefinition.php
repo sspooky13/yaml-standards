@@ -37,7 +37,7 @@ class YamlStandardConfigDefinition implements ConfigurationInterface
         } else {
             $treeBuilder = new TreeBuilder();
             /** @var \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition $rootNode */
-            $rootNode = $treeBuilder->root('yaml_standards_config');
+            $rootNode = /** @scrutinizer ignore-deprecated */ $treeBuilder->root('yaml_standards_config');
         }
 
         $this->buildItemsNode($rootNode->arrayPrototype());
@@ -55,7 +55,7 @@ class YamlStandardConfigDefinition implements ConfigurationInterface
             ->children()
                 ->arrayNode(self::CONFIG_PATHS_TO_CHECK)->isRequired()->cannotBeEmpty()
                     ->prototype('scalar')->end()
-                ->end()
+                ->/** @scrutinizer ignore-call */end()
                 ->arrayNode(self::CONFIG_EXCLUDED_PATHS)
                     ->prototype('scalar')->end()
                 ->end()
