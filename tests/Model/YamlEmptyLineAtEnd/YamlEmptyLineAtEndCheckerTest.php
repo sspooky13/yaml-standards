@@ -24,7 +24,7 @@ class YamlEmptyLineAtEndCheckerTest extends TestCase
         ];
         $yamlEmptyLineAtEndChecker = new YamlEmptyLineAtEndChecker();
 
-        foreach ($pathToFiles as $key => $pathToFile) {
+        foreach ($pathToFiles as $pathToFile) {
             $standardParametersData = new StandardParametersData(null, null, null, null);
             $result = $yamlEmptyLineAtEndChecker->check($pathToFile, $standardParametersData);
 
@@ -43,7 +43,7 @@ class YamlEmptyLineAtEndCheckerTest extends TestCase
         ];
         $yamlEmptyLineAtEndChecker = new YamlEmptyLineAtEndChecker();
 
-        foreach ($pathToFiles as $key => $pathToFile) {
+        foreach ($pathToFiles as $pathToFile) {
             $standardParametersData = new StandardParametersData(null, null, null, null);
             $result = $yamlEmptyLineAtEndChecker->check($pathToFile, $standardParametersData);
 
