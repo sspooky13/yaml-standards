@@ -20,9 +20,13 @@ class YamlStandardConfigDefinition implements ConfigurationInterface
     public const CONFIG_PARAMETERS_INDENTS = 'indents';
     public const CONFIG_PARAMETERS_LEVEL = 'level';
     public const CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE = 'serviceAliasingType';
+    public const CONFIG_PARAMETERS_INDENTS_COMMENTS_WITHOUT_PARENT = 'indentsCommentsWithoutParent';
 
     public const CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_SHORT = 'short';
     public const CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_LONG = 'long';
+
+    public const CONFIG_PARAMETERS_INDENTS_COMMENTS_WITHOUT_PARENT_VALUE_DEFAULT = 'default';
+    public const CONFIG_PARAMETERS_INDENTS_COMMENTS_WITHOUT_PARENT_VALUE_PRESERVED = 'preserved';
 
     /**
      * @inheritDoc
@@ -73,6 +77,10 @@ class YamlStandardConfigDefinition implements ConfigurationInterface
                                         ->enumNode(self::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE)->defaultValue(self::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_SHORT)->values([
                                             self::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_SHORT,
                                             self::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_LONG,
+                                        ])->end()
+                                        ->enumNode(self::CONFIG_PARAMETERS_INDENTS_COMMENTS_WITHOUT_PARENT)->defaultValue(self::CONFIG_PARAMETERS_INDENTS_COMMENTS_WITHOUT_PARENT_VALUE_DEFAULT)->values([
+                                            self::CONFIG_PARAMETERS_INDENTS_COMMENTS_WITHOUT_PARENT_VALUE_DEFAULT,
+                                            self::CONFIG_PARAMETERS_INDENTS_COMMENTS_WITHOUT_PARENT_VALUE_PRESERVED,
                                         ])->end()
                                     ->end()
                                 ->end()
