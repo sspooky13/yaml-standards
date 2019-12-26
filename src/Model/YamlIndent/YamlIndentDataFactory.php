@@ -70,24 +70,7 @@ class YamlIndentDataFactory
 
         // the highest parent
         if ($countOfRowIndents === 0) {
-            // line is directive
-            if (YamlService::hasLineThreeDashesOnStartOfLine($trimmedLine)) {
-                $correctIndents = YamlService::createCorrectIndentsByCountOfIndents($countOfRowIndents);
-                $trimmedFileLine = trim($fileLine);
-
-                return $correctIndents . $trimmedFileLine;
-            }
-
-            // parent start as array, e.g. "- foo: bar"
-            // skip comment line because we want result after this condition
-            if ($isCommentLine === false && YamlService::isLineStartOfArrayWithKeyAndValue($trimmedLine)) {
-                return $this->getCorrectLineForArrayWithKeyAndValue($line, $fileLines, $key, $countOfIndents, $fileLine, $isCommentLine);
-            }
-
-            $correctIndents = YamlService::createCorrectIndentsByCountOfIndents($countOfRowIndents);
-            $trimmedFileLine = trim($fileLine);
-
-            return $correctIndents . $trimmedFileLine;
+            return $this->processHighestParentScenario($fileLines, $key, $fileLine, $isCommentLine, $trimmedLine, $countOfRowIndents, $line, $countOfIndents);
         }
 
         // line start of array, e.g. "- foo: bar" or "- foo" or "- { foo: bar }" or "- foo:"
@@ -143,6 +126,47 @@ class YamlIndentDataFactory
 
         $countOfParents = YamlCountOfParents::getCountOfParentsForLine($fileLines, $key);
         $correctIndents = YamlService::createCorrectIndentsByCountOfIndents($countOfParents * $countOfIndents);
+        $trimmedFileLine = trim($fileLine);
+
+        return $correctIndents . $trimmedFileLine;
+    }
+
+    /**
+     * @param array $fileLines
+     * @param int $key
+     * @param string $fileLine
+     * @param bool $isCommentLine
+     * @param string $trimmedLine
+     * @param int $countOfRowIndents
+     * @param string $line
+     * @param int $countOfIndents
+     * @return string
+     */
+    private function processHighestParentScenario(
+        array $fileLines,
+        int $key,
+        string $fileLine,
+        bool $isCommentLine,
+        string $trimmedLine,
+        int $countOfRowIndents,
+        string $line,
+        int $countOfIndents
+    ): string {
+        // line is directive
+        if (YamlService::hasLineThreeDashesOnStartOfLine($trimmedLine)) {
+            $correctIndents = YamlService::createCorrectIndentsByCountOfIndents($countOfRowIndents);
+            $trimmedFileLine = trim($fileLine);
+
+            return $correctIndents . $trimmedFileLine;
+        }
+
+        // parent start as array, e.g. "- foo: bar"
+        // skip comment line because we want result after this condition
+        if ($isCommentLine === false && YamlService::isLineStartOfArrayWithKeyAndValue($trimmedLine)) {
+            return $this->getCorrectLineForArrayWithKeyAndValue($line, $fileLines, $key, $countOfIndents, $fileLine, $isCommentLine);
+        }
+
+        $correctIndents = YamlService::createCorrectIndentsByCountOfIndents($countOfRowIndents);
         $trimmedFileLine = trim($fileLine);
 
         return $correctIndents . $trimmedFileLine;
