@@ -6,42 +6,60 @@ namespace YamlStandards\Model\YamlIndent;
 
 use YamlStandards\Model\Component\YamlCountOfParents;
 use YamlStandards\Model\Component\YamlService;
+use YamlStandards\Model\Config\StandardParametersData;
+use YamlStandards\Model\Config\YamlStandardConfigDefinition;
 
 class YamlIndentDataFactory
 {
     /**
      * @param string[] $fileLines
      * @param int $key
-     * @param int $countOfIndents
+     * @param \YamlStandards\Model\Config\StandardParametersData $standardParametersData
      * @param string $fileLine current checked line in loop
      * @param bool $isCommentLine
      * @return string
      */
-    public function getRightFileLines(array $fileLines, int $key, int $countOfIndents, string $fileLine, bool $isCommentLine = false): string
+    public function getRightFileLines(array $fileLines, int $key, StandardParametersData $standardParametersData, string $fileLine, bool $isCommentLine = false): string
     {
+        $countOfIndents = $standardParametersData->getIndents();
+        $lastFileRow = end($fileLines);
+
+        // add empty line at the end because file can ending with comment line
+        if (YamlService::isLineNotBlank($lastFileRow)) {
+            $fileLines[] = '';
+        }
+
         if (YamlService::isLineComment($fileLines[$key])) {
             $key++;
-            return $this->getRightFileLines($fileLines, $key, $countOfIndents, $fileLine, true);
+            return $this->getRightFileLines($fileLines, $key, $standardParametersData, $fileLine, true);
         }
 
         $line = $fileLines[$key];
         $trimmedLine = trim($line);
         $countOfRowIndents = YamlService::rowIndentsOf($line);
         $explodedLine = explode(':', $line);
+        $fileRows = array_keys($fileLines);
+        $lastFileRowKey = end($fileRows);
+
+        // return comment line with original indent
+        if ($isCommentLine &&
+            $lastFileRowKey === $key &&
+            $standardParametersData->getIndentsCommentsWithoutParent() === YamlStandardConfigDefinition::CONFIG_PARAMETERS_INDENTS_COMMENTS_WITHOUT_PARENT_VALUE_PRESERVED
+        ) {
+            return $fileLine;
+        }
 
         // empty line
         if (YamlService::isLineBlank($line)) {
-            $fileRows = array_keys($fileLines);
-            $lastFileRow = end($fileRows);
             /* set comment line indents by next non-empty line, e.g
                 (empty line)
                 # comment line
                 (empty line)
                 foo: bar
             */
-            if ($isCommentLine && $lastFileRow !== $key) {
+            if ($isCommentLine && $lastFileRowKey !== $key) {
                 $key++;
-                return $this->getRightFileLines($fileLines, $key, $countOfIndents, $fileLine, true);
+                return $this->getRightFileLines($fileLines, $key, $standardParametersData, $fileLine, true);
             }
 
             $correctIndents = YamlService::createCorrectIndentsByCountOfIndents(0);
