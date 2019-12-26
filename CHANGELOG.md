@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [5.1.0] - 2019-12-26
 ### Added
 - Config: add new parameter for preserve indents comment lines without parent
     - Yaml indents: don't change indents for comment line without parent if is set 'preserved' parameter
@@ -174,7 +176,8 @@ patchesJson6902:
 [#14]: https://github.com/sspooky13/yaml-standards/issues/14
 [#13]: https://github.com/sspooky13/yaml-standards/pull/13
 
-[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/5.0.0...HEAD
+[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/5.1.0...HEAD
+[5.1.0]: https://github.com/sspooky13/yaml-standards/compare/5.0.0...5.1.0
 [5.0.0]: https://github.com/sspooky13/yaml-standards/compare/4.2.5...5.0.0
 [4.2.5]: https://github.com/sspooky13/yaml-standards/compare/4.2.4...4.2.5
 [4.2.4]: https://github.com/sspooky13/yaml-standards/compare/4.2.3...4.2.4
