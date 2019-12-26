@@ -27,7 +27,7 @@ class YamlIndentFixer implements FixerInterface
         $rightFileLines = [];
 
         foreach ($fileLines as $key => $fileLine) {
-            $rightFileLines[] = $yamlIndentDataFactory->getRightFileLines($fileLines, $key, $standardParametersData->getIndents(), $fileLine);
+            $rightFileLines[] = $yamlIndentDataFactory->getRightFileLines($fileLines, $key, $standardParametersData, $fileLine);
         }
 
         $rightFileContent = implode("\n", $rightFileLines);

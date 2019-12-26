@@ -27,17 +27,29 @@ class StandardParametersData
     private $serviceAliasingType;
 
     /**
+     * @var string
+     */
+    private $indentsCommentsWithoutParent;
+
+    /**
      * @param int $depth
      * @param int $indents
      * @param int $level
      * @param string $serviceAliasingType
+     * @param string $indentsCommentsWithoutParent
      */
-    public function __construct(int $depth, int $indents, int $level, string $serviceAliasingType)
-    {
+    public function __construct(
+        int $depth,
+        int $indents,
+        int $level,
+        string $serviceAliasingType,
+        string $indentsCommentsWithoutParent
+    ) {
         $this->depth = $depth;
         $this->indents = $indents;
         $this->level = $level;
         $this->serviceAliasingType = $serviceAliasingType;
+        $this->indentsCommentsWithoutParent = $indentsCommentsWithoutParent;
     }
 
     /**
@@ -70,5 +82,13 @@ class StandardParametersData
     public function getServiceAliasingType(): string
     {
         return $this->serviceAliasingType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIndentsCommentsWithoutParent(): string
+    {
+        return $this->indentsCommentsWithoutParent;
     }
 }

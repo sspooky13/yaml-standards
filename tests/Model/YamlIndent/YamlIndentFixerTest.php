@@ -12,7 +12,7 @@ class YamlIndentFixerTest extends TestCase
 {
     public function testFixUnfixedFile(): void
     {
-        $standardParametersData = $this->getStandardsParametersData();
+        $standardParametersData = $this->getStandardsParametersData(YamlStandardConfigDefinition::CONFIG_PARAMETERS_INDENTS_COMMENTS_WITHOUT_PARENT_VALUE_DEFAULT);
         $pathToUnfixedFile = __DIR__ . '/resource/unfixed/yaml-getting-started.yml';
         $pathToFixedFile = __DIR__ . '/resource/fixed/yaml-getting-started.yml';
         $tempCorrectYamlFile = $this->getTempCorrectYamlFile();
@@ -26,9 +26,25 @@ class YamlIndentFixerTest extends TestCase
         $this->assertSame($correctYamlFileContent, $yamlFileContent);
     }
 
+    public function testFixUnfixedFileWithPreservedComments(): void
+    {
+        $standardParametersData = $this->getStandardsParametersData(YamlStandardConfigDefinition::CONFIG_PARAMETERS_INDENTS_COMMENTS_WITHOUT_PARENT_VALUE_PRESERVED);
+        $pathToUnfixedFile = __DIR__ . '/resource/unfixed/yaml-getting-started.yml';
+        $pathToFixedFile = __DIR__ . '/resource/fixed/yaml-getting-started-with-preserved-comments.yml';
+        $tempCorrectYamlFile = $this->getTempCorrectYamlFile();
+
+        $yamlIndentChecker = new YamlIndentFixer();
+        $yamlIndentChecker->fix($pathToUnfixedFile, $tempCorrectYamlFile, $standardParametersData);
+
+        $yamlFileContent = file_get_contents($tempCorrectYamlFile);
+        $correctYamlFileContent = file_get_contents($pathToFixedFile);
+
+        $this->assertSame($correctYamlFileContent, $yamlFileContent);
+    }
+
     public function testFixUnfixedFiles(): void
     {
-        $standardParametersData = $this->getStandardsParametersData();
+        $standardParametersData = $this->getStandardsParametersData(YamlStandardConfigDefinition::CONFIG_PARAMETERS_INDENTS_COMMENTS_WITHOUT_PARENT_VALUE_DEFAULT);
         $pathToUnfixedFiles = [
             __DIR__ . '/resource/unfixed/kustomization.yaml',
             __DIR__ . '/resource/unfixed/shopsys-service.yml',
@@ -71,10 +87,11 @@ class YamlIndentFixerTest extends TestCase
     }
 
     /**
+     * @param string $indentsCommentsWithoutParent
      * @return \YamlStandards\Model\Config\StandardParametersData
      */
-    private function getStandardsParametersData(): StandardParametersData
+    private function getStandardsParametersData(string $indentsCommentsWithoutParent): StandardParametersData
     {
-        return new StandardParametersData(4, 4, 4, YamlStandardConfigDefinition::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_SHORT);
+        return new StandardParametersData(4, 4, 4, YamlStandardConfigDefinition::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_SHORT, $indentsCommentsWithoutParent);
     }
 }

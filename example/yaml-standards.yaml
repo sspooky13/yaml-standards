@@ -10,7 +10,7 @@
                 { depth: 4 } # max depth to check, optional, by default it is 4
         -   pathToChecker: YamlStandards\Model\YamlIndent\YamlIndentChecker
             parameters:
-                { indents: 4 } # count of indents which files must observe, optional, by default it is 4
+                { indents: 4, indentsCommentWithoutParent: default/preserved } # count of indents which files must observe, preserve indents for comment lines without parent (comment line at the end of file); optional, by default it is '4' and 'default'
         -   pathToChecker: YamlStandards\Model\YamlSpacesBetweenGroups\YamlSpacesBetweenGroupsChecker
             parameters:
                 { level: 2 } # max level to check, optional, by default it is 2

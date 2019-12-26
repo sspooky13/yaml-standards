@@ -70,7 +70,8 @@ class YamlStandardConfigLoader
             $indents = $parameters[YamlStandardConfigDefinition::CONFIG_PARAMETERS_INDENTS];
             $level = $parameters[YamlStandardConfigDefinition::CONFIG_PARAMETERS_LEVEL];
             $serviceAliasingType = $parameters[YamlStandardConfigDefinition::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE];
-            $parametersClass = new StandardParametersData($depth, $indents, $level, $serviceAliasingType);
+            $indentsCommentsWithoutParent = $parameters[YamlStandardConfigDefinition::CONFIG_PARAMETERS_INDENTS_COMMENTS_WITHOUT_PARENT];
+            $parametersClass = new StandardParametersData($depth, $indents, $level, $serviceAliasingType, $indentsCommentsWithoutParent);
 
             $yamlStandardConfigsSingleCheckerData[] = new YamlStandardConfigSingleStandardData($checkerClass, $fixerClass, $parametersClass);
         }

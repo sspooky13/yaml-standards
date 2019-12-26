@@ -1,6 +1,12 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- Config: add new parameter for preserve indents comment lines without parent
+    - Yaml indents: don't change indents for comment line without parent if is set 'preserved' parameter
+
+### Fixed
+- Yaml indent: fix issue with file ending with comment line
 
 ## [5.0.0] - 2019-12-15
 ### Added
