@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [5.1.1] - 2019-12-27
 ### Fixed
 - Yaml empty line at end: correct fix file with one non-blank line
 
@@ -178,7 +180,8 @@ patchesJson6902:
 [#14]: https://github.com/sspooky13/yaml-standards/issues/14
 [#13]: https://github.com/sspooky13/yaml-standards/pull/13
 
-[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/5.1.0...HEAD
+[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/5.1.1...HEAD
+[5.1.1]: https://github.com/sspooky13/yaml-standards/compare/5.1.0...5.1.1
 [5.1.0]: https://github.com/sspooky13/yaml-standards/compare/5.0.0...5.1.0
 [5.0.0]: https://github.com/sspooky13/yaml-standards/compare/4.2.5...5.0.0
 [4.2.5]: https://github.com/sspooky13/yaml-standards/compare/4.2.4...4.2.5
