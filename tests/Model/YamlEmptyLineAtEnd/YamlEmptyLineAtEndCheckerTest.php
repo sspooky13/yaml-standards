@@ -21,6 +21,7 @@ class YamlEmptyLineAtEndCheckerTest extends TestCase
             __DIR__ . '/resource/unfixed/symfony-route.yml',
             __DIR__ . '/resource/unfixed/symfony-security.yml',
             __DIR__ . '/resource/unfixed/symfony-service.yml',
+            __DIR__ . '/resource/unfixed/version.yaml',
             __DIR__ . '/resource/unfixed/yaml-getting-started.yml',
         ];
         $yamlEmptyLineAtEndChecker = new YamlEmptyLineAtEndChecker();
@@ -40,6 +41,7 @@ class YamlEmptyLineAtEndCheckerTest extends TestCase
             __DIR__ . '/resource/fixed/symfony-route.yml',
             __DIR__ . '/resource/fixed/symfony-security.yml',
             __DIR__ . '/resource/fixed/symfony-service.yml',
+            __DIR__ . '/resource/fixed/version.yaml',
             __DIR__ . '/resource/fixed/yaml-getting-started.yml',
         ];
         $yamlEmptyLineAtEndChecker = new YamlEmptyLineAtEndChecker();

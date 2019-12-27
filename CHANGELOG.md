@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Fixed
+- Yaml empty line at end: correct fix file with one non-blank line
 
 ## [5.1.0] - 2019-12-26
 ### Added

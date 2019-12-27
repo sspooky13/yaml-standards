@@ -19,17 +19,15 @@ class YamlEmptyLineAtEndDataFactory
         $lastKey = end($keys);
 
         foreach ($reversedYamlLines as $key => $yamlLine) {
-            if ($key === $lastKey) {
-                $yamlLines = [''];
-                break;
-            }
             if (YamlService::isLineNotBlank($yamlLine)) {
                 $yamlLines = array_slice($yamlLines, 0, $key + 1);
                 $yamlLines[] = '';
                 break;
             }
-
-            continue;
+            if ($key === $lastKey) {
+                $yamlLines = [''];
+                break;
+            }
         }
 
         return $yamlLines;

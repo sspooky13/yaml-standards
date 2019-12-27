@@ -37,4 +37,14 @@ class YamlEmptyLineAtEndDataFactoryTest extends TestCase
 
         $this->assertSame($rightYamlLines, $correctYamlLines);
     }
+
+    public function testGetCorrectYamlLinesForVersionLine(): void
+    {
+        $yamlLines = ['1.0.0: Initial version', '', '', ''];
+        $correctYamlLines = ['1.0.0: Initial version', ''];
+
+        $rightYamlLines = YamlEmptyLineAtEndDataFactory::getCorrectYamlContent($yamlLines);
+
+        $this->assertSame($rightYamlLines, $correctYamlLines);
+    }
 }
