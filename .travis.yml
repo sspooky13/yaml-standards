@@ -17,8 +17,110 @@ cache:
 jobs:
     exclude:
         # symfony/console fails on "YamlStandards\Command\YamlCommandTest::testCorrectRunCommandForFix -> Trying to access array offset on value of type int" and I think it's not necessary fix it, so I skip it
-        - php: '7.4'
-          env: DEPENDENCIES=lowest
+        -   php: '7.4'
+            env: DEPENDENCIES=lowest
+    include:
+        -   name: "PHP: 7.1"
+            language: sh
+            os: windows
+            env:
+                - PHP_VERSION=7.1.31
+                - DEPENDENCIES=lowest
+            install:
+                - git config --global core.autocrlf input
+                - git clone https://github.com/$TRAVIS_REPO_SLUG.git $TRAVIS_REPO_SLUG
+                - cd $TRAVIS_REPO_SLUG
+                - git checkout -qf $TRAVIS_COMMIT
+            before_script:
+                ./.github/build/travis-windows-build-before-script.sh
+            script: skip
+        -   name: "PHP: 7.1"
+            language: sh
+            os: windows
+            env:
+                - PHP_VERSION=7.1.31
+                - DEPENDENCIES=highest
+            install:
+                - git config --global core.autocrlf input
+                - git clone https://github.com/$TRAVIS_REPO_SLUG.git $TRAVIS_REPO_SLUG
+                - cd $TRAVIS_REPO_SLUG
+                - git checkout -qf $TRAVIS_COMMIT
+            before_script:
+                ./.github/build/travis-windows-build-before-script.sh
+            script: skip
+
+        -   name: "PHP: 7.2"
+            language: sh
+            os: windows
+            env:
+                - PHP_VERSION=7.2.20
+                - DEPENDENCIES=lowest
+            install:
+                - git config --global core.autocrlf input
+                - git clone https://github.com/$TRAVIS_REPO_SLUG.git $TRAVIS_REPO_SLUG
+                - cd $TRAVIS_REPO_SLUG
+                - git checkout -qf $TRAVIS_COMMIT
+            before_script:
+                ./.github/build/travis-windows-build-before-script.sh
+            script: skip
+        -   name: "PHP: 7.2"
+            language: sh
+            os: windows
+            env:
+                - PHP_VERSION=7.2.20
+                - DEPENDENCIES=highest
+            install:
+                - git config --global core.autocrlf input
+                - git clone https://github.com/$TRAVIS_REPO_SLUG.git $TRAVIS_REPO_SLUG
+                - cd $TRAVIS_REPO_SLUG
+                - git checkout -qf $TRAVIS_COMMIT
+            before_script:
+                ./.github/build/travis-windows-build-before-script.sh
+            script: skip
+
+        -   name: "PHP: 7.3"
+            language: sh
+            os: windows
+            env:
+                - PHP_VERSION=7.3.8
+                - DEPENDENCIES=lowest
+            install:
+                - git config --global core.autocrlf input
+                - git clone https://github.com/$TRAVIS_REPO_SLUG.git $TRAVIS_REPO_SLUG
+                - cd $TRAVIS_REPO_SLUG
+                - git checkout -qf $TRAVIS_COMMIT
+            before_script:
+                ./.github/build/travis-windows-build-before-script.sh
+            script: skip
+        -   name: "PHP: 7.3"
+            language: sh
+            os: windows
+            env:
+                - PHP_VERSION=7.3.8
+                - DEPENDENCIES=highest
+            install:
+                - git config --global core.autocrlf input
+                - git clone https://github.com/$TRAVIS_REPO_SLUG.git $TRAVIS_REPO_SLUG
+                - cd $TRAVIS_REPO_SLUG
+                - git checkout -qf $TRAVIS_COMMIT
+            before_script:
+                ./.github/build/travis-windows-build-before-script.sh
+            script: skip
+
+        -   name: "PHP: 7.4"
+            language: sh
+            os: windows
+            env:
+                - PHP_VERSION=7.4.1
+                - DEPENDENCIES=highest
+            install:
+                - git config --global core.autocrlf input
+                - git clone https://github.com/$TRAVIS_REPO_SLUG.git $TRAVIS_REPO_SLUG
+                - cd $TRAVIS_REPO_SLUG
+                - git checkout -qf $TRAVIS_COMMIT
+            before_script:
+                ./.github/build/travis-windows-build-before-script.sh
+            script: skip
 
 before_script:
     - composer self-update
