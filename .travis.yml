@@ -23,6 +23,7 @@ jobs:
         -   name: "PHP: 7.1"
             language: sh
             os: windows
+            stage: 'Windows'
             env:
                 - PHP_VERSION=7.1.31
                 - DEPENDENCIES=lowest
@@ -37,6 +38,7 @@ jobs:
         -   name: "PHP: 7.1"
             language: sh
             os: windows
+            stage: 'Windows'
             env:
                 - PHP_VERSION=7.1.31
                 - DEPENDENCIES=highest
@@ -52,6 +54,7 @@ jobs:
         -   name: "PHP: 7.2"
             language: sh
             os: windows
+            stage: 'Windows'
             env:
                 - PHP_VERSION=7.2.20
                 - DEPENDENCIES=lowest
@@ -66,6 +69,7 @@ jobs:
         -   name: "PHP: 7.2"
             language: sh
             os: windows
+            stage: 'Windows'
             env:
                 - PHP_VERSION=7.2.20
                 - DEPENDENCIES=highest
@@ -81,6 +85,7 @@ jobs:
         -   name: "PHP: 7.3"
             language: sh
             os: windows
+            stage: 'Windows'
             env:
                 - PHP_VERSION=7.3.8
                 - DEPENDENCIES=lowest
@@ -95,6 +100,7 @@ jobs:
         -   name: "PHP: 7.3"
             language: sh
             os: windows
+            stage: 'Windows'
             env:
                 - PHP_VERSION=7.3.8
                 - DEPENDENCIES=highest
@@ -110,6 +116,7 @@ jobs:
         -   name: "PHP: 7.4"
             language: sh
             os: windows
+            stage: 'Windows'
             env:
                 - PHP_VERSION=7.4.1
                 - DEPENDENCIES=highest
@@ -126,6 +133,7 @@ jobs:
         -   name: "PHP: 7.1"
             language: sh
             os: osx
+            stage: 'OSX'
             env:
                 - PHP_VERSION=7.1
                 - DEPENDENCIES=lowest
@@ -139,6 +147,7 @@ jobs:
         -   name: "PHP: 7.1"
             language: sh
             os: osx
+            stage: 'OSX'
             env:
                 - PHP_VERSION=7.1
                 - DEPENDENCIES=highest
@@ -153,6 +162,7 @@ jobs:
         -   name: "PHP: 7.2"
             language: sh
             os: osx
+            stage: 'OSX'
             env:
                 - PHP_VERSION=7.2
                 - DEPENDENCIES=lowest
@@ -166,6 +176,7 @@ jobs:
         -   name: "PHP: 7.2"
             language: sh
             os: osx
+            stage: 'OSX'
             env:
                 - PHP_VERSION=7.2
                 - DEPENDENCIES=highest
@@ -182,6 +193,7 @@ jobs:
         -   name: "PHP: 7.4"
             language: sh
             os: osx
+            stage: 'OSX'
             env:
                 - PHP_VERSION=7.4
                 - DEPENDENCIES=highest
