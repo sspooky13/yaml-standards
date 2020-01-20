@@ -10,6 +10,9 @@ env:
     - DEPENDENCIES=lowest
     - DEPENDENCIES=highest
 
+git:
+    autocrlf: input
+
 cache:
     directories:
         - ~/.composer/cache
@@ -27,11 +30,6 @@ jobs:
             env:
                 - PHP_VERSION=7.1.31
                 - DEPENDENCIES=lowest
-            install:
-                - git config --global core.autocrlf input
-                - git clone https://github.com/$TRAVIS_REPO_SLUG.git $TRAVIS_REPO_SLUG
-                - cd $TRAVIS_REPO_SLUG
-                - git checkout -qf $TRAVIS_COMMIT
             before_script:
                 ./.github/build/travis-windows-build-before-script.sh
             script: skip
@@ -42,11 +40,6 @@ jobs:
             env:
                 - PHP_VERSION=7.1.31
                 - DEPENDENCIES=highest
-            install:
-                - git config --global core.autocrlf input
-                - git clone https://github.com/$TRAVIS_REPO_SLUG.git $TRAVIS_REPO_SLUG
-                - cd $TRAVIS_REPO_SLUG
-                - git checkout -qf $TRAVIS_COMMIT
             before_script:
                 ./.github/build/travis-windows-build-before-script.sh
             script: skip
@@ -58,11 +51,6 @@ jobs:
             env:
                 - PHP_VERSION=7.2.20
                 - DEPENDENCIES=lowest
-            install:
-                - git config --global core.autocrlf input
-                - git clone https://github.com/$TRAVIS_REPO_SLUG.git $TRAVIS_REPO_SLUG
-                - cd $TRAVIS_REPO_SLUG
-                - git checkout -qf $TRAVIS_COMMIT
             before_script:
                 ./.github/build/travis-windows-build-before-script.sh
             script: skip
@@ -73,11 +61,6 @@ jobs:
             env:
                 - PHP_VERSION=7.2.20
                 - DEPENDENCIES=highest
-            install:
-                - git config --global core.autocrlf input
-                - git clone https://github.com/$TRAVIS_REPO_SLUG.git $TRAVIS_REPO_SLUG
-                - cd $TRAVIS_REPO_SLUG
-                - git checkout -qf $TRAVIS_COMMIT
             before_script:
                 ./.github/build/travis-windows-build-before-script.sh
             script: skip
@@ -89,11 +72,6 @@ jobs:
             env:
                 - PHP_VERSION=7.3.8
                 - DEPENDENCIES=lowest
-            install:
-                - git config --global core.autocrlf input
-                - git clone https://github.com/$TRAVIS_REPO_SLUG.git $TRAVIS_REPO_SLUG
-                - cd $TRAVIS_REPO_SLUG
-                - git checkout -qf $TRAVIS_COMMIT
             before_script:
                 ./.github/build/travis-windows-build-before-script.sh
             script: skip
@@ -104,11 +82,6 @@ jobs:
             env:
                 - PHP_VERSION=7.3.8
                 - DEPENDENCIES=highest
-            install:
-                - git config --global core.autocrlf input
-                - git clone https://github.com/$TRAVIS_REPO_SLUG.git $TRAVIS_REPO_SLUG
-                - cd $TRAVIS_REPO_SLUG
-                - git checkout -qf $TRAVIS_COMMIT
             before_script:
                 ./.github/build/travis-windows-build-before-script.sh
             script: skip
@@ -120,11 +93,6 @@ jobs:
             env:
                 - PHP_VERSION=7.4.1
                 - DEPENDENCIES=highest
-            install:
-                - git config --global core.autocrlf input
-                - git clone https://github.com/$TRAVIS_REPO_SLUG.git $TRAVIS_REPO_SLUG
-                - cd $TRAVIS_REPO_SLUG
-                - git checkout -qf $TRAVIS_COMMIT
             before_script:
                 ./.github/build/travis-windows-build-before-script.sh
             script: skip
