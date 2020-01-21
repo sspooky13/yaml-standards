@@ -109,9 +109,6 @@ jobs:
                 homebrew:
                     packages:
                         - composer
-            install:
-                - curl -s http://php-osx.liip.ch/install.sh | bash -s ${PHP_VERSION}
-                - export PATH=/usr/local/php5/bin:$PATH
         -   name: "PHP: 7.1"
             language: sh
             os: osx
@@ -123,9 +120,6 @@ jobs:
                 homebrew:
                     packages:
                         - composer
-            install:
-                - curl -s http://php-osx.liip.ch/install.sh | bash -s ${PHP_VERSION}
-                - export PATH=/usr/local/php5/bin:$PATH
 
         -   name: "PHP: 7.2"
             language: sh
@@ -138,9 +132,6 @@ jobs:
                 homebrew:
                     packages:
                         - composer
-            install:
-                - curl -s http://php-osx.liip.ch/install.sh | bash -s ${PHP_VERSION}
-                - export PATH=/usr/local/php5/bin:$PATH
         -   name: "PHP: 7.2"
             language: sh
             os: osx
@@ -152,9 +143,6 @@ jobs:
                 homebrew:
                     packages:
                         - composer
-            install:
-                - curl -s http://php-osx.liip.ch/install.sh | bash -s ${PHP_VERSION}
-                - export PATH=/usr/local/php5/bin:$PATH
 
         # build for PHP 7.3 is skipped because it's error in PHP https://bugs.php.net/bug.php?id=77260 'preg_match(): JIT compilation failed: no more memory in phar' and I don't know how to fix it
 
@@ -169,9 +157,13 @@ jobs:
                 homebrew:
                     packages:
                         - composer
-            install:
-                - curl -s http://php-osx.liip.ch/install.sh | bash -s ${PHP_VERSION}
-                - export PATH=/usr/local/php5/bin:$PATH
+
+install:
+    - |
+        if [ $TRAVIS_OS_NAME = osx ]; then
+            curl -s http://php-osx.liip.ch/install.sh | bash -s ${PHP_VERSION}
+            export PATH=/usr/local/php5/bin:$PATH
+        fi;
 
 before_script:
     - composer self-update
