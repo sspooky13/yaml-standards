@@ -30,9 +30,6 @@ jobs:
             env:
                 - PHP_VERSION=7.1.31
                 - DEPENDENCIES=lowest
-            before_script:
-                ./.github/build/travis-windows-build-before-script.sh
-            script: skip
         -   name: "PHP: 7.1"
             language: sh
             os: windows
@@ -40,9 +37,6 @@ jobs:
             env:
                 - PHP_VERSION=7.1.31
                 - DEPENDENCIES=highest
-            before_script:
-                ./.github/build/travis-windows-build-before-script.sh
-            script: skip
 
         -   name: "PHP: 7.2"
             language: sh
@@ -51,9 +45,6 @@ jobs:
             env:
                 - PHP_VERSION=7.2.20
                 - DEPENDENCIES=lowest
-            before_script:
-                ./.github/build/travis-windows-build-before-script.sh
-            script: skip
         -   name: "PHP: 7.2"
             language: sh
             os: windows
@@ -61,9 +52,6 @@ jobs:
             env:
                 - PHP_VERSION=7.2.20
                 - DEPENDENCIES=highest
-            before_script:
-                ./.github/build/travis-windows-build-before-script.sh
-            script: skip
 
         -   name: "PHP: 7.3"
             language: sh
@@ -72,9 +60,6 @@ jobs:
             env:
                 - PHP_VERSION=7.3.8
                 - DEPENDENCIES=lowest
-            before_script:
-                ./.github/build/travis-windows-build-before-script.sh
-            script: skip
         -   name: "PHP: 7.3"
             language: sh
             os: windows
@@ -82,9 +67,6 @@ jobs:
             env:
                 - PHP_VERSION=7.3.8
                 - DEPENDENCIES=highest
-            before_script:
-                ./.github/build/travis-windows-build-before-script.sh
-            script: skip
 
         -   name: "PHP: 7.4"
             language: sh
@@ -93,10 +75,6 @@ jobs:
             env:
                 - PHP_VERSION=7.4.1
                 - DEPENDENCIES=highest
-            before_script:
-                ./.github/build/travis-windows-build-before-script.sh
-            script: skip
-
 
         -   name: "PHP: 7.1"
             language: sh
@@ -166,6 +144,22 @@ install:
         fi;
 
 before_script:
+    - |
+        if [ $TRAVIS_OS_NAME = windows ]; then
+            # install php
+            choco install php --version ${PHP_VERSION} --package-parameters='"/InstallDir:C:\php"'
+            export PATH=/c/php:$PATH
+
+            # Enable extensions
+            PHP_EXTENSIONS="openssl mbstring curl"
+            for php_ext in $PHP_EXTENSIONS ; do sed -i -e "s/^;extension=${php_ext}/extension=${php_ext}/" /c/php/php.ini ; done
+            # PHP 7.1 has name of extensions different as other higher versions
+            for php_ext in $PHP_EXTENSIONS ; do sed -i -e "s/^;extension=php_${php_ext}/extension=php_${php_ext}/" /c/php/php.ini ; done
+
+            # install composer
+            choco install composer
+            export PATH=/c/ProgramData/ComposerSetup/bin:$PATH
+        fi;
     - composer self-update
     - composer global require hirak/prestissimo
     - if [ "${DEPENDENCIES}" = "lowest" ]; then composer update --prefer-lowest --prefer-dist --no-interaction --no-progress; fi;
