@@ -10,6 +10,9 @@ env:
     - DEPENDENCIES=lowest
     - DEPENDENCIES=highest
 
+git:
+    autocrlf: input
+
 cache:
     directories:
         - ~/.composer/cache
@@ -17,10 +20,49 @@ cache:
 jobs:
     exclude:
         # symfony/console fails on "YamlStandards\Command\YamlCommandTest::testCorrectRunCommandForFix -> Trying to access array offset on value of type int" and I think it's not necessary fix it, so I skip it
-        - php: '7.4'
-          env: DEPENDENCIES=lowest
+        -   php: '7.4'
+            env: DEPENDENCIES=lowest
+    include:
+        # Windows
+        - { name: 'PHP: 7.1', language: sh, os: windows, stage: Windows, env: [PHP_VERSION=7.1.31, DEPENDENCIES=lowest] }
+        - { name: 'PHP: 7.1', language: sh, os: windows, stage: Windows, env: [PHP_VERSION=7.1.31, DEPENDENCIES=highest] }
+        - { name: 'PHP: 7.2', language: sh, os: windows, stage: Windows, env: [PHP_VERSION=7.2.20, DEPENDENCIES=lowest] }
+        - { name: 'PHP: 7.2', language: sh, os: windows, stage: Windows, env: [PHP_VERSION=7.2.20, DEPENDENCIES=highest] }
+        - { name: 'PHP: 7.3', language: sh, os: windows, stage: Windows, env: [PHP_VERSION=7.3.8, DEPENDENCIES=lowest] }
+        - { name: 'PHP: 7.3', language: sh, os: windows, stage: Windows, env: [PHP_VERSION=7.3.8, DEPENDENCIES=highest] }
+        - { name: 'PHP: 7.4', language: sh, os: windows, stage: Windows, env: [PHP_VERSION=7.4.1, DEPENDENCIES=highest] }
+        # OSX
+        - { name: 'PHP: 7.1', language: sh, os: osx, stage: OSX, env: [PHP_VERSION=7.1, DEPENDENCIES=lowest], addons: { homebrew: { packages: [composer] } } }
+        - { name: 'PHP: 7.1', language: sh, os: osx, stage: OSX, env: [PHP_VERSION=7.1, DEPENDENCIES=highest], addons: { homebrew: { packages: [composer] } } }
+        - { name: 'PHP: 7.2', language: sh, os: osx, stage: OSX, env: [PHP_VERSION=7.2, DEPENDENCIES=lowest], addons: { homebrew: { packages: [composer] } } }
+        - { name: 'PHP: 7.2', language: sh, os: osx, stage: OSX, env: [PHP_VERSION=7.2, DEPENDENCIES=highest], addons: { homebrew: { packages: [composer] } } }
+        # build for PHP 7.3 is skipped because it's error in PHP https://bugs.php.net/bug.php?id=77260 'preg_match(): JIT compilation failed: no more memory in phar' and I don't know how to fix it
+        - { name: 'PHP: 7.4', language: sh, os: osx, stage: OSX, env: [PHP_VERSION=7.4, DEPENDENCIES=highest], addons: { homebrew: { packages: [composer] } } }
+
+install:
+    - |
+        if [ $TRAVIS_OS_NAME = osx ]; then
+            curl -s http://php-osx.liip.ch/install.sh | bash -s ${PHP_VERSION}
+            export PATH=/usr/local/php5/bin:$PATH
+        fi;
 
 before_script:
+    - |
+        if [ $TRAVIS_OS_NAME = windows ]; then
+            # install php
+            choco install php --version ${PHP_VERSION} --package-parameters='"/InstallDir:C:\php"'
+            export PATH=/c/php:$PATH
+
+            # Enable extensions
+            PHP_EXTENSIONS="openssl mbstring curl"
+            for php_ext in $PHP_EXTENSIONS ; do sed -i -e "s/^;extension=${php_ext}/extension=${php_ext}/" /c/php/php.ini ; done
+            # PHP 7.1 has name of extensions different as other higher versions
+            for php_ext in $PHP_EXTENSIONS ; do sed -i -e "s/^;extension=php_${php_ext}/extension=php_${php_ext}/" /c/php/php.ini ; done
+
+            # install composer
+            choco install composer
+            export PATH=/c/ProgramData/ComposerSetup/bin:$PATH
+        fi;
     - composer self-update
     - composer global require hirak/prestissimo
     - if [ "${DEPENDENCIES}" = "lowest" ]; then composer update --prefer-lowest --prefer-dist --no-interaction --no-progress; fi;
