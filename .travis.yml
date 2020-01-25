@@ -23,118 +23,21 @@ jobs:
         -   php: '7.4'
             env: DEPENDENCIES=lowest
     include:
-        -   name: "PHP: 7.1"
-            language: sh
-            os: windows
-            stage: 'Windows'
-            env:
-                - PHP_VERSION=7.1.31
-                - DEPENDENCIES=lowest
-        -   name: "PHP: 7.1"
-            language: sh
-            os: windows
-            stage: 'Windows'
-            env:
-                - PHP_VERSION=7.1.31
-                - DEPENDENCIES=highest
-
-        -   name: "PHP: 7.2"
-            language: sh
-            os: windows
-            stage: 'Windows'
-            env:
-                - PHP_VERSION=7.2.20
-                - DEPENDENCIES=lowest
-        -   name: "PHP: 7.2"
-            language: sh
-            os: windows
-            stage: 'Windows'
-            env:
-                - PHP_VERSION=7.2.20
-                - DEPENDENCIES=highest
-
-        -   name: "PHP: 7.3"
-            language: sh
-            os: windows
-            stage: 'Windows'
-            env:
-                - PHP_VERSION=7.3.8
-                - DEPENDENCIES=lowest
-        -   name: "PHP: 7.3"
-            language: sh
-            os: windows
-            stage: 'Windows'
-            env:
-                - PHP_VERSION=7.3.8
-                - DEPENDENCIES=highest
-
-        -   name: "PHP: 7.4"
-            language: sh
-            os: windows
-            stage: 'Windows'
-            env:
-                - PHP_VERSION=7.4.1
-                - DEPENDENCIES=highest
-
-        -   name: "PHP: 7.1"
-            language: sh
-            os: osx
-            stage: 'OSX'
-            env:
-                - PHP_VERSION=7.1
-                - DEPENDENCIES=lowest
-            addons:
-                homebrew:
-                    packages:
-                        - composer
-        -   name: "PHP: 7.1"
-            language: sh
-            os: osx
-            stage: 'OSX'
-            env:
-                - PHP_VERSION=7.1
-                - DEPENDENCIES=highest
-            addons:
-                homebrew:
-                    packages:
-                        - composer
-
-        -   name: "PHP: 7.2"
-            language: sh
-            os: osx
-            stage: 'OSX'
-            env:
-                - PHP_VERSION=7.2
-                - DEPENDENCIES=lowest
-            addons:
-                homebrew:
-                    packages:
-                        - composer
-        -   name: "PHP: 7.2"
-            language: sh
-            os: osx
-            stage: 'OSX'
-            env:
-                - PHP_VERSION=7.2
-                - DEPENDENCIES=highest
-            addons:
-                homebrew:
-                    packages:
-                        - composer
-
+        # Windows
+        - { name: 'PHP: 7.1', language: sh, os: windows, stage: Windows, env: [PHP_VERSION=7.1.31, DEPENDENCIES=lowest] }
+        - { name: 'PHP: 7.1', language: sh, os: windows, stage: Windows, env: [PHP_VERSION=7.1.31, DEPENDENCIES=highest] }
+        - { name: 'PHP: 7.2', language: sh, os: windows, stage: Windows, env: [PHP_VERSION=7.2.20, DEPENDENCIES=lowest] }
+        - { name: 'PHP: 7.2', language: sh, os: windows, stage: Windows, env: [PHP_VERSION=7.2.20, DEPENDENCIES=highest] }
+        - { name: 'PHP: 7.3', language: sh, os: windows, stage: Windows, env: [PHP_VERSION=7.3.8, DEPENDENCIES=lowest] }
+        - { name: 'PHP: 7.3', language: sh, os: windows, stage: Windows, env: [PHP_VERSION=7.3.8, DEPENDENCIES=highest] }
+        - { name: 'PHP: 7.4', language: sh, os: windows, stage: Windows, env: [PHP_VERSION=7.4.1, DEPENDENCIES=highest] }
+        # OSX
+        - { name: 'PHP: 7.1', language: sh, os: osx, stage: OSX, env: [PHP_VERSION=7.1, DEPENDENCIES=lowest], addons: { homebrew: { packages: [composer] } } }
+        - { name: 'PHP: 7.1', language: sh, os: osx, stage: OSX, env: [PHP_VERSION=7.1, DEPENDENCIES=highest], addons: { homebrew: { packages: [composer] } } }
+        - { name: 'PHP: 7.2', language: sh, os: osx, stage: OSX, env: [PHP_VERSION=7.2, DEPENDENCIES=lowest], addons: { homebrew: { packages: [composer] } } }
+        - { name: 'PHP: 7.2', language: sh, os: osx, stage: OSX, env: [PHP_VERSION=7.2, DEPENDENCIES=highest], addons: { homebrew: { packages: [composer] } } }
         # build for PHP 7.3 is skipped because it's error in PHP https://bugs.php.net/bug.php?id=77260 'preg_match(): JIT compilation failed: no more memory in phar' and I don't know how to fix it
-
-        -   name: "PHP: 7.4"
-            language: sh
-            os: osx
-            stage: 'OSX'
-            env:
-                - PHP_VERSION=7.4
-                - DEPENDENCIES=highest
-            addons:
-                homebrew:
-                    packages:
-                        - composer
+        - { name: 'PHP: 7.4', language: sh, os: osx, stage: OSX, env: [PHP_VERSION=7.4, DEPENDENCIES=highest], addons: { homebrew: { packages: [composer] } } }
 
 install:
     - |
