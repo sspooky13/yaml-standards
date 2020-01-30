@@ -60,3 +60,12 @@ services:
 
     app.mailer.third:
         alias: App\Mail\PhpMailer
+
+    app.mailer.fourth:
+        alias: app.mailer.second
+
+    app.mailer.fifth:
+        alias: 'app.mailer.second'
+
+    app.mailer.sixth:
+        alias: "app.mailer.second"

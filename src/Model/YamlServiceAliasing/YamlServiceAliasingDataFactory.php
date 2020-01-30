@@ -44,17 +44,17 @@ class YamlServiceAliasingDataFactory
                 $explodedLine = explode(':', $yamlLine);
                 [$lineKey, $lineValue] = $explodedLine;
                 $trimmedLineValue = trim($lineValue);
+                $replacedLineValue = str_replace(['@', '\'', '"'], '', $trimmedLineValue);
 
                 if ($type === YamlStandardConfigDefinition::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_SHORT) {
                     $key--;
                     $prevYamlLine = $yamlLines[$key];
-                    $yamlLines[$key] = $prevYamlLine . ' \'@' . $trimmedLineValue . '\'';
+                    $yamlLines[$key] = $prevYamlLine . ' \'@' . $replacedLineValue . '\'';
                     unset($yamlLines[$key + 1]); // remove `alias:` line
                 } else {
                     $countOfRowIndents = YamlService::rowIndentsOf($yamlLine);
                     $nextIndents = $standardParametersData->getIndents(); // `alias:` is child so I need add extra indents
                     $indents = YamlService::createCorrectIndentsByCountOfIndents($countOfRowIndents + $nextIndents);
-                    $replacedLineValue = str_replace(['@', '\''], '', $trimmedLineValue);
                     $yamlLines[$key] = $lineKey . ':';
                     $yamlLines[$key . 'alias'] = $indents . 'alias: ' . $replacedLineValue;
                 }

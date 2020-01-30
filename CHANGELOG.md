@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Fixed
+- Yaml service aliasing: get correct short type if alias has double quotes
 
 ## [5.1.1] - 2019-12-27
 ### Fixed

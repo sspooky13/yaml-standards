@@ -58,3 +58,9 @@ services:
     app.mailer.second: '@App\Mail\PhpMailer'
 
     app.mailer.third: '@App\Mail\PhpMailer'
+
+    app.mailer.fourth: '@app.mailer.second'
+
+    app.mailer.fifth: '@app.mailer.second'
+
+    app.mailer.sixth: '@app.mailer.second'
