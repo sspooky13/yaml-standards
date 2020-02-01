@@ -23,6 +23,16 @@ jobs:
         -   php: '7.4'
             env: DEPENDENCIES=lowest
     include:
+        # build all symfony versions
+        - { php: 7.1, env: [DEPENDENCIES=highest, SYMFONY_VERSION=^3.0] }
+        - { php: 7.2, env: [DEPENDENCIES=highest, SYMFONY_VERSION=^3.0] }
+        - { php: 7.3, env: [DEPENDENCIES=highest, SYMFONY_VERSION=^3.0] }
+        - { php: 7.4, env: [DEPENDENCIES=highest, SYMFONY_VERSION=^3.0] }
+        - { php: 7.1, env: [DEPENDENCIES=highest, SYMFONY_VERSION=^4.0.10] }
+        - { php: 7.2, env: [DEPENDENCIES=highest, SYMFONY_VERSION=^4.0.10] }
+        - { php: 7.3, env: [DEPENDENCIES=highest, SYMFONY_VERSION=^4.0.10] }
+        - { php: 7.4, env: [DEPENDENCIES=highest, SYMFONY_VERSION=^4.0.10] }
+        # I can't install composer for symfony 5 versions because shopsys/coding-standards blocked symplify/easy-coding-standard and he blocked symfony packages to max symfony 4 versions. At this moment it's not necessary to run builds for symfony 5 versions because I think it's working but in future, I want to resolve this
         # Windows
         - { name: 'PHP: 7.1', language: sh, os: windows, stage: Windows, env: [PHP_VERSION=7.1.31, DEPENDENCIES=lowest] }
         - { name: 'PHP: 7.1', language: sh, os: windows, stage: Windows, env: [PHP_VERSION=7.1.31, DEPENDENCIES=highest] }
@@ -65,8 +75,9 @@ before_script:
         fi;
     - composer self-update
     - composer global require hirak/prestissimo
-    - if [ "${DEPENDENCIES}" = "lowest" ]; then composer update --prefer-lowest --prefer-dist --no-interaction --no-progress; fi;
-    - if [ "${DEPENDENCIES}" = "highest" ]; then composer update --prefer-dist --no-interaction --no-progress; fi;
+    - if [[ "${SYMFONY_VERSION}" != "" ]]; then composer require --no-update "symfony/console:${SYMFONY_VERSION}" "symfony/config:${SYMFONY_VERSION}" "symfony/yaml:${SYMFONY_VERSION}"; fi;
+    - if [ "${DEPENDENCIES}" = "lowest" ]; then composer update --prefer-lowest; fi;
+    - if [ "${DEPENDENCIES}" = "highest" ]; then composer update; fi;
 
 script:
     - vendor/bin/phing build-ci
