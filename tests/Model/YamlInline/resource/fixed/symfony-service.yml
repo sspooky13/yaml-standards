@@ -1,0 +1,25 @@
+parameters:
+    locale: en
+    app_locales: en|fr|de|es|cs|nl|ru|uk|ro|pt_BR|pl|it|ja|id|ca|sl|hr|zh_CN
+    app.notifications.email_sender: anonymous@example.com
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{Entity,Repository,Tests}'
+    App\Controller\:
+        resource: ../src/Controller
+        tags: [controller.service_arguments]
+    App\Command\ListUsersCommand:
+        $emailSender: '%app.notifications.email_sender%'
+    App\Twig\AppExtension:
+        $locales: '%app_locales%'
+    App\EventSubscriber\CommentNotificationSubscriber:
+        $sender: '%app.notifications.email_sender%'
+    App\EventSubscriber\RedirectToPreferredLocaleSubscriber:
+        $locales: '%app_locales%'
+        $defaultLocale: '%locale%'
+    Twig\Extensions\IntlExtension: null
