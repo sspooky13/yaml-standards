@@ -48,20 +48,20 @@ class YamlCountOfParents
                  *      - path/to/file
                  */
                 if ($isArrayLine &&
-                    YamlService::isLineOpeningAnArray($trimmedLine) &&
-                    YamlService::rowIndentsOf($line) === 0 &&
-                    $countOfParents > 0
+                    $countOfParents > 0 &&
+                    YamlService::isLineOpeningAnArray($trimmedLine)
                 ) {
                     $countOfParents--;
                 }
 
                 $countOfParents++;
 
-                /* nested hierarchy in array fix, eg.
-                   - foo:
-                       nested: value
-                     bar: baz
-                */
+                /**
+                 * nested hierarchy in array fix, eg.
+                 * - foo:
+                 *     nested: value
+                 *   bar: baz
+                 */
                 if ($isArrayLine && YamlService::isLineOpeningAnArray($trimmedLine) && YamlService::keyIndentsOf($originalLine) > YamlService::keyIndentsOf($line)) {
                     $countOfParents++;
                 }

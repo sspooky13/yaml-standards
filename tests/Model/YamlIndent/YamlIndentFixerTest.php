@@ -46,6 +46,8 @@ class YamlIndentFixerTest extends TestCase
     {
         $standardParametersData = $this->getStandardsParametersData(YamlStandardConfigDefinition::CONFIG_PARAMETERS_INDENTS_COMMENTS_WITHOUT_PARENT_VALUE_DEFAULT);
         $pathToUnfixedFiles = [
+            __DIR__ . '/resource/unfixed/arraysWithUnquotedColons.yml',
+            __DIR__ . '/resource/unfixed/kubernetes-postgres.yml',
             __DIR__ . '/resource/unfixed/kustomization.yaml',
             __DIR__ . '/resource/unfixed/shopsys-service.yml',
             __DIR__ . '/resource/unfixed/symfony-config.yml',
@@ -56,6 +58,8 @@ class YamlIndentFixerTest extends TestCase
             __DIR__ . '/resource/unfixed/yaml-standards.yaml',
         ];
         $pathToFixedFiles = [
+            __DIR__ . '/resource/fixed/arraysWithUnquotedColons.yml',
+            __DIR__ . '/resource/fixed/kubernetes-postgres.yml',
             __DIR__ . '/resource/fixed/kustomization.yaml',
             __DIR__ . '/resource/fixed/shopsys-service.yml',
             __DIR__ . '/resource/fixed/symfony-config.yml',

@@ -1,6 +1,18 @@
 # Changelog
 
 ## [Unreleased]
+### Fixed
+- Yaml indent: fix get correct indents for array
+```diff
+apiVersion2: v1
+    -   addresses:
+            -   ip: ~
+        ports:
++           -   name: postgres
++               port: 5432
+-                -   name: postgres
+-                    port: 5432
+```
 
 ## [5.1.2] - 2020-02-02
 ### Fixed
