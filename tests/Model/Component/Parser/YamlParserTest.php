@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace YamlStandards\Model\Component;
+namespace YamlStandards\Model\Component\Parser;
 
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class YamlCountOfParentsTest extends TestCase
+class YamlParserTest extends TestCase
 {
     public function testGetRightCountOfParents(): void
     {
@@ -29,7 +29,7 @@ class YamlCountOfParentsTest extends TestCase
         $rightCountOfParents = [2, 2, 2, 2, 2, 3, 1, 1, 2, 1, 3, 0];
 
         foreach ($groupOfYamlLines as $key => $yamlLines) {
-            $countOfParents = YamlCountOfParents::getCountOfParentsForLine($yamlLines, $keyToCheck[$key]);
+            $countOfParents = YamlParser::getCountOfParentsForLine($yamlLines, $keyToCheck[$key]);
 
             $this->assertSame($rightCountOfParents[$key], $countOfParents, sprintf('`%s` has wrong count of parents', implode(',', $yamlLines)));
         }
@@ -37,7 +37,7 @@ class YamlCountOfParentsTest extends TestCase
 
     public function testIsPrevLineNextParent(): void
     {
-        $reflectionClass = new ReflectionClass(YamlCountOfParents::class);
+        $reflectionClass = new ReflectionClass(YamlParser::class);
         $reflectionMethod = $reflectionClass->getMethod('isPrevLineNextParent');
         $reflectionMethod->setAccessible(true);
 
@@ -53,7 +53,7 @@ class YamlCountOfParentsTest extends TestCase
 
     public function testIsClassicHierarchy(): void
     {
-        $reflectionClass = new ReflectionClass(YamlCountOfParents::class);
+        $reflectionClass = new ReflectionClass(YamlParser::class);
         $reflectionMethod = $reflectionClass->getMethod('isClassicHierarchy');
         $reflectionMethod->setAccessible(true);
 
@@ -63,7 +63,7 @@ class YamlCountOfParentsTest extends TestCase
 
     public function testIsStartOfArray(): void
     {
-        $reflectionClass = new ReflectionClass(YamlCountOfParents::class);
+        $reflectionClass = new ReflectionClass(YamlParser::class);
         $reflectionMethod = $reflectionClass->getMethod('isStartOfArray');
         $reflectionMethod->setAccessible(true);
 
@@ -73,7 +73,7 @@ class YamlCountOfParentsTest extends TestCase
 
     public function testIsStartOfArrayInArray(): void
     {
-        $reflectionClass = new ReflectionClass(YamlCountOfParents::class);
+        $reflectionClass = new ReflectionClass(YamlParser::class);
         $reflectionMethod = $reflectionClass->getMethod('isStartOfArrayInArray');
         $reflectionMethod->setAccessible(true);
 

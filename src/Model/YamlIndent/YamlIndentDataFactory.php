@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace YamlStandards\Model\YamlIndent;
 
-use YamlStandards\Model\Component\YamlCountOfParents;
+use YamlStandards\Model\Component\Parser\YamlParser;
 use YamlStandards\Model\Component\YamlService;
 use YamlStandards\Model\Config\StandardParametersData;
 use YamlStandards\Model\Config\YamlStandardConfigDefinition;
@@ -80,7 +80,7 @@ class YamlIndentDataFactory
 
         // children of array, description over name of function
         if ($this->belongLineToArray($fileLines, $key)) {
-            $countOfParents = YamlCountOfParents::getCountOfParentsForLine($fileLines, $key);
+            $countOfParents = YamlParser::getCountOfParentsForLine($fileLines, $key);
             $correctIndents = YamlService::createCorrectIndentsByCountOfIndents($countOfParents * $countOfIndents);
             $trimmedFileLine = trim($fileLine);
 
@@ -91,7 +91,7 @@ class YamlIndentDataFactory
         if (array_key_exists(1, $explodedLine) === false) {
             // is multidimensional array?
             if ($trimmedLine === '-') {
-                $countOfParents = YamlCountOfParents::getCountOfParentsForLine($fileLines, $key);
+                $countOfParents = YamlParser::getCountOfParentsForLine($fileLines, $key);
 
                 $correctIndents = YamlService::createCorrectIndentsByCountOfIndents($countOfParents * $countOfIndents);
                 $trimmedFileLine = trim($fileLine);
@@ -100,7 +100,7 @@ class YamlIndentDataFactory
             }
 
             // is array or string?
-            $countOfParents = YamlCountOfParents::getCountOfParentsForLine($fileLines, $key);
+            $countOfParents = YamlParser::getCountOfParentsForLine($fileLines, $key);
             $correctIndents = YamlService::createCorrectIndentsByCountOfIndents($countOfParents * $countOfIndents);
             $trimmedFileLine = trim($fileLine);
 
@@ -115,7 +115,7 @@ class YamlIndentDataFactory
             // fix situation when key is without value and is not parent, e.g.: "   foo:"
             $nextLine = array_key_exists($key + 1, $fileLines) ? $fileLines[$key + 1] : '';
             if (YamlService::rowIndentsOf($nextLine) > $countOfRowIndents) {
-                $countOfParents = YamlCountOfParents::getCountOfParentsForLine($fileLines, $key);
+                $countOfParents = YamlParser::getCountOfParentsForLine($fileLines, $key);
 
                 $correctIndents = YamlService::createCorrectIndentsByCountOfIndents($countOfParents * $countOfIndents);
                 $trimmedFileLine = trim($fileLine);
@@ -124,7 +124,7 @@ class YamlIndentDataFactory
             }
         }
 
-        $countOfParents = YamlCountOfParents::getCountOfParentsForLine($fileLines, $key);
+        $countOfParents = YamlParser::getCountOfParentsForLine($fileLines, $key);
         $correctIndents = YamlService::createCorrectIndentsByCountOfIndents($countOfParents * $countOfIndents);
         $trimmedFileLine = trim($fileLine);
 
@@ -223,7 +223,7 @@ class YamlIndentDataFactory
         $lineWithReplacedDashToSpace = preg_replace('/-/', ' ', $line, 1);
         $trimmedLineWithoutDash = trim($lineWithReplacedDashToSpace);
 
-        $countOfParents = YamlCountOfParents::getCountOfParentsForLine($fileLines, $key);
+        $countOfParents = YamlParser::getCountOfParentsForLine($fileLines, $key);
         $correctIndentsOnStartOfLine = YamlService::createCorrectIndentsByCountOfIndents($countOfParents * $countOfIndents);
 
         $trimmedFileLine = trim($fileLine);

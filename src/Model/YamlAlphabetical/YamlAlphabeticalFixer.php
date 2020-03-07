@@ -7,19 +7,19 @@ namespace YamlStandards\Model\YamlAlphabetical;
 use SebastianBergmann\Diff\Differ;
 use Symfony\Component\Yaml\Yaml;
 use YamlStandards\Command\ProcessOutput;
-use YamlStandards\Model\AbstractChecker;
+use YamlStandards\Model\AbstractFixer;
 use YamlStandards\Model\Config\StandardParametersData;
 use YamlStandards\Result\Result;
 
 /**
- * Check yaml file is alphabetical sorted
+ * Fix yaml file is alphabetical sorted
  */
-class YamlAlphabeticalChecker extends AbstractChecker
+class YamlAlphabeticalFixer extends AbstractFixer
 {
     /**
      * @inheritDoc
      */
-    public function check(string $pathToYamlFile, StandardParametersData $standardParametersData): Result
+    public function fix(string $pathToYamlFile, string $pathToDumpFixedFile, StandardParametersData $standardParametersData): Result
     {
         $fileContent = file_get_contents($pathToYamlFile);
         $fileContent = str_replace("\r", '', $fileContent); // remove carriage returns
@@ -32,9 +32,11 @@ class YamlAlphabeticalChecker extends AbstractChecker
             return new Result($pathToYamlFile, Result::RESULT_CODE_OK, ProcessOutput::STATUS_CODE_OK);
         }
 
+        file_put_contents($pathToDumpFixedFile, $rightFileContent);
+
         $differ = new Differ();
         $diffBetweenStrings = $differ->diff($fileContent, $rightFileContent);
 
-        return new Result($pathToYamlFile, Result::RESULT_CODE_INVALID_FILE_SYNTAX, ProcessOutput::STATUS_CODE_INVALID_FILE_SYNTAX, $diffBetweenStrings);
+        return new Result($pathToYamlFile, Result::RESULT_CODE_OK, ProcessOutput::STATUS_CODE_INVALID_FILE_SYNTAX, $diffBetweenStrings);
     }
 }

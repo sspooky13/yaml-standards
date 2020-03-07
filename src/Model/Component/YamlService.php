@@ -25,7 +25,7 @@ class YamlService
      */
     public static function hasArrayKeyUnderscoreAsFirstCharacter(string $key): bool
     {
-        return strpos($key, '_') === 0;
+        return strpos(trim($key), '_') === 0;
     }
 
     /**
@@ -34,7 +34,7 @@ class YamlService
      */
     public static function hasNotArrayKeyUnderscoreAsFirstCharacter(string $key): bool
     {
-        return strpos($key, '_') !== 0;
+        return strpos(trim($key), '_') !== 0;
     }
 
     /**
@@ -77,6 +77,17 @@ class YamlService
      * @param string $value
      * @return bool
      */
+    public static function isMultipleLinesValue(string $value): bool
+    {
+        $value = trim($value);
+
+        return strpos($value, '|') === 0 || strpos($value, '>') === 0;
+    }
+
+    /**
+     * @param string $value
+     * @return bool
+     */
     public static function hasLineDashOnStartOfLine(string $value): bool
     {
         return strpos($value, '-') === 0;
@@ -98,6 +109,15 @@ class YamlService
     public static function isCurlyBracketInStartOfString(string $value): bool
     {
         return strpos($value, '{') === 0;
+    }
+
+    /**
+     * @param string $value
+     * @return bool
+     */
+    public static function isCurlyBracketInEndOfString(string $value): bool
+    {
+        return substr($value, -1) === '}';
     }
 
     /**
@@ -178,5 +198,62 @@ class YamlService
     public static function hasLineColon(string $line): bool
     {
         return strpos($line, ':') !== false;
+    }
+
+    /**
+     * @param string $line
+     * @return bool
+     */
+    public static function hasLineOnlyOneDash(string $line): bool
+    {
+        return trim($line) === '-';
+    }
+
+    /**
+     * @param string[] $yamlLines
+     * @return string[]
+     *
+     * @example
+     * foo: | or <
+     *     this is really a
+     *     single line of text
+     *     despite appearances
+     *
+     * to
+     *
+     * foo: | or < \n this is really a \n single line of text \n despite appearances\n
+     */
+    public static function mergeMultipleValueLinesTogether(array $yamlLines): array
+    {
+        foreach ($yamlLines as $yamlLineNumber => $yamlLine) {
+            $explodedCurrentLine = explode(':', $yamlLine);
+            $value = array_key_exists(1, $explodedCurrentLine) ? $explodedCurrentLine[1] : '';
+            if (self::isMultipleLinesValue($value)) {
+                $countOfCurrentLineIndents = self::rowIndentsOf($yamlLine);
+                $explodedLine = explode(':', $yamlLine);
+                $value = $explodedLine[1];
+
+                $value .= "\n";
+                foreach ($yamlLines as $lineNumber => $fileLine) {
+                    if ($lineNumber <= $yamlLineNumber) {
+                        continue;
+                    }
+                    $countOfLineIndents = self::rowIndentsOf($fileLine);
+
+                    if ($countOfLineIndents <= $countOfCurrentLineIndents) {
+                        break;
+                    }
+
+                    $value .= $fileLine . "\n";
+                    unset($yamlLines[$lineNumber]);
+                }
+
+                $yamlLines[$yamlLineNumber] = $explodedCurrentLine[0] . ':' . rtrim($value);
+            }
+        }
+
+        $yamlLines = array_values($yamlLines); // reset array keys
+
+        return $yamlLines;
     }
 }
