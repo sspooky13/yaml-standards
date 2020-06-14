@@ -1,5 +1,5 @@
 -   pathsToCheck:
-        - tests/Command/resource/yamlFiles/sorted/service
+        - tests/Command/resource/yamlFiles/sorted/service/*.yml
     checkers:
         -   pathToChecker: YamlStandards\Model\YamlServiceAliasing\YamlServiceAliasingChecker
             parameters:

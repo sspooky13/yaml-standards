@@ -1,7 +1,7 @@
 -   pathsToCheck:
         - tests/Command/resource/yamlFiles/sorted/yaml-getting-started.yml
-        - tests/Command/resource/yamlFiles/sorted/config
-        - tests/Command/resource/yamlFiles/sorted/route
-        - tests/Command/resource/yamlFiles/sorted/service
+        - tests/Command/resource/yamlFiles/sorted/config/*.yml
+        - tests/Command/resource/yamlFiles/sorted/route/*.yml
+        - tests/Command/resource/yamlFiles/sorted/service/*.yml
     checkers:
         -   pathToChecker: YamlStandards\Model\YamlEmptyLineAtEnd\YamlEmptyLineAtEndChecker
