@@ -12,6 +12,9 @@ parameters:
             message: '#^Call to an undefined method Symfony\\Component\\Config\\Definition\\Builder\\TreeBuilder::getRootNode\(\)\.$#'
             path: %currentWorkingDirectory%/src/Model/Config/YamlStandardConfigDefinition.php
         -
+            message: '#^Call to an undefined method Symfony\\Component\\Config\\Definition\\Builder\\NodeDefinition::prototype\(\)\.$#'
+            path: %currentWorkingDirectory%/src/Model/Config/YamlStandardConfigDefinition.php
+        -
             message: '#^Comparison operation ">=" between \d+ and \d+ is always (?:true|false)\.$#'
             path: %currentWorkingDirectory%/src/Model/Config/YamlStandardConfigDefinition.php
         -

@@ -58,9 +58,33 @@ class YamlStandardConfigDefinition implements ConfigurationInterface
         return $node
             ->children()
                 ->arrayNode(self::CONFIG_PATHS_TO_CHECK)->isRequired()->cannotBeEmpty()
+                    ->validate()
+                        ->ifTrue(function (array $patterns) {
+                            foreach ($patterns as $pattern) {
+                                if (preg_match('/\..+/', $pattern) === 0) {
+                                    return true;
+                                }
+                            }
+
+                            return false;
+                        })
+                        ->thenInvalid('Invalid pattern: %s. Pattern must have to suffix defined.')
+                    ->end()
                     ->prototype('scalar')->end()
                 ->/** @scrutinizer ignore-call */end()
                 ->arrayNode(self::CONFIG_EXCLUDED_PATHS)
+                    ->validate()
+                        ->ifTrue(function (array $patterns) {
+                            foreach ($patterns as $pattern) {
+                                if (preg_match('/\..+/', $pattern) === 0) {
+                                    return true;
+                                }
+                            }
+
+                            return false;
+                        })
+                        ->thenInvalid('Invalid pattern: %s. Pattern must have to suffix defined.')
+                    ->end()
                     ->prototype('scalar')->end()
                 ->end()
                 ->arrayNode(self::CONFIG_CHECKERS)
