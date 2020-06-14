@@ -6,14 +6,14 @@ namespace YamlStandards\Model\YamlIndent;
 
 use SebastianBergmann\Diff\Differ;
 use YamlStandards\Command\ProcessOutput;
+use YamlStandards\Model\AbstractFixer;
 use YamlStandards\Model\Config\StandardParametersData;
-use YamlStandards\Model\FixerInterface;
 use YamlStandards\Result\Result;
 
 /**
  * Fix yaml file with right count of indent
  */
-class YamlIndentFixer implements FixerInterface
+class YamlIndentFixer extends AbstractFixer
 {
     /**
      * @inheritDoc

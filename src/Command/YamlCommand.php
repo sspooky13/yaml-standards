@@ -12,7 +12,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Exception\ParseException;
 use YamlStandards\Command\Service\ProcessOutputService;
 use YamlStandards\Command\Service\ResultService;
-use YamlStandards\Model\Component\YamlService;
 use YamlStandards\Model\Config\YamlStandardConfigLoader;
 use YamlStandards\Result\Result;
 
@@ -64,16 +63,13 @@ class YamlCommand extends Command
                 }
 
                 try {
-                    // check yaml is valid
-                    YamlService::getYamlData($pathToYamlFile);
-
                     foreach ($yamlStandardConfigSingleData->getYamlStandardConfigsSingleStandardData() as $yamlStandardConfigSingleCheckerData) {
                         $standardParametersData = $yamlStandardConfigSingleCheckerData->getStandardParametersData();
                         $fixer = $yamlStandardConfigSingleCheckerData->getFixer();
                         if ($fixer !== null && $inputSettingData->isFixEnabled()) {
-                            $fileResults[] = $fixer->fix($pathToYamlFile, $pathToYamlFile, $standardParametersData);
+                            $fileResults[] = $fixer->runFix($pathToYamlFile, $pathToYamlFile, $standardParametersData);
                         } else {
-                            $fileResults[] = $yamlStandardConfigSingleCheckerData->getChecker()->check($pathToYamlFile, $standardParametersData);
+                            $fileResults[] = $yamlStandardConfigSingleCheckerData->getChecker()->runCheck($pathToYamlFile, $standardParametersData);
                         }
                     }
                 } catch (ParseException $e) {

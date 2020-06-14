@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace YamlStandards\Model\Config;
 
-use YamlStandards\Model\CheckerInterface;
-use YamlStandards\Model\FixerInterface;
+use YamlStandards\Model\AbstractChecker;
+use YamlStandards\Model\AbstractFixer;
 
 class YamlStandardConfigSingleStandardData
 {
     /**
-     * @var \YamlStandards\Model\CheckerInterface
+     * @var \YamlStandards\Model\AbstractChecker
      */
     private $checker;
 
     /**
-     * @var \YamlStandards\Model\FixerInterface|null
+     * @var \YamlStandards\Model\AbstractFixer|null
      */
     private $fixer;
 
@@ -25,11 +25,11 @@ class YamlStandardConfigSingleStandardData
     private $standardParametersData;
 
     /**
-     * @param \YamlStandards\Model\CheckerInterface $checker
-     * @param \YamlStandards\Model\FixerInterface|null $fixer
+     * @param \YamlStandards\Model\AbstractChecker $checker
+     * @param \YamlStandards\Model\AbstractFixer|null $fixer
      * @param \YamlStandards\Model\Config\StandardParametersData $standardParametersData
      */
-    public function __construct(CheckerInterface $checker, ?FixerInterface $fixer, StandardParametersData $standardParametersData)
+    public function __construct(AbstractChecker $checker, ?AbstractFixer $fixer, StandardParametersData $standardParametersData)
     {
         $this->checker = $checker;
         $this->fixer = $fixer;
@@ -37,17 +37,17 @@ class YamlStandardConfigSingleStandardData
     }
 
     /**
-     * @return \YamlStandards\Model\CheckerInterface
+     * @return \YamlStandards\Model\AbstractChecker
      */
-    public function getChecker(): CheckerInterface
+    public function getChecker(): AbstractChecker
     {
         return $this->checker;
     }
 
     /**
-     * @return \YamlStandards\Model\FixerInterface|null
+     * @return \YamlStandards\Model\AbstractFixer|null
      */
-    public function getFixer(): ?FixerInterface
+    public function getFixer(): ?AbstractFixer
     {
         return $this->fixer;
     }

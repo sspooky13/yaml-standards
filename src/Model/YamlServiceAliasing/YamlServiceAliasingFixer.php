@@ -6,15 +6,15 @@ namespace YamlStandards\Model\YamlServiceAliasing;
 
 use SebastianBergmann\Diff\Differ;
 use YamlStandards\Command\ProcessOutput;
+use YamlStandards\Model\AbstractFixer;
 use YamlStandards\Model\Component\YamlService;
 use YamlStandards\Model\Config\StandardParametersData;
-use YamlStandards\Model\FixerInterface;
 use YamlStandards\Result\Result;
 
 /**
  * Fix service file has uniform aliasing
  */
-class YamlServiceAliasingFixer implements FixerInterface
+class YamlServiceAliasingFixer extends AbstractFixer
 {
     /**
      * @inheritDoc

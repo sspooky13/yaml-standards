@@ -6,14 +6,14 @@ namespace YamlStandards\Model\YamlIndent;
 
 use SebastianBergmann\Diff\Differ;
 use YamlStandards\Command\ProcessOutput;
-use YamlStandards\Model\CheckerInterface;
+use YamlStandards\Model\AbstractChecker;
 use YamlStandards\Model\Config\StandardParametersData;
 use YamlStandards\Result\Result;
 
 /**
  * Check yaml file complies right count of indent
  */
-class YamlIndentChecker implements CheckerInterface
+class YamlIndentChecker extends AbstractChecker
 {
     /**
      * @inheritDoc
