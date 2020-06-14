@@ -7,7 +7,7 @@
 [![Code Coverage](https://scrutinizer-ci.com/g/sspooky13/yaml-standards/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/sspooky13/yaml-standards/?branch=master)
 ![PHPStan level](https://img.shields.io/badge/PHPStan-level%205-brightgreen.svg)
 
-This library helps you to keep observe standards for YAML files.
+This library is primarily intended to help you to keep observe standards for YAML files, but some standards can be used for other files, e.g. **YamlEmptyLineAtEnd** standard
 
 ## Installation
 Install the latest version with [Composer](http://getcomposer.org/) command:
@@ -46,7 +46,7 @@ Tips:
 - **YamlIndentChecker** - Check yaml has right count of indents. **This checker has fixer**.
 - **YamlSpacesBetweenGroupsChecker** - Check yaml file has empty line between every group to selected level. **This checker has fixer**.
 - **YamlInlineChecker** - Check yaml file observe standards by symfony yaml parser.
-- **YamlEmptyLineAtEnd** - Check yaml file has empty line at end of file. **This checker has fixer**.
+- **YamlEmptyLineAtEnd** - Check yaml file has empty line at end of file. **This checker has fixer**. Note: This standard can be used on every file, not only yaml files.
 - **YamlServiceAliasing** - Check yaml service file observe short or long code style aliasing. **This checker has fixer**.
 
 ## PHPStorm Integration
@@ -64,8 +64,8 @@ Now, file watcher check your YAML files by config file and notify you if they ha
 
 ## How create your own standards
 1. Create class with your own check/fix logic
-2. Checker must implement interface `YamlStandards\Model\CheckerInterface.php` and class name must end with `Checker` word, e.g. YamlLine**Checker**
-3. Fixer must be in same directory as checker class, implement interface `YamlStandards\Model\FixerInterface` and name must be same as checker class except name must end with `Fixer` word, e.g. YamlLine**Fixer**. Warning! checker class must exists too.
+2. Checker has to extend class `YamlStandards\Model\AbstractChecker.php` and class name have to end with `Checker` word, e.g. YamlLine**Checker**
+3. Fixer has to be in same directory as checker class, extend class `YamlStandards\Model\AbstractFixer.php` and name have to be same as checker class except name must end with `Fixer` word, e.g. YamlLine**Fixer**. **Warning! checker class must exist too.**
 4. Both classes must return class `\YamlStandards\Result\Result`
 5. Add your checker class with namespace to your config file to `checkers` array
 6. done :)
