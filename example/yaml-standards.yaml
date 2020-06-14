@@ -1,9 +1,11 @@
 -   pathsToCheck:
-        - path/to/file
-        - path/to/dir
+        - path/to/file.yaml
+        - path/to/dir/*.yaml
+        - path/to/*/*.yaml
     excludedPaths:
-        - path/to/file
-        - path/to/dir
+        - path/to/file.yaml
+        - path/to/dir/*.yaml
+        - path/to/*/*.yaml
     checkers:
         -   pathToChecker: YamlStandards\Model\YamlAlphabetical\YamlAlphabeticalChecker # path to checker
             parameters:
