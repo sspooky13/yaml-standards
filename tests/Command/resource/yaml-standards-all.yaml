@@ -1,13 +1,13 @@
 -   pathsToCheck:
         - tests/Command/resource/yamlFiles/sorted/yaml-getting-started.yml
-        - tests/Command/resource/yamlFiles/sorted/config
-        - tests/Command/resource/yamlFiles/sorted/route
-        - tests/Command/resource/yamlFiles/sorted/service
+        - tests/Command/resource/yamlFiles/sorted/config/*.yml
+        - tests/Command/resource/yamlFiles/sorted/route/*.yml
+        - tests/Command/resource/yamlFiles/sorted/service/*.yml
     excludedPaths:
         - tests/Command/resource/yamlFiles/unSorted/yaml-getting-started.yml
-        - tests/Command/resource/yamlFiles/unSorted/config
-        - tests/Command/resource/yamlFiles/unSorted/route
-        - tests/Command/resource/yamlFiles/unSorted/service
+        - tests/Command/resource/yamlFiles/unSorted/config/*.yml
+        - tests/Command/resource/yamlFiles/unSorted/route/*.yml
+        - tests/Command/resource/yamlFiles/unSorted/service/*.yml
         - tests/Command/resource/yamlFiles/sorted/service/shopsys-service.yml
     checkers:
         -   pathToChecker: YamlStandards\Model\YamlAlphabetical\YamlAlphabeticalChecker

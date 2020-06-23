@@ -22,6 +22,12 @@ class YamlEmptyLineAtEndFixerTest extends TestCase
             __DIR__ . '/resource/unfixed/symfony-service.yml',
             __DIR__ . '/resource/unfixed/version.yaml',
             __DIR__ . '/resource/unfixed/yaml-getting-started.yml',
+            __DIR__ . '/resource/unfixed/foo.js',
+            __DIR__ . '/resource/unfixed/foo.json',
+            __DIR__ . '/resource/unfixed/foo.less',
+            __DIR__ . '/resource/unfixed/foo.md',
+            __DIR__ . '/resource/unfixed/foo.php',
+            __DIR__ . '/resource/unfixed/foo.xml',
         ];
         $pathToFixedFiles = [
             __DIR__ . '/resource/fixed/symfony-config.yml',
@@ -30,15 +36,21 @@ class YamlEmptyLineAtEndFixerTest extends TestCase
             __DIR__ . '/resource/fixed/symfony-service.yml',
             __DIR__ . '/resource/fixed/version.yaml',
             __DIR__ . '/resource/fixed/yaml-getting-started.yml',
+            __DIR__ . '/resource/fixed/foo.js',
+            __DIR__ . '/resource/fixed/foo.json',
+            __DIR__ . '/resource/fixed/foo.less',
+            __DIR__ . '/resource/fixed/foo.md',
+            __DIR__ . '/resource/fixed/foo.php',
+            __DIR__ . '/resource/fixed/foo.xml',
         ];
 
-        $tempCorrectYamlFile = $this->getTempCorrectYamlFile();
         $yamlEmptyLineAtEndFixer = new YamlEmptyLineAtEndFixer();
 
         foreach ($pathToUnfixedFiles as $key => $pathToUnfixedFile) {
+            $tempCorrectFile = $this->getTempCorrectFile($pathToUnfixedFile);
             $standardParametersData = $this->getStandardsParametersData();
-            $yamlEmptyLineAtEndFixer->fix($pathToUnfixedFile, $tempCorrectYamlFile, $standardParametersData);
-            $yamlFileContent = file_get_contents($tempCorrectYamlFile);
+            $yamlEmptyLineAtEndFixer->fix($pathToUnfixedFile, $tempCorrectFile, $standardParametersData);
+            $yamlFileContent = file_get_contents($tempCorrectFile);
             $correctYamlFileContent = file_get_contents($pathToFixedFiles[$key]);
 
             $this->assertSame($correctYamlFileContent, $yamlFileContent);
@@ -46,11 +58,14 @@ class YamlEmptyLineAtEndFixerTest extends TestCase
     }
 
     /**
+     * @param string $pathToUnfixedFile
      * @return string
      */
-    private function getTempCorrectYamlFile(): string
+    private function getTempCorrectFile(string $pathToUnfixedFile): string
     {
-        return __DIR__ . '/resource/temp/noName.yml';
+        $extension = pathinfo($pathToUnfixedFile)['extension'];
+
+        return __DIR__ . '/resource/temp/noName.' . $extension;
     }
 
     /**

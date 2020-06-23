@@ -23,6 +23,12 @@ class YamlEmptyLineAtEndCheckerTest extends TestCase
             __DIR__ . '/resource/unfixed/symfony-service.yml',
             __DIR__ . '/resource/unfixed/version.yaml',
             __DIR__ . '/resource/unfixed/yaml-getting-started.yml',
+            __DIR__ . '/resource/unfixed/foo.js',
+            __DIR__ . '/resource/unfixed/foo.json',
+            __DIR__ . '/resource/unfixed/foo.less',
+            __DIR__ . '/resource/unfixed/foo.md',
+            __DIR__ . '/resource/unfixed/foo.php',
+            __DIR__ . '/resource/unfixed/foo.xml',
         ];
         $yamlEmptyLineAtEndChecker = new YamlEmptyLineAtEndChecker();
 
@@ -43,6 +49,12 @@ class YamlEmptyLineAtEndCheckerTest extends TestCase
             __DIR__ . '/resource/fixed/symfony-service.yml',
             __DIR__ . '/resource/fixed/version.yaml',
             __DIR__ . '/resource/fixed/yaml-getting-started.yml',
+            __DIR__ . '/resource/fixed/foo.js',
+            __DIR__ . '/resource/fixed/foo.json',
+            __DIR__ . '/resource/fixed/foo.less',
+            __DIR__ . '/resource/fixed/foo.md',
+            __DIR__ . '/resource/fixed/foo.php',
+            __DIR__ . '/resource/fixed/foo.xml',
         ];
         $yamlEmptyLineAtEndChecker = new YamlEmptyLineAtEndChecker();
 

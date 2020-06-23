@@ -8,20 +8,11 @@ use PHPUnit\Framework\TestCase;
 
 class YamlFilesPathServiceTest extends TestCase
 {
-    public function testFindAllYamlFilesInDir(): void
-    {
-        $pathToDir = ['./tests/Command/resource/yamlFiles/unSorted/'];
-
-        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($pathToDir);
-
-        $this->assertCount(6, $yamlFiles);
-    }
-
     public function testFindAllYamlFilesInDirs(): void
     {
         $pathToDirs = [
-            './tests/Command/resource/yamlFiles/sorted/config',
-            './tests/Command/resource/yamlFiles/unSorted/route',
+            './tests/Command/resource/yamlFiles/sorted/config/*.yml',
+            './tests/Command/resource/yamlFiles/unSorted/route/*.yml',
         ];
 
         $yamlFiles = YamlFilesPathService::getPathToYamlFiles($pathToDirs);
@@ -29,29 +20,18 @@ class YamlFilesPathServiceTest extends TestCase
         $this->assertCount(3, $yamlFiles);
     }
 
-    public function testFindAllYamlFilesInPaths(): void
+    public function testFindAllOthersFilesInPaths(): void
     {
         $pathToFiles = [
-            './tests/Command/resource/yamlFiles/sorted/config/symfony-config.yml',
-            './tests/Command/resource/yamlFiles/sorted/config/symfony-config.yml',
-            './tests/Command/resource/yamlFiles/unSorted/route/symfony-route.yml',
+            './tests/Command/resource/otherFiles/*.js',
+            './tests/Command/resource/otherFiles/*.json',
+            './tests/Command/resource/otherFiles/*.less',
+            './tests/Command/resource/otherFiles/*.md',
+            './tests/Command/resource/otherFiles/*.php',
+            './tests/Command/resource/otherFiles/*.xml',
         ];
 
         $yamlFiles = YamlFilesPathService::getPathToYamlFiles($pathToFiles);
-
-        $this->assertCount(2, $yamlFiles);
-    }
-
-    public function testFindAllYamlFilesInPathsAndDirs(): void
-    {
-        $pathToDirsAndFiles = [
-            './tests/Command/resource/yamlFiles/sorted/config/symfony-config.yml',
-            './tests/Command/resource/yamlFiles/unSorted/route/symfony-route.yml',
-            './tests/Command/resource/yamlFiles/unSorted/config',
-            './tests/Command/resource/yamlFiles/unSorted/service',
-        ];
-
-        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($pathToDirsAndFiles);
 
         $this->assertCount(6, $yamlFiles);
     }
@@ -67,7 +47,7 @@ class YamlFilesPathServiceTest extends TestCase
 
     public function testReturnFullPathToFilesFromDir(): void
     {
-        $pathToDirs = ['./tests/Command/resource/yamlFiles/unSorted/config/', './tests/Command/resource/yamlFiles/unSorted/route/'];
+        $pathToDirs = ['./tests/Command/resource/yamlFiles/unSorted/config/*.yml', './tests/Command/resource/yamlFiles/unSorted/route/*.yml'];
 
         $yamlFiles = YamlFilesPathService::getPathToYamlFiles($pathToDirs);
 

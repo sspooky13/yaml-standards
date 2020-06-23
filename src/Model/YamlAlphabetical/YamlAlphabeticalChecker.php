@@ -7,7 +7,7 @@ namespace YamlStandards\Model\YamlAlphabetical;
 use SebastianBergmann\Diff\Differ;
 use Symfony\Component\Yaml\Yaml;
 use YamlStandards\Command\ProcessOutput;
-use YamlStandards\Model\CheckerInterface;
+use YamlStandards\Model\AbstractChecker;
 use YamlStandards\Model\Component\YamlService;
 use YamlStandards\Model\Config\StandardParametersData;
 use YamlStandards\Result\Result;
@@ -15,7 +15,7 @@ use YamlStandards\Result\Result;
 /**
  * Check yaml file is alphabetical sorted
  */
-class YamlAlphabeticalChecker implements CheckerInterface
+class YamlAlphabeticalChecker extends AbstractChecker
 {
     /**
      * @inheritDoc

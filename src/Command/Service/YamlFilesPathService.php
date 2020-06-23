@@ -4,53 +4,39 @@ declare(strict_types=1);
 
 namespace YamlStandards\Command\Service;
 
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
-use RecursiveRegexIterator;
-use RegexIterator;
-
 class YamlFilesPathService
 {
     /**
-     * @param string[] $pathToDirsOrFiles
+     * @param string[] $patterns
      * @return string[]
      */
-    public static function getPathToYamlFiles(array $pathToDirsOrFiles): array
+    public static function getPathToYamlFiles(array $patterns): array
     {
-        $pathToFiles = [];
-        foreach ($pathToDirsOrFiles as $pathToDirOrFile) {
-            if (self::existsDirectoryOrFile($pathToDirOrFile) === false) {
-                continue;
-            }
-
-            if (is_file($pathToDirOrFile)) {
-                $pathToFiles[] = $pathToDirOrFile;
-                continue;
-            }
-
-            $recursiveIteratorIterator = new RecursiveIteratorIterator(
-                new RecursiveDirectoryIterator($pathToDirOrFile),
-                RecursiveIteratorIterator::LEAVES_ONLY,
-                RecursiveIteratorIterator::CATCH_GET_CHILD
-            );
-            $regexIterator = new RegexIterator($recursiveIteratorIterator, '/^.+\.(ya?ml(\.dist)?)$/i', RecursiveRegexIterator::GET_MATCH);
-
-            foreach ($regexIterator as $pathToFile) {
-                $pathToFiles[] = reset($pathToFile);
-            }
+        $pathToFiles = [[]];
+        foreach ($patterns as $pattern) {
+            $pathToFiles[] = self::globRecursive($pattern);
         }
 
+        $pathToFiles = array_merge(...$pathToFiles);
         $pathToFiles = str_replace('\\', '/', $pathToFiles);
 
         return array_unique($pathToFiles);
     }
 
     /**
-     * @param string $pathToDirOrFile
-     * @return bool
+     * @param string $pattern
+     * @return string[]
+     *
+     * @link https://www.php.net/manual/en/function.glob.php#106595
      */
-    private static function existsDirectoryOrFile($pathToDirOrFile): bool
+    private static function globRecursive(string $pattern): array
     {
-        return is_dir($pathToDirOrFile) || is_file($pathToDirOrFile);
+        $files = glob($pattern);
+
+        foreach (glob(dirname($pattern) . '/*', GLOB_ONLYDIR | GLOB_NOSORT) as $dir) {
+            $files = array_merge($files, self::globRecursive($dir . '/' . basename($pattern)));
+        }
+
+        return $files;
     }
 }

@@ -1,0 +1,9 @@
+-   pathsToCheck:
+        - path/to/dir/*.php
+        - path/to/dir/*.less
+        - path/to/*/*.js
+        - path/to/dir/*.md
+        - path/to/dir/*.json
+        - path/to/*/*.xml
+    checkers:
+        -   pathToChecker: YamlStandards\Model\YamlEmptyLineAtEnd\YamlEmptyLineAtEndChecker # only for turn it on

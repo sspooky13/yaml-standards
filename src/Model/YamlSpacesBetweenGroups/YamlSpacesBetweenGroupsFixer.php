@@ -6,15 +6,15 @@ namespace YamlStandards\Model\YamlSpacesBetweenGroups;
 
 use SebastianBergmann\Diff\Differ;
 use YamlStandards\Command\ProcessOutput;
+use YamlStandards\Model\AbstractFixer;
 use YamlStandards\Model\Component\YamlService;
 use YamlStandards\Model\Config\StandardParametersData;
-use YamlStandards\Model\FixerInterface;
 use YamlStandards\Result\Result;
 
 /**
  * Fix yaml file have space between groups
  */
-class YamlSpacesBetweenGroupsFixer implements FixerInterface
+class YamlSpacesBetweenGroupsFixer extends AbstractFixer
 {
     /**
      * @inheritDoc

@@ -6,7 +6,7 @@ namespace YamlStandards\Model\YamlSpacesBetweenGroups;
 
 use SebastianBergmann\Diff\Differ;
 use YamlStandards\Command\ProcessOutput;
-use YamlStandards\Model\CheckerInterface;
+use YamlStandards\Model\AbstractChecker;
 use YamlStandards\Model\Component\YamlService;
 use YamlStandards\Model\Config\StandardParametersData;
 use YamlStandards\Result\Result;
@@ -14,7 +14,7 @@ use YamlStandards\Result\Result;
 /**
  * Check yaml file have space between groups
  */
-class YamlSpacesBetweenGroupsChecker implements CheckerInterface
+class YamlSpacesBetweenGroupsChecker extends AbstractChecker
 {
     /**
      * @inheritDoc

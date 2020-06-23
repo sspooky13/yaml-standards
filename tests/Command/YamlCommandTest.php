@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace YamlStandards\Command;
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -96,6 +97,18 @@ class YamlCommandTest extends TestCase
         $command = $this->createCommandTester();
         $commandExitCode = $command->execute([
             YamlCommand::ARGUMENT_PATH_TO_CONFIG_FILE => __DIR__ . '/resource/yaml-standards-all.yaml',
+        ]);
+
+        $this->assertEquals(0, $commandExitCode);
+    }
+
+    public function testRunCommandWithoutSuffixThrowException(): void
+    {
+        $this->expectException(InvalidConfigurationException::class);
+
+        $command = $this->createCommandTester();
+        $commandExitCode = $command->execute([
+            YamlCommand::ARGUMENT_PATH_TO_CONFIG_FILE => __DIR__ . '/resource/yaml-standards-all-without-suffix.yaml',
         ]);
 
         $this->assertEquals(0, $commandExitCode);

@@ -6,14 +6,14 @@ namespace YamlStandards\Model\YamlEmptyLineAtEnd;
 
 use SebastianBergmann\Diff\Differ;
 use YamlStandards\Command\ProcessOutput;
+use YamlStandards\Model\AbstractFixer;
 use YamlStandards\Model\Config\StandardParametersData;
-use YamlStandards\Model\FixerInterface;
 use YamlStandards\Result\Result;
 
 /**
  * Fix yaml file has empty line at end of file
  */
-class YamlEmptyLineAtEndFixer implements FixerInterface
+class YamlEmptyLineAtEndFixer extends AbstractFixer
 {
     /**
      * @inheritDoc
@@ -37,5 +37,12 @@ class YamlEmptyLineAtEndFixer implements FixerInterface
         $diffBetweenStrings = $differ->diff($yamlContent, $correctYamlContent);
 
         return new Result($pathToYamlFile, Result::RESULT_CODE_OK, ProcessOutput::STATUS_CODE_INVALID_FILE_SYNTAX, $diffBetweenStrings);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function runCheckYamlFileIsValid(string $pathToYamlFile): void
+    {
     }
 }
