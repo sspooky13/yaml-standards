@@ -15,11 +15,16 @@ class ProcessOutput
         STATUS_CODE_SKIPP = 2,
         STATUS_CODE_ERROR = 3;
 
+    private const
+        STATUS_SYMBOL = 'symbol',
+        STATUS_FORMAT = 'format',
+        STATUS_DESCRIPTION = 'description';
+
     private const STATUS_MAP = [
-        self::STATUS_CODE_OK => ['symbol' => '.', 'format' => '%s', 'description' => 'OK'],
-        self::STATUS_CODE_INVALID_FILE_SYNTAX => ['symbol' => 'I', 'format' => '<fg=red>%s</fg=red>', 'description' => 'Invalid file syntax'],
-        self::STATUS_CODE_SKIPP => ['symbol' => 'S', 'format' => '<fg=cyan>%s</fg=cyan>', 'description' => 'Skipped'],
-        self::STATUS_CODE_ERROR => ['symbol' => 'E', 'format' => '<bg=red>%s</bg=red>', 'description' => 'Error'],
+        self::STATUS_CODE_OK => [self::STATUS_SYMBOL => '.', self::STATUS_FORMAT => '%s', self::STATUS_DESCRIPTION => 'OK'],
+        self::STATUS_CODE_INVALID_FILE_SYNTAX => [self::STATUS_SYMBOL => 'I', self::STATUS_FORMAT => '<fg=red>%s</fg=red>', self::STATUS_DESCRIPTION => 'Invalid file syntax'],
+        self::STATUS_CODE_SKIPP => [self::STATUS_SYMBOL => 'S', self::STATUS_FORMAT => '<fg=cyan>%s</fg=cyan>', self::STATUS_DESCRIPTION => 'Skipped'],
+        self::STATUS_CODE_ERROR => [self::STATUS_SYMBOL => 'E', self::STATUS_FORMAT => '<bg=red>%s</bg=red>', self::STATUS_DESCRIPTION => 'Error'],
     ];
 
     /**
@@ -59,7 +64,7 @@ class ProcessOutput
      */
     public function process(int $statusCode): string
     {
-        $symbol = sprintf(self::STATUS_MAP[$statusCode]['format'], self::STATUS_MAP[$statusCode]['symbol']);
+        $symbol = sprintf(self::STATUS_MAP[$statusCode][self::STATUS_FORMAT], self::STATUS_MAP[$statusCode][self::STATUS_SYMBOL]);
         $this->progressLine[] = $symbol;
         $currentPosition = count($this->progressLine);
 
@@ -83,9 +88,9 @@ class ProcessOutput
         $symbols = [];
 
         foreach (self::STATUS_MAP as $status) {
-            $symbol = $status['symbol'];
-            $format = $status['format'];
-            $description = $status['description'];
+            $symbol = $status[self::STATUS_SYMBOL];
+            $format = $status[self::STATUS_FORMAT];
+            $description = $status[self::STATUS_DESCRIPTION];
 
             $symbols[$symbol] = sprintf('%s-%s', sprintf($format, $symbol), $description);
         }
