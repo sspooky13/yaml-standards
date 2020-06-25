@@ -70,7 +70,7 @@ class YamlStandardConfigDefinition implements ConfigurationInterface
                         })
                         ->thenInvalid('Invalid pattern: %s. Pattern must have to suffix defined.')
                     ->end()
-                    ->prototype('scalar')->end()
+                    ->/** @scrutinizer ignore-call */prototype('scalar')->end()
                 ->/** @scrutinizer ignore-call */end()
                 ->arrayNode(self::CONFIG_EXCLUDED_PATHS)
                     ->validate()

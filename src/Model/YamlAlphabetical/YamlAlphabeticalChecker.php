@@ -75,7 +75,6 @@ class YamlAlphabeticalChecker extends AbstractChecker
                 if ($currentDepth < $depth) {
                     $yamlArrayData[$key] = $this->recursiveKsort($value, $depth, $currentDepth);
                 }
-                continue;
             }
         }
 
