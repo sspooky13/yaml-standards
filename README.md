@@ -43,7 +43,7 @@ Tips:
 - `--fix` Automatically fix allowed standards problems.
 
 ## Implemented checkers
-- **YamlAlphabeticalChecker** - Check yaml file is alphabetically sorted to selected level.
+- **YamlAlphabeticalChecker** - Check yaml file is alphabetically sorted to selected level. **This checker has fixer**.
 - **YamlIndentChecker** - Check yaml has right count of indents. **This checker has fixer**.
 - **YamlSpacesBetweenGroupsChecker** - Check yaml file has empty line between every group to selected level. **This checker has fixer**.
 - **YamlInlineChecker** - Check yaml file observe standards by symfony yaml parser.
