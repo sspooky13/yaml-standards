@@ -8,10 +8,13 @@ use YamlStandards\Model\Component\YamlService;
 
 class YamlParserLineData
 {
-    public const KEY_DEFAULT = 'key:';
-    public const KEY_DASH = self::KEY_DEFAULT . 'dashes:';
-    public const KEY_ARRAY_WITHOUT_KEY = self::KEY_DEFAULT . 'array_without_key:';
-    public const KEY_CURLY_BRACKETS = self::KEY_DEFAULT . 'curly_brackets:';
+    private const KEY = 'key:';
+    public const KEY_COMMON_LINE = self::KEY . ':common_line:';
+    public const KEY_COMMENT_OR_EMPTY_LINE = self::KEY . 'comment_empty_line:';
+    public const KEY_DASH = self::KEY . 'dashes:';
+    public const KEY_EMPTY_ARRAY = self::KEY . 'empty_array:';
+    public const KEY_ARRAY_WITHOUT_KEY = self::KEY . 'array_without_key:';
+    public const KEY_CURLY_BRACKETS = self::KEY . 'curly_brackets:';
     public const KEY_LAST_ELEMENT = 'zzzLastElementInFile:';
 
     public const EMPTY_LINE_DEFAULT_VALUE = 'empty:line:default:value';
@@ -27,6 +30,11 @@ class YamlParserLineData
     private $value;
 
     /**
+     * @var int
+     */
+    private $currentDashRowIndents;
+
+    /**
      * @param string[] $fileLines
      * @param int $key
      */
@@ -36,12 +44,14 @@ class YamlParserLineData
 
         $isCommentOrBlankLine = false;
         $line = $fileLines[$key];
+        $this->currentDashRowIndents = YamlService::rowIndentsOf($line);
         if (YamlService::isLineBlank($line) || YamlService::isLineComment($line)) {
             $this->addCommentOrBlankLineAsKey($fileLines, $key);
             $isCommentOrBlankLine = true;
         } else {
             $this->addLineKey($fileLines, $key);
         }
+        $this->addArrayKeyWithValueToSeparatedArray($fileLines, $key);
 
         $this->value = $this->getLineValue($fileLines, $key, $isCommentOrBlankLine);
     }
@@ -58,6 +68,48 @@ class YamlParserLineData
             $this->parentKeys[] = $correctIndents . self::KEY_DASH . $key;
         } else {
             $this->parentKeys[] = $this->getLineKey($fileLines, $key);
+        }
+    }
+
+    /**
+     * add array elements to separated array, e.g.: - foo: bar
+     *
+     * @param string[] $fileLines
+     * @param int $key
+     */
+    public function addArrayKeyWithValueToSeparatedArray(array $fileLines, int $key): void
+    {
+        $currentLine = $fileLines[$key];
+        $prevLine = $fileLines[$key - 1] ?? null;
+        $currentLineWithoutDash = str_replace('-', ' ', $currentLine);
+        $countOfCurrentRowIndents = YamlService::rowIndentsOf($currentLineWithoutDash);
+        $countOfCurrentRowWithDashIndents = YamlService::rowIndentsOf($currentLine);
+
+        if (YamlService::isLineStartOfArrayWithKeyAndValue(trim($currentLine)) && YamlService::hasLineThreeDashesOnStartOfLine(trim($currentLine)) === false) {
+            if ($prevLine !== null) {
+                $prevLineWithoutDash = str_replace('-', ' ', $prevLine);
+                $countOfPrevRowIndents = YamlService::rowIndentsOf($prevLineWithoutDash);
+
+                $isThereDashInParentKeys = array_filter($this->parentKeys, function ($key) {
+                    return strpos($key, self::KEY_EMPTY_ARRAY) !== false;
+                });
+
+                if (count($isThereDashInParentKeys) === 0 ||
+                    $countOfCurrentRowWithDashIndents < $this->currentDashRowIndents ||
+                    ($countOfCurrentRowWithDashIndents === 0 && (YamlService::isLineComment($prevLine) === false || YamlService::isLineNotBlank($prevLine)))
+                ) {
+                    if ((YamlService::isLineStartOfArrayWithKeyAndValue(trim($currentLine)) && YamlService::isLineStartOfArrayWithKeyAndValue(trim($prevLine)) === false) ||
+                        (YamlService::isLineStartOfArrayWithKeyAndValue(trim($currentLine)) && YamlService::isLineStartOfArrayWithKeyAndValue(trim($prevLine)) && $countOfCurrentRowIndents !== $countOfPrevRowIndents)
+                        ) {
+                        $lineKey = self::KEY_EMPTY_ARRAY . $key;
+                        $this->parentKeys[] = $lineKey;
+                        $this->currentDashRowIndents = $countOfCurrentRowWithDashIndents;
+                    }
+                }
+            } else {
+                $lineKey = self::KEY_EMPTY_ARRAY . $key;
+                $this->parentKeys[] = $lineKey;
+            }
         }
     }
 
@@ -93,7 +145,9 @@ class YamlParserLineData
             if (YamlService::isLineNotBlank($line) && YamlService::isLineComment($line) === false) {
                 $lineKey = $this->getLineKey($fileLines, $key);
 
-                $this->parentKeys[] = $lineKey . self::KEY_DEFAULT . $key;
+                $this->parentKeys[] = $lineKey . self::KEY_COMMENT_OR_EMPTY_LINE . $key;
+                $this->addArrayKeyWithValueToSeparatedArray($fileLines, $key);
+
                 break;
             }
         }
@@ -181,7 +235,7 @@ class YamlParserLineData
             $countOfNextRowIndents = YamlService::rowIndentsOf($nextLineWithoutDash);
 
             if ($countOfCurrentRowIndents < $countOfNextRowIndents) {
-                return $currentLine;
+                return $currentLine . self::KEY_COMMON_LINE . $key;
             }
         }
 
@@ -190,7 +244,7 @@ class YamlParserLineData
         // if line is array without key (e.g. "- 'something'") then line can be duplicated, so we need to distinguish them
         $lineNumber = YamlService::hasLineDashOnStartOfLine(trim($currentLine)) && YamlService::hasLineColon($currentLine) === false ? self::KEY_ARRAY_WITHOUT_KEY . $key : '';
 
-        return $lineNumber . $lineKey . $colon;
+        return $lineNumber . $lineKey . $colon . self::KEY_COMMON_LINE . $key;
     }
 
     /**

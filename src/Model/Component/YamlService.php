@@ -256,4 +256,27 @@ class YamlService
 
         return $yamlLines;
     }
+
+    /**
+     * @param string[] $yamlLines
+     * @param int $key
+     * @return string|null
+     */
+    public static function getNextNonCommentAndNonBlankLine(array $yamlLines, int $key): ?string
+    {
+        $arrayKeys = array_keys($yamlLines);
+        $lastKey = end($arrayKeys);
+        while ($key < $lastKey) {
+            $key++;
+            $line = $yamlLines[$key];
+
+            if (self::isLineBlank($line) || self::isLineComment($line)) {
+                continue;
+            }
+
+            return $line;
+        }
+
+        return null;
+    }
 }

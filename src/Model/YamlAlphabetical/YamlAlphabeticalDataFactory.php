@@ -10,8 +10,10 @@ use YamlStandards\Model\Component\YamlService;
 
 class YamlAlphabeticalDataFactory
 {
-    public const REGEX_KEY_DEFAULT_WITH_NUMBER_AT_END = '/' . YamlParserLineData::KEY_DEFAULT . '\d+$/';
+    public const REGEX_KEY_COMMON_LINE_WITH_NUMBER_AT_END = '/' . YamlParserLineData::KEY_COMMON_LINE . '\d+$/';
+    public const REGEX_KEY_COMMENT_OR_EMPTY_LINE_WITH_NUMBER_AT_END = '/' . YamlParserLineData::KEY_COMMENT_OR_EMPTY_LINE . '\d+$/';
     public const REGEX_KEY_DASH_WITH_NUMBER_AT_END = '/' . YamlParserLineData::KEY_DASH . '\d+$/';
+    public const REGEX_KEY_EMPTY_ARRAY_WITH_NUMBER_AT_END = '/' . YamlParserLineData::KEY_EMPTY_ARRAY . '\d+$/';
     public const REGEX_KEY_ARRAY_WITHOUT_KEY_WITH_NUMBER_AT_END = '/^' . YamlParserLineData::KEY_ARRAY_WITHOUT_KEY . '\d+/';
     public const REGEX_KEY_CURLY_BRACKETS_WITH_NUMBER_AT_END = '/' . YamlParserLineData::KEY_CURLY_BRACKETS . '\d+$/';
 
@@ -102,8 +104,8 @@ class YamlAlphabeticalDataFactory
     private static function sortArrayAlphabetical(string $key1, string $key2): int
     {
         // remove added text for empty line and comment line
-        $key1WithoutNumberAtEnd = preg_replace(self::REGEX_KEY_DEFAULT_WITH_NUMBER_AT_END, '', $key1);
-        $key2WithoutNumberAtEnd = preg_replace(self::REGEX_KEY_DEFAULT_WITH_NUMBER_AT_END, '', $key2);
+        $key1WithoutNumberAtEnd = preg_replace(self::REGEX_KEY_COMMENT_OR_EMPTY_LINE_WITH_NUMBER_AT_END, '', $key1);
+        $key2WithoutNumberAtEnd = preg_replace(self::REGEX_KEY_COMMENT_OR_EMPTY_LINE_WITH_NUMBER_AT_END, '', $key2);
 
         /*
          * add exclamation mark (!) to penultimate position in string for fix order for "dot" key scenario, e.g:
@@ -137,8 +139,11 @@ class YamlAlphabeticalDataFactory
             }
 
             $yamlKey = is_int($yamlKey) ? (string)$yamlKey : $yamlKey;
-            if (preg_match(self::REGEX_KEY_DEFAULT_WITH_NUMBER_AT_END, $yamlKey) === 0) {
-                $key = preg_match(self::REGEX_KEY_DASH_WITH_NUMBER_AT_END, $yamlKey) === 0 ? $yamlKey : preg_replace(self::REGEX_KEY_DASH_WITH_NUMBER_AT_END, '-', $yamlKey);
+            if (preg_match(self::REGEX_KEY_COMMENT_OR_EMPTY_LINE_WITH_NUMBER_AT_END, $yamlKey) === 0 &&
+                preg_match(self::REGEX_KEY_EMPTY_ARRAY_WITH_NUMBER_AT_END, $yamlKey) === 0
+            ) {
+                $key = preg_match(self::REGEX_KEY_COMMON_LINE_WITH_NUMBER_AT_END, $yamlKey) === 0 ? $yamlKey : preg_replace(self::REGEX_KEY_COMMON_LINE_WITH_NUMBER_AT_END, '', $yamlKey);
+                $key = preg_match(self::REGEX_KEY_DASH_WITH_NUMBER_AT_END, $key) === 0 ? $key : preg_replace(self::REGEX_KEY_DASH_WITH_NUMBER_AT_END, '-', $key);
                 $key = preg_match(self::REGEX_KEY_CURLY_BRACKETS_WITH_NUMBER_AT_END, $key) === 0 ? $key : preg_replace(self::REGEX_KEY_CURLY_BRACKETS_WITH_NUMBER_AT_END, '', $key);
                 $key = preg_match(self::REGEX_KEY_ARRAY_WITHOUT_KEY_WITH_NUMBER_AT_END, $key) === 0 ? $key : preg_replace(self::REGEX_KEY_ARRAY_WITHOUT_KEY_WITH_NUMBER_AT_END, '', $key);
                 $value = is_array($yamlValue) ? '' : $yamlValue;

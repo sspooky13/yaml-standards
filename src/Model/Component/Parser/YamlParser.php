@@ -136,8 +136,20 @@ class YamlParser
             $yamlLine = YamlParserService::addBlankLineIndentsByHisParent($yamlLines, $key);
             $currentLineWithoutDash = str_replace('-', ' ', $yamlLine);
             $countOfCurrentRowIndents = YamlService::rowIndentsOf($currentLineWithoutDash);
-            $dashRowCountOfIndents = null;
             while ($key > 0) {
+                /**
+                 * don't associate blank line to previous parent too, e.g.:
+                 *   -   foo: bar
+                 * (blank line)⬅
+                 *   -   baz: qux
+                 */
+                $nextLine = YamlService::getNextNonCommentAndNonBlankLine($yamlLines, $key);
+                if ((YamlService::isLineBlank($yamlLines[$key]) || YamlService::isLineComment($yamlLines[$key])) &&
+                    $nextLine !== null && YamlService::isLineStartOfArrayWithKeyAndValue(trim($nextLine)) &&
+                    YamlService::rowIndentsOf($nextLine) === 0) {
+                    break;
+                }
+
                 $key--;
                 $prevLine = $yamlLines[$key];
                 $prevLineWithoutDash = str_replace('-', ' ', $prevLine);
@@ -152,6 +164,7 @@ class YamlParser
                     if ($countOfPrevRowIndents < $countOfCurrentRowIndents) {
                         $yamlParserLineData->addLineKey($yamlLines, $key);
                     }
+                    $yamlParserLineData->addArrayKeyWithValueToSeparatedArray($yamlLines, $key);
 
                     $countOfCurrentRowIndents = $countOfPrevRowIndents; // it's parent, so we want to only higher from him
                 }
