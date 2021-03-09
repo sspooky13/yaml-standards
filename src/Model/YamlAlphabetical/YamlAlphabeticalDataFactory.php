@@ -107,6 +107,18 @@ class YamlAlphabeticalDataFactory
         $key1WithoutNumberAtEnd = preg_replace(self::REGEX_KEY_COMMENT_OR_EMPTY_LINE_WITH_NUMBER_AT_END, '', $key1);
         $key2WithoutNumberAtEnd = preg_replace(self::REGEX_KEY_COMMENT_OR_EMPTY_LINE_WITH_NUMBER_AT_END, '', $key2);
 
+        // add key number to end for fix situation when keys are same
+        preg_match('/\d+$/', $key1WithoutNumberAtEnd, $key1NumberAtEnd);
+        preg_match('/\d+$/', $key2WithoutNumberAtEnd, $key2NumberAtEnd);
+        $key1NumberAtEnd = count($key1NumberAtEnd) === 0 ? 0 : reset($key1NumberAtEnd);
+        $key2NumberAtEnd = count($key2NumberAtEnd) === 0 ? 0 : reset($key2NumberAtEnd);
+
+        $key1WithoutNumberAtEnd = preg_match(self::REGEX_KEY_COMMON_LINE_WITH_NUMBER_AT_END, $key1WithoutNumberAtEnd) === 0 ? $key1WithoutNumberAtEnd : preg_replace(self::REGEX_KEY_COMMON_LINE_WITH_NUMBER_AT_END, '', $key1WithoutNumberAtEnd);
+        $key1WithoutNumberAtEnd = preg_match(self::REGEX_KEY_ARRAY_WITHOUT_KEY_WITH_NUMBER_AT_END, $key1WithoutNumberAtEnd) === 0 ? $key1WithoutNumberAtEnd : preg_replace(self::REGEX_KEY_ARRAY_WITHOUT_KEY_WITH_NUMBER_AT_END, '', $key1WithoutNumberAtEnd);
+
+        $key2WithoutNumberAtEnd = preg_match(self::REGEX_KEY_COMMON_LINE_WITH_NUMBER_AT_END, $key2WithoutNumberAtEnd) === 0 ? $key2WithoutNumberAtEnd : preg_replace(self::REGEX_KEY_COMMON_LINE_WITH_NUMBER_AT_END, '', $key2WithoutNumberAtEnd);
+        $key2WithoutNumberAtEnd = preg_match(self::REGEX_KEY_ARRAY_WITHOUT_KEY_WITH_NUMBER_AT_END, $key2WithoutNumberAtEnd) === 0 ? $key2WithoutNumberAtEnd : preg_replace(self::REGEX_KEY_ARRAY_WITHOUT_KEY_WITH_NUMBER_AT_END, '', $key2WithoutNumberAtEnd);
+
         /*
          * add exclamation mark (!) to penultimate position in string for fix order for "dot" key scenario, e.g:
          * foo.bar:
@@ -115,6 +127,9 @@ class YamlAlphabeticalDataFactory
          */
         $key1WithoutNumberAtEnd = substr_replace($key1WithoutNumberAtEnd, '!', -1, 0);
         $key2WithoutNumberAtEnd = substr_replace($key2WithoutNumberAtEnd, '!', -1, 0);
+
+        $key1WithoutNumberAtEnd .= $key1NumberAtEnd;
+        $key2WithoutNumberAtEnd .= $key2NumberAtEnd;
 
         if ($key1WithoutNumberAtEnd === $key2WithoutNumberAtEnd) {
             return strnatcmp(trim($key2), trim($key1));
