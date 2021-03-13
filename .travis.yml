@@ -74,7 +74,6 @@ before_script:
             export PATH=/c/ProgramData/ComposerSetup/bin:$PATH
         fi;
     - composer self-update
-    - composer global require hirak/prestissimo
     - if [[ "${SYMFONY_VERSION}" != "" ]]; then composer require --no-update "symfony/console:${SYMFONY_VERSION}" "symfony/config:${SYMFONY_VERSION}" "symfony/yaml:${SYMFONY_VERSION}"; fi;
     - if [ "${DEPENDENCIES}" = "lowest" ]; then composer update --prefer-lowest; fi;
     - if [ "${DEPENDENCIES}" = "highest" ]; then composer update; fi;
