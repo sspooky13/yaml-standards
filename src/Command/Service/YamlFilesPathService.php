@@ -31,7 +31,8 @@ class YamlFilesPathService
      */
     private static function globRecursive(string $pattern): array
     {
-        $files = glob($pattern);
+        $pathNames = glob($pattern, GLOB_BRACE);
+        $files = array_filter($pathNames, 'is_file');
 
         foreach (glob(dirname($pattern) . '/*', GLOB_ONLYDIR | GLOB_NOSORT) as $dir) {
             $files = array_merge($files, self::globRecursive($dir . '/' . basename($pattern)));

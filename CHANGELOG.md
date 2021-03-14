@@ -20,6 +20,7 @@ apiVersion2: v1
 -                -   name: postgres
 -                    port: 5432
 ```
+- Yaml files path service: now you can use curly braces to find file, e.g.: `services.{yml,yaml}`
 
 ## [5.1.2] - 2020-02-02
 ### Fixed

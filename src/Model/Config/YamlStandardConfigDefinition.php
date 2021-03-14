@@ -28,6 +28,8 @@ class YamlStandardConfigDefinition implements ConfigurationInterface
     public const CONFIG_PARAMETERS_INDENTS_COMMENTS_WITHOUT_PARENT_VALUE_DEFAULT = 'default';
     public const CONFIG_PARAMETERS_INDENTS_COMMENTS_WITHOUT_PARENT_VALUE_PRESERVED = 'preserved';
 
+    private const REGEX_FILE_EXTENSION = '/\..+$/';
+
     /**
      * @inheritDoc
      */
@@ -61,7 +63,7 @@ class YamlStandardConfigDefinition implements ConfigurationInterface
                     ->validate()
                         ->ifTrue(function (array $patterns) {
                             foreach ($patterns as $pattern) {
-                                if (preg_match('/\..+/', $pattern) === 0) {
+                                if (preg_match(self::REGEX_FILE_EXTENSION, $pattern) === 0) {
                                     return true;
                                 }
                             }
@@ -76,7 +78,7 @@ class YamlStandardConfigDefinition implements ConfigurationInterface
                     ->validate()
                         ->ifTrue(function (array $patterns) {
                             foreach ($patterns as $pattern) {
-                                if (preg_match('/\..+/', $pattern) === 0) {
+                                if (preg_match(self::REGEX_FILE_EXTENSION, $pattern) === 0) {
                                     return true;
                                 }
                             }
