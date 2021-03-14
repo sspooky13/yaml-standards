@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-namespace YamlStandards\Model\Component;
+namespace YamlStandards\Model\Component\Parser;
 
-class YamlCountOfParents
+use YamlStandards\Model\Component\YamlService;
+
+class YamlParser
 {
     /**
      * Go back until deepest parent and count them
@@ -115,6 +117,69 @@ class YamlCountOfParents
         }
 
         return $countOfParents;
+    }
+
+    /**
+     * @param string $pathToYamlFile
+     * @return string[]
+     */
+    public static function getYamlParsedDataFromFile(string $pathToYamlFile): array
+    {
+        $fileContent = file_get_contents($pathToYamlFile);
+        $fileContent = str_replace("\r", '', $fileContent); // remove carriage returns
+        $yamlLines = explode("\n", $fileContent);
+        $yamlLines = YamlService::mergeMultipleValueLinesTogether($yamlLines);
+        $parentsData = [];
+
+        foreach ($yamlLines as $key => $yamlLine) {
+            $yamlParserLineData = new YamlParserLineData($yamlLines, $key);
+            $yamlLine = YamlParserService::addBlankLineIndentsByHisParent($yamlLines, $key);
+            $currentLineWithoutDash = str_replace('-', ' ', $yamlLine);
+            $countOfCurrentRowIndents = YamlService::rowIndentsOf($currentLineWithoutDash);
+            while ($key > 0) {
+                /**
+                 * don't associate blank line to previous parent too, e.g.:
+                 *   -   foo: bar
+                 * (blank line)⬅
+                 *   -   baz: qux
+                 */
+                $nextLine = YamlService::getNextNonCommentAndNonBlankLine($yamlLines, $key);
+                if ((YamlService::isLineBlank($yamlLines[$key]) || YamlService::isLineComment($yamlLines[$key])) &&
+                    $nextLine !== null && YamlService::isLineStartOfArrayWithKeyAndValue(trim($nextLine)) &&
+                    YamlService::rowIndentsOf($nextLine) === 0) {
+                    break;
+                }
+
+                $key--;
+                $prevLine = $yamlLines[$key];
+                $prevLineWithoutDash = str_replace('-', ' ', $prevLine);
+                $countOfPrevRowIndents = YamlService::rowIndentsOf($prevLineWithoutDash);
+
+                // ignore comment line and empty line
+                if (YamlService::isLineBlank($prevLine) || YamlService::isLineComment($prevLine)) {
+                    continue;
+                }
+
+                if ($countOfPrevRowIndents <= $countOfCurrentRowIndents) {
+                    if ($countOfPrevRowIndents < $countOfCurrentRowIndents) {
+                        $yamlParserLineData->addLineKey($yamlLines, $key);
+                    }
+                    $yamlParserLineData->addArrayKeyWithValueToSeparatedArray($yamlLines, $key);
+
+                    $countOfCurrentRowIndents = $countOfPrevRowIndents; // it's parent, so we want to only higher from him
+                }
+
+                if ($countOfCurrentRowIndents === 0) {
+                    break;
+                }
+            }
+
+            $parentsData[] = $yamlParserLineData->getPathToLineGradually();
+        }
+
+        $allParentsData = array_merge_recursive(...$parentsData); // add all data to one big array
+
+        return $allParentsData;
     }
 
     /**
