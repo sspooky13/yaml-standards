@@ -9,7 +9,8 @@
     checkers:
         -   pathToChecker: YamlStandards\Model\YamlAlphabetical\YamlAlphabeticalChecker # path to checker
             parameters:
-                { depth: 4 } # max depth to check, optional, by default it is 4
+                depth: 4 # max depth to check, optional, by default it is 4
+                prioritizedKeys: [ key1, key2 ] # keys which will be sorted as first, by default it is empty
         -   pathToChecker: YamlStandards\Model\YamlIndent\YamlIndentChecker
             parameters:
                 { indents: 4, indentsCommentsWithoutParent: default/preserved } # count of indents which files must observe, preserve indents for comment lines without parent (comment line at the end of file); optional, by default it is '4' and 'default'

@@ -21,6 +21,7 @@ class YamlStandardConfigDefinition implements ConfigurationInterface
     public const CONFIG_PARAMETERS_LEVEL = 'level';
     public const CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE = 'serviceAliasingType';
     public const CONFIG_PARAMETERS_INDENTS_COMMENTS_WITHOUT_PARENT = 'indentsCommentsWithoutParent';
+    public const CONFIG_PARAMETERS_ALPHABETICAL_PRIORITIZED_KEYS = 'prioritizedKeys';
 
     public const CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_SHORT = 'short';
     public const CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_LONG = 'long';
@@ -108,6 +109,7 @@ class YamlStandardConfigDefinition implements ConfigurationInterface
                                             self::CONFIG_PARAMETERS_INDENTS_COMMENTS_WITHOUT_PARENT_VALUE_DEFAULT,
                                             self::CONFIG_PARAMETERS_INDENTS_COMMENTS_WITHOUT_PARENT_VALUE_PRESERVED,
                                         ])->end()
+                                        ->arrayNode(self::CONFIG_PARAMETERS_ALPHABETICAL_PRIORITIZED_KEYS)->prototype('scalar')->end()
                                     ->end()
                                 ->end()
                             ->end()
