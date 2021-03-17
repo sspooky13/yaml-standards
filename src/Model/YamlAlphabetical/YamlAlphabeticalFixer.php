@@ -24,7 +24,7 @@ class YamlAlphabeticalFixer extends AbstractFixer
         $fileContent = file_get_contents($pathToYamlFile);
         $fileContent = str_replace("\r", '', $fileContent); // remove carriage returns
 
-        $rightFileLines = YamlAlphabeticalDataFactory::getCorrectYamlLines($pathToYamlFile, $standardParametersData->getDepth());
+        $rightFileLines = YamlAlphabeticalDataFactory::getCorrectYamlLines($pathToYamlFile, $standardParametersData->getDepth(), $standardParametersData->getAlphabeticalPrioritizedKeys());
 
         $rightFileContent = implode("\n", $rightFileLines);
 

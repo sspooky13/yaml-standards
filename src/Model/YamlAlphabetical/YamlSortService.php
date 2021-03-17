@@ -11,17 +11,18 @@ class YamlSortService
     /**
      * @param string[] $yamlArrayData
      * @param int $depth
+     * @param string[] $prioritizedKeys
      * @return string[]
      */
-    public static function sortArray(array $yamlArrayData, int $depth): array
+    public static function sortArray(array $yamlArrayData, int $depth, array $prioritizedKeys): array
     {
         if ($depth > 0) {
-            $yamlArrayData = self::sortArrayKeyWithUnderscoresAsFirst($yamlArrayData);
+            $yamlArrayData = self::sortArrayKeyWithUnderscoresAsFirst($yamlArrayData, $prioritizedKeys);
 
             if ($depth > 1) {
                 foreach ($yamlArrayData as $key => $value) {
                     if (is_array($value)) {
-                        $yamlArrayData[$key] = self::recursiveKsort($value, $depth);
+                        $yamlArrayData[$key] = self::recursiveKsort($value, $depth, $prioritizedKeys);
                     }
                 }
             }
@@ -33,16 +34,17 @@ class YamlSortService
     /**
      * @param string[] $yamlArrayData
      * @param int $depth
+     * @param string[] $prioritizedKeys
      * @param int $currentDepth
      * @return string[]
      */
-    private static function recursiveKsort(array $yamlArrayData, int $depth, int $currentDepth = 1): array
+    private static function recursiveKsort(array $yamlArrayData, int $depth, array $prioritizedKeys, int $currentDepth = 1): array
     {
-        $yamlArrayData = self::sortArrayKeyWithUnderscoresAsFirst($yamlArrayData);
+        $yamlArrayData = self::sortArrayKeyWithUnderscoresAsFirst($yamlArrayData, $prioritizedKeys);
         foreach ($yamlArrayData as $key => $value) {
             if (is_array($value)) {
                 if ($currentDepth <= $depth) {
-                    $yamlArrayData[$key] = self::recursiveKsort($value, $depth, $currentDepth + 1);
+                    $yamlArrayData[$key] = self::recursiveKsort($value, $depth, $prioritizedKeys, $currentDepth + 1);
                 }
             }
         }
@@ -52,9 +54,10 @@ class YamlSortService
 
     /**
      * @param string[] $yamlArrayData
+     * @param string[] $prioritizedKeys
      * @return string[]|string[][]
      */
-    private static function sortArrayKeyWithUnderscoresAsFirst(array $yamlArrayData): array
+    private static function sortArrayKeyWithUnderscoresAsFirst(array $yamlArrayData, array $prioritizedKeys): array
     {
         $arrayWithUnderscoreKeys = array_filter($yamlArrayData, [YamlService::class, 'hasArrayKeyUnderscoreAsFirstCharacter'], ARRAY_FILTER_USE_KEY);
         $arrayWithOtherKeys = array_filter($yamlArrayData, [YamlService::class, 'hasNotArrayKeyUnderscoreAsFirstCharacter'], ARRAY_FILTER_USE_KEY);
@@ -62,7 +65,9 @@ class YamlSortService
         uksort($arrayWithUnderscoreKeys, ['self', 'sortArrayAlphabetical']);
         uksort($arrayWithOtherKeys, ['self', 'sortArrayAlphabetical']);
 
-        return array_merge($arrayWithUnderscoreKeys, $arrayWithOtherKeys);
+        $arrayData = array_merge($arrayWithUnderscoreKeys, $arrayWithOtherKeys);
+
+        return self::sortArrayElementsByPrioritizedKeys($prioritizedKeys, $arrayData);
     }
 
     /**
@@ -105,5 +110,39 @@ class YamlSortService
         }
 
         return strnatcmp(trim($key1WithoutNumberAtEnd), trim($key2WithoutNumberAtEnd));
+    }
+
+    /**
+     * @param string[] $prioritizedKeys
+     * @param string[] $arrayData
+     * @return string[]
+     */
+    private static function sortArrayElementsByPrioritizedKeys(array $prioritizedKeys, array $arrayData): array
+    {
+        $positionTo = 0;
+        foreach ($prioritizedKeys as $prioritizedKey) {
+            $foundKeys = preg_grep('/' . $prioritizedKey . '/', array_keys($arrayData));
+            foreach ($foundKeys as $foundKey) {
+                $positionFrom = (int)array_search($foundKey, array_keys($arrayData), true);
+                self::changeElementPositionInArray($arrayData, $positionFrom, $positionTo);
+                $positionTo++;
+            }
+        }
+
+        return $arrayData;
+    }
+
+    /**
+     * @param string[] $array
+     * @param int $positionFrom
+     * @param int $positionTo
+     *
+     * @link https://stackoverflow.com/a/28831998
+     */
+    private static function changeElementPositionInArray(array &$array, int $positionFrom, int $positionTo): void
+    {
+        $p1 = array_splice($array, $positionFrom, 1);
+        $p2 = array_splice($array, 0, $positionTo);
+        $array = array_merge($p2, $p1, $array);
     }
 }

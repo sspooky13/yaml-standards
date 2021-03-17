@@ -27,14 +27,15 @@ class YamlAlphabeticalDataFactory
     /**
      * @param string $pathToYamlFile
      * @param int $depth
+     * @param string[] $prioritizedKeys
      * @return string[]
      */
-    public static function getCorrectYamlLines(string $pathToYamlFile, int $depth): array
+    public static function getCorrectYamlLines(string $pathToYamlFile, int $depth, array $prioritizedKeys): array
     {
         self::$index = 0; // start from 0 in every file
 
         $yamlArrayData = YamlParser::getYamlParsedDataFromFile($pathToYamlFile);
-        $yamlArrayDataSorted = YamlSortService::sortArray($yamlArrayData, $depth);
+        $yamlArrayDataSorted = YamlSortService::sortArray($yamlArrayData, $depth, $prioritizedKeys);
 
         return self::createRightSortedYamlLines($yamlArrayDataSorted);
     }
