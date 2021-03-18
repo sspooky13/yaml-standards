@@ -19,9 +19,10 @@ class YamlSortService
         if ($depth > 0) {
             $yamlArrayData = self::sortArrayKeyWithUnderscoresAsFirst($yamlArrayData, $prioritizedKeys);
 
-            if ($depth > 1) {
-                foreach ($yamlArrayData as $key => $value) {
-                    if (is_array($value)) {
+            foreach ($yamlArrayData as $key => $value) {
+                if (is_array($value)) {
+                    // ignore "empty_array" key because they not included in file, they are only auxiliary variables
+                    if ($depth > 1 || preg_match(YamlAlphabeticalDataFactory::REGEX_KEY_EMPTY_ARRAY_WITH_NUMBER_AT_END, $key) === 1) {
                         $yamlArrayData[$key] = self::recursiveKsort($value, $depth, $prioritizedKeys);
                     }
                 }
@@ -38,12 +39,13 @@ class YamlSortService
      * @param int $currentDepth
      * @return string[]
      */
-    private static function recursiveKsort(array $yamlArrayData, int $depth, array $prioritizedKeys, int $currentDepth = 1): array
+    private static function recursiveKsort(array $yamlArrayData, int $depth, array $prioritizedKeys, int $currentDepth = 2): array
     {
         $yamlArrayData = self::sortArrayKeyWithUnderscoresAsFirst($yamlArrayData, $prioritizedKeys);
         foreach ($yamlArrayData as $key => $value) {
             if (is_array($value)) {
-                if ($currentDepth <= $depth) {
+                // ignore "empty_array" key because they not included in file, they are only auxiliary variables
+                if ($currentDepth < $depth || preg_match(YamlAlphabeticalDataFactory::REGEX_KEY_EMPTY_ARRAY_WITH_NUMBER_AT_END, $key) === 1) {
                     $yamlArrayData[$key] = self::recursiveKsort($value, $depth, $prioritizedKeys, $currentDepth + 1);
                 }
             }
