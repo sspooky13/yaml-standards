@@ -3,6 +3,7 @@
 ## [Unreleased]
 ### Added
 - Yaml alphabetical: create fixer
+- Config: added new parameter for prioritizing keys in alphabetical functionality
 
 ### Changed
 - Yaml files path service: use wildcards for find files instead of directory recursive iterator
