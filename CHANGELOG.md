@@ -3,6 +3,7 @@
 ## [Unreleased]
 ### Added
 - Yaml alphabetical: create fixer
+- Config: added new parameter for prioritizing keys in alphabetical functionality
 
 ### Changed
 - Yaml files path service: use wildcards for find files instead of directory recursive iterator
@@ -21,6 +22,7 @@ apiVersion2: v1
 -                    port: 5432
 ```
 - Yaml files path service: now you can use curly braces to find file, e.g.: `services.{yml,yaml}`
+- Yaml alphabetical: fixed right sort yaml by depth
 
 ## [5.1.2] - 2020-02-02
 ### Fixed

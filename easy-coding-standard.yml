@@ -10,10 +10,11 @@ parameters:
         ObjectCalisthenics\Sniffs\Files\FunctionLengthSniff:
             - '*/src/Model/YamlIndent/YamlIndentDataFactory.php'
             - '*/src/Model/Component/Parser/YamlParser.php'
+            - '*/tests/Model/YamlAlphabetical/YamlSortServiceTest.php'
 
         SlevomatCodingStandard\Sniffs\Classes\UnusedPrivateElementsSniff.UnusedMethod:
             - '*/src/Model/YamlInline/YamlInlineChecker.php'
-            - '*/src/Model/YamlAlphabetical/YamlAlphabeticalDataFactory.php'
+            - '*/src/Model/YamlAlphabetical/YamlSortService.php'
 
         PhpCsFixer\Fixer\Whitespace\SingleBlankLineAtEofFixer:
             - '*/tests/Model/YamlEmptyLineAtEnd/resource/unfixed/foo.php' # this is only for unit test so this has to be skipped
