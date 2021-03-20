@@ -12,26 +12,25 @@ class YamlParserTest extends TestCase
     public function testGetRightCountOfParents(): void
     {
         $groupOfYamlLines = [
-            ['- foo:', '        - bar'],
-            ['- foo:', '        - bar', 'baz: qux'],
-            ['- foo:', '        - bar', '    baz:', '        qux: quux'],
-            ['- foo:', '        - bar', '        - baz', '  qux:', '        - quux'],
-            ['- foo:', '        - bar', '  baz:', '        - qux'],
-            ['- foo:', '        - bar', '          baz:', '              - qux'],
+            ['-   foo:', '        - bar'],
+            ['-   foo:', '        - bar', 'baz: qux'],
+            ['-   foo:', '        - bar', '    baz:', '        qux: quux'],
+            ['-   foo:', '        - bar', '        - baz', '  qux:', '        - quux'],
+            ['-   foo:', '        - bar', '    baz:', '        - qux'],
             ['foo:', '    bar: baz'],
             ['foo:', '    - bar: baz'],
             ['foo:', '    bar:', '        baz: quux'],
             ['foo:', '- bar'],
             ['foo:', '- bar:', '            - baz'],
-            ['- foo:', '    bar: baz', '- qux:', '        - quux: quuz'],
+            ['-   foo:', '    bar: baz', '- qux:', '        - quux: quuz'],
         ];
-        $keyToCheck = [1, 1, 3, 2, 3, 3, 1, 1, 2, 1, 2, 2];
-        $rightCountOfParents = [2, 2, 2, 2, 2, 3, 1, 1, 2, 1, 3, 0];
+        $keyToCheck = [1, 1, 3, 2, 3, 1, 1, 2, 1, 2, 2];
+        $rightCountOfParents = [2, 2, 2, 2, 2, 1, 1, 2, 1, 3, 0];
 
         foreach ($groupOfYamlLines as $key => $yamlLines) {
             $countOfParents = YamlParser::getCountOfParentsForLine($yamlLines, $keyToCheck[$key]);
 
-            $this->assertSame($rightCountOfParents[$key], $countOfParents, sprintf('`%s` has wrong count of parents', implode(',', $yamlLines)));
+            $this->assertSame($rightCountOfParents[$key], $countOfParents, sprintf('`%s` has wrong count of parents, key: %d', implode(',', $yamlLines), $key));
         }
     }
 

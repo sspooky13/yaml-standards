@@ -24,6 +24,16 @@ apiVersion2: v1
 - Yaml files path service: now you can use curly braces to find file, e.g.: `services.{yml,yaml}`
 - Yaml alphabetical: fixed right sort yaml by depth
 - Yaml files path service: don't run recursive searching for file if full path to file is defined
+- Yaml indent: fix get correct indents for array
+```diff
+plugins:
+    - search
+    -   readthedocs-version-warning:
+            project_id: "490215"
+            show_on_versions:
+-           - latest
++               - latest
+```
 
 ## [5.1.2] - 2020-02-02
 ### Fixed

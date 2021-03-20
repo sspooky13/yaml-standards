@@ -40,6 +40,9 @@ class YamlParser
 
             if (self::isPrevLineNextParent($isArrayLine, $countOfPrevRowIndents, $countOfRowIndents, $isPrevLineArrayLine)) {
                 $line = $yamlLines[$key];
+                $lineWithoutDash = str_replace('-', ' ', $line);
+                $countOfRowIndentsWithoutDash = YamlService::rowIndentsOf($lineWithoutDash);
+                $hasPrevParentSameCountOfIndents = $countOfRowIndents === $countOfRowIndentsWithoutDash;
                 $countOfRowIndents = YamlService::rowIndentsOf($line);
                 $trimmedLine = trim($line);
                 $isArrayLine = YamlService::hasLineDashOnStartOfLine($trimmedLine);
@@ -48,10 +51,21 @@ class YamlParser
                  * array has array values at beginning and is not first element in array, e.g.
                  *  -  pathsToCheck:
                  *      - path/to/file
+                 *
+                 *
+                 * subtract one parent only for line with same count of indents, e.g.
+                 *  -   foo: bar
+                 *      baz:
+                 *         qux: quux ⬅
+                 * but not for different count of indent, e.g.
+                 *  -   foo:
+                 *         bar:
+                 *             baz: qux ⬅
                  */
                 if ($isArrayLine &&
                     $countOfParents > 0 &&
-                    YamlService::isLineOpeningAnArray($trimmedLine)
+                    YamlService::isLineOpeningAnArray($trimmedLine) &&
+                    $hasPrevParentSameCountOfIndents
                 ) {
                     $countOfParents--;
                 }
