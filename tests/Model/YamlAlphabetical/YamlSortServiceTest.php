@@ -16,22 +16,6 @@ class YamlSortServiceTest extends TestCase
     {
         return [
             [
-                'array' => [
-                    'qux' => 'baz',
-                    'foo' => 'bar',
-                    'bar' => [
-                        'key2' => [
-                            'key12' => 'value',
-                            'key5' => 'value',
-                            'key2' => 'value',
-                        ],
-                        'key1' => [
-                            'key1111' => 'value',
-                            'key111' => 'value',
-                            'key11' => 'value',
-                        ],
-                    ],
-                ],
                 'expectedSortedArray' => [
                     'bar' => [
                         'key2' => [
@@ -52,22 +36,6 @@ class YamlSortServiceTest extends TestCase
                 'prioritizedKeys' => [],
             ],
             [
-                'array' => [
-                    'qux' => 'baz',
-                    'foo' => 'bar',
-                    'bar' => [
-                        'key2' => [
-                            'key12' => 'value',
-                            'key5' => 'value',
-                            'key2' => 'value',
-                        ],
-                        'key1' => [
-                            'key1111' => 'value',
-                            'key111' => 'value',
-                            'key11' => 'value',
-                        ],
-                    ],
-                ],
                 'expectedSortedArray' => [
                     'bar' => [
                         'key1' => [
@@ -88,22 +56,6 @@ class YamlSortServiceTest extends TestCase
                 'prioritizedKeys' => [],
             ],
             [
-                'array' => [
-                    'qux' => 'baz',
-                    'foo' => 'bar',
-                    'bar' => [
-                        'key2' => [
-                            'key12' => 'value',
-                            'key5' => 'value',
-                            'key2' => 'value',
-                        ],
-                        'key1' => [
-                            'key1111' => 'value',
-                            'key111' => 'value',
-                            'key11' => 'value',
-                        ],
-                    ],
-                ],
                 'expectedSortedArray' => [
                     'bar' => [
                         'key1' => [
@@ -124,22 +76,6 @@ class YamlSortServiceTest extends TestCase
                 'prioritizedKeys' => [],
             ],
             [
-                'array' => [
-                    'qux' => 'baz',
-                    'foo' => 'bar',
-                    'bar' => [
-                        'key2' => [
-                            'key12' => 'value',
-                            'key5' => 'value',
-                            'key2' => 'value',
-                        ],
-                        'key1' => [
-                            'key1111' => 'value',
-                            'key111' => 'value',
-                            'key11' => 'value',
-                        ],
-                    ],
-                ],
                 'expectedSortedArray' => [
                     'qux' => 'baz',
                     'bar' => [
@@ -164,13 +100,29 @@ class YamlSortServiceTest extends TestCase
 
     /**
      * @dataProvider getDataForAlphabeticalSortProvider
-     * @param array $array
      * @param array $expectedSortedArray
      * @param int $depth
      * @param string[] $prioritizedKeys
      */
-    public function testSortArrayByDepth(array $array, array $expectedSortedArray, int $depth, array $prioritizedKeys): void
+    public function testSortArrayByDepth(array $expectedSortedArray, int $depth, array $prioritizedKeys): void
     {
+        /** @var string[] $array */
+        $array = [
+            'qux' => 'baz',
+            'foo' => 'bar',
+            'bar' => [
+                'key2' => [
+                    'key12' => 'value',
+                    'key5' => 'value',
+                    'key2' => 'value',
+                ],
+                'key1' => [
+                    'key1111' => 'value',
+                    'key111' => 'value',
+                    'key11' => 'value',
+                ],
+            ],
+        ];
         $actualSortedArray = YamlSortService::sortArray($array, $depth, $prioritizedKeys);
 
         $this->assertSame($expectedSortedArray, $actualSortedArray);
