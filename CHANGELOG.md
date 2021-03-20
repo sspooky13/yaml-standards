@@ -23,6 +23,7 @@ apiVersion2: v1
 ```
 - Yaml files path service: now you can use curly braces to find file, e.g.: `services.{yml,yaml}`
 - Yaml alphabetical: fixed right sort yaml by depth
+- Yaml files path service: don't run recursive searching for file if full path to file is defined
 
 ## [5.1.2] - 2020-02-02
 ### Fixed

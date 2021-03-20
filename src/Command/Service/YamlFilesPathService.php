@@ -14,7 +14,11 @@ class YamlFilesPathService
     {
         $pathToFiles = [[]];
         foreach ($patterns as $pattern) {
-            $pathToFiles[] = self::globRecursive($pattern);
+            if (is_file($pattern)) {
+                $pathToFiles[] = [$pattern];
+            } else {
+                $pathToFiles[] = self::globRecursive($pattern);
+            }
         }
 
         $pathToFiles = array_merge(...$pathToFiles);

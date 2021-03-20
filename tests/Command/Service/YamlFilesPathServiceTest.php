@@ -60,6 +60,18 @@ class YamlFilesPathServiceTest extends TestCase
         $this->assertTrue($this->arraysAreEqual($yamlFiles, $expectedYamlFiles)); // assert two arrays are equal, but order of elements is not important
     }
 
+    public function testReturnOnlyDefinedFilesIfFullPathToFileIsDefined(): void
+    {
+        $pathToFiles = [
+            './tests/Command/resource/symfony-service.yml',
+            './tests/Command/resource/yaml-getting-started.yml',
+        ];
+
+        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($pathToFiles);
+
+        $this->assertCount(2, $yamlFiles);
+    }
+
     /**
      * @param string[] $expectedPaths
      * @param string[] $actualPaths
