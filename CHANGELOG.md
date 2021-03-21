@@ -8,6 +8,7 @@
 ### Changed
 - Yaml files path service: use wildcards for find files instead of directory recursive iterator
 - Yaml empty line at end: this standard can be used for any file suffix
+- Config: prioritized keys can be defined exactly with string `::exact` for exact search
 
 ### Fixed
 - Yaml indent: fix get correct indents for array

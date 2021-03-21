@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace YamlStandards\Model\YamlAlphabetical;
 
+use YamlStandards\Model\Component\Parser\YamlParserLineData;
 use YamlStandards\Model\Component\YamlService;
 
 class YamlSortService
 {
+    private const EXACT_DEFINED_PRIORITIZED_KEY = '::exact';
+
     /**
      * @param string[] $yamlArrayData
      * @param int $depth
@@ -122,8 +125,17 @@ class YamlSortService
     private static function sortArrayElementsByPrioritizedKeys(array $prioritizedKeys, array $arrayData): array
     {
         $positionTo = 0;
+        $exactDefinedPrioritizedKeyLength = strlen(self::EXACT_DEFINED_PRIORITIZED_KEY);
+
         foreach ($prioritizedKeys as $prioritizedKey) {
-            $foundKeys = preg_grep('/' . $prioritizedKey . '/', array_keys($arrayData));
+            // check if prioritized key is defined as exact in end
+            if (substr($prioritizedKey, -$exactDefinedPrioritizedKeyLength) === self::EXACT_DEFINED_PRIORITIZED_KEY) {
+                $prioritizedKey = str_replace(self::EXACT_DEFINED_PRIORITIZED_KEY, '', $prioritizedKey);
+                $foundKeys = preg_grep('/' . preg_quote($prioritizedKey, '/') . ':' . YamlParserLineData::KEY . '/', array_keys($arrayData));
+            } else {
+                $foundKeys = preg_grep('/' . preg_quote($prioritizedKey, '/') . '/', array_keys($arrayData));
+            }
+
             foreach ($foundKeys as $foundKey) {
                 $positionFrom = (int)array_search($foundKey, array_keys($arrayData), true);
                 self::changeElementPositionInArray($arrayData, $positionFrom, $positionTo);

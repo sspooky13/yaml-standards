@@ -172,31 +172,6 @@ class YamlSortServiceTest extends TestCase
                 ],
                 'expectedSortedArray' => [
                     'corge' => 'value',
-                    'baz' => 'value',
-                    'foo' => 'value',
-                    'bar' => 'value',
-                    'qux' => 'value',
-                    'quux' => 'value',
-                    'quuz' => 'value',
-                    'grault' => 'value',
-                ],
-                'prioritizedKey' => [
-                    'corge', 'baz',
-                ],
-            ],
-            [
-                'array' => [
-                    'foo' => 'value',
-                    'bar' => 'value',
-                    'baz' => 'value',
-                    'qux' => 'value',
-                    'quux' => 'value',
-                    'quuz' => 'value',
-                    'corge' => 'value',
-                    'grault' => 'value',
-                ],
-                'expectedSortedArray' => [
-                    'corge' => 'value',
                     'quux' => 'value',
                     'grault' => 'value',
                     'foo' => 'value',
@@ -207,6 +182,56 @@ class YamlSortServiceTest extends TestCase
                 ],
                 'prioritizedKey' => [
                     'corge', 'quux', 'grault',
+                ],
+            ],
+            [
+                'array' => [
+                    'foo' => 'value',
+                    'bar' => 'value',
+                    'baz' => 'value',
+                    'fooqux' => 'value',
+                    'quux' => 'value',
+                    'quuz' => 'value',
+                    'corge' => 'value',
+                    'grault' => 'value',
+                ],
+                'expectedSortedArray' => [
+                    'foo' => 'value',
+                    'fooqux' => 'value',
+                    'bar' => 'value',
+                    'baz' => 'value',
+                    'quux' => 'value',
+                    'quuz' => 'value',
+                    'corge' => 'value',
+                    'grault' => 'value',
+                ],
+                'prioritizedKey' => [
+                    'foo',
+                ],
+            ],
+            [
+                'array' => [
+                    'foo:key:' => 'value',
+                    'foobar:key:' => 'value',
+                    'foobaz:key:' => 'value',
+                    'fooqux:key:' => 'value',
+                    'fooquux:key:' => 'value',
+                    'fooquuz:key:' => 'value',
+                    'foocorge:key:' => 'value',
+                    'foograult:key:' => 'value',
+                ],
+                'expectedSortedArray' => [
+                    'foo:key:' => 'value',
+                    'foograult:key:' => 'value',
+                    'foobar:key:' => 'value',
+                    'foobaz:key:' => 'value',
+                    'fooqux:key:' => 'value',
+                    'fooquux:key:' => 'value',
+                    'fooquuz:key:' => 'value',
+                    'foocorge:key:' => 'value',
+                ],
+                'prioritizedKey' => [
+                    'foo::exact', 'grault',
                 ],
             ],
         ];

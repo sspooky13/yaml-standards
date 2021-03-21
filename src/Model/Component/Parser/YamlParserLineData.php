@@ -8,7 +8,7 @@ use YamlStandards\Model\Component\YamlService;
 
 class YamlParserLineData
 {
-    private const KEY = 'key:';
+    public const KEY = 'key:';
     public const KEY_COMMON_LINE = self::KEY . ':common_line:';
     public const KEY_COMMENT_OR_EMPTY_LINE = self::KEY . 'comment_empty_line:';
     public const KEY_DASH = self::KEY . 'dashes:';
