@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [6.0.0] - 2021-03-21
 ### Added
 - Yaml alphabetical: create fixer
 - Config: added new parameter for prioritizing keys in alphabetical functionality
@@ -218,7 +220,8 @@ patchesJson6902:
 [#14]: https://github.com/sspooky13/yaml-standards/issues/14
 [#13]: https://github.com/sspooky13/yaml-standards/pull/13
 
-[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/5.1.2...HEAD
+[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/6.0.0...HEAD
+[6.0.0]: https://github.com/sspooky13/yaml-standards/compare/5.1.2...6.0.0
 [5.1.2]: https://github.com/sspooky13/yaml-standards/compare/5.1.1...5.1.2
 [5.1.1]: https://github.com/sspooky13/yaml-standards/compare/5.1.0...5.1.1
 [5.1.0]: https://github.com/sspooky13/yaml-standards/compare/5.0.0...5.1.0
