@@ -1,7 +1,7 @@
 # YAML standards
 
 [![Total Downloads](https://poser.pugx.org/sspooky13/yaml-standards/downloads)](https://packagist.org/packages/sspooky13/yaml-standards)
-[![Build Status](https://github.com/sspooky13/yaml-standards/actions/workflows/build.yaml/badge.svg)
+[![Build Status](https://github.com/sspooky13/yaml-standards/actions/workflows/build.yaml/badge.svg?branch=master)](https://github.com/sspooky13/yaml-standards/actions?query=branch%3Amaster+event%3Apush)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/74e686c9111940a982ff3ee5e4ca9d52)](https://www.codacy.com/app/sspooky13/yaml-standards?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=sspooky13/yaml-standards&amp;utm_campaign=Badge_Grade)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sspooky13/yaml-standards/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/sspooky13/yaml-standards/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/sspooky13/yaml-standards/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/sspooky13/yaml-standards/?branch=master)
