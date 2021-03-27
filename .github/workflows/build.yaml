@@ -1,0 +1,69 @@
+name: "Build"
+
+on:
+    push:
+        branches:
+            - 'master'
+        tags:
+            - '**'
+    pull_request:
+        branches:
+            - '**'
+
+jobs:
+    build:
+        name: PHP ${{ matrix.php }} on ${{ matrix.os }} with ${{ matrix.deps-level }} ${{ matrix.symfony }} dependency level
+        runs-on: ${{ matrix.os }}
+        strategy:
+            matrix:
+                os: [ 'ubuntu-latest', 'macos-latest', 'windows-latest' ]
+                php: [ '7.1', '7.2', '7.3', '7.4' ]
+                deps-level: [ 'lowest', 'highest' ]
+                symfony: [ '^3.0', '^4.0.10' ]
+                exclude:
+                    # symfony/console fails on "YamlStandards\Command\YamlCommandTest::testCorrectRunCommandForFix -> Trying to access array offset on value of type int" and I think it's not necessary fix it, so I skip it
+                    -   php: '7.4'
+                        deps-level: 'lowest'
+                    # symfony/config fails on "vendor/symfony/config/Definition/BaseNode.php:502 -> strpos(): Non-string needles will be interpreted as strings in the future.
+                    # Use an explicit chr() call to preserve the current behavior" but PHP 7.3 for MacOS was already skipped with Travis CI
+                    -   php: '7.3'
+                        os: 'macos-latest'
+        steps:
+            -   name: Configure git to avoid issues with line endings
+                if: matrix.os == 'windows-latest'
+                run: git config --global core.autocrlf false
+
+            -   uses: actions/checkout@v2
+
+            -   name: Setup PHP ${{ matrix.php }} and composer
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php }}
+                    coverage: none # disable xdebug, pcov
+                    tools: composer:v2
+
+            -   name: Require Symfony at version ${{ matrix.symfony }}
+                if: ${{ matrix.symfony != '' && matrix.os != 'windows-latest' }}
+                run: composer require --no-update "symfony/console:${{ matrix.symfony }}" "symfony/config:${{ matrix.symfony }}" "symfony/yaml:${{ matrix.symfony }}"
+
+            -   name: "Set composer cache directory"
+                id: composer-cache
+                run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+            -   name: "Cache composer"
+                uses: actions/cache@v2.1.2
+                with:
+                    path: ${{ steps.composer-cache.outputs.dir }}
+                    key: ${{ runner.os }}-${{ matrix.php-version }}-composer-${{ hashFiles('composer.json') }}
+                    restore-keys: ${{ runner.os }}-${{ matrix.php-version }}-composer-
+
+            -   name: Install lowest dependencies
+                if: ${{ matrix.deps-level == 'lowest' }}
+                run: composer update --prefer-lowest
+
+            -   name: Install highest dependencies
+                if: ${{ matrix.deps-level == 'highest' }}
+                run: composer update
+
+            -   name: Run CI
+                run: vendor/bin/phing build-ci
