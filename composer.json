@@ -37,10 +37,10 @@
         "phpstan/phpstan": "^0.12",
         "jakub-onderka/php-parallel-lint": "^0.9",
         "phpunit/phpunit": "^7.5 || ^9.3",
-        "shopsys/coding-standards": "^7.3",
+        "shopsys/coding-standards": "^7.3 || ^9.0",
         "symfony/var-dumper": "^3.4 || ^4.3 || ^5.0",
         "symfony/dependency-injection": "<4.4.19",
-        "symplify/easy-coding-standard": "^5.4.3",
+        "symplify/easy-coding-standard": "^5.4.3 || ^9.0.0",
         "phpstan/phpstan-phpunit": "^0.12.1"
     },
     "bin": [
