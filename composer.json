@@ -29,6 +29,7 @@
         "php": "^7.1",
         "symfony/console": "^3.0 || ^4.0.10 || ^5.0",
         "symfony/config": "^3.0 || ^4.0.10 || ^5.0",
+        "symfony/http-kernel": "^3.0 || ^4.0.10 || ^5.0",
         "symfony/yaml": "^3.0 || ^4.0.10 || ^5.0",
         "sebastian/diff": "^1.4 || ^2.0 || ^3.0"
     },
@@ -39,7 +40,6 @@
         "phpunit/phpunit": "^7.5",
         "shopsys/coding-standards": "^7.3",
         "symfony/var-dumper": "^3.4 || ^4.3 || ^5.0",
-        "symfony/dependency-injection": "<4.4.19",
         "symplify/easy-coding-standard": "^5.4.3",
         "phpstan/phpstan-phpunit": "^0.12.1"
     },
