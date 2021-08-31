@@ -14,6 +14,8 @@ jobs:
     build:
         name: PHP ${{ matrix.php }} on ${{ matrix.os }} with ${{ matrix.deps-level }} ${{ matrix.symfony }} dependency level
         runs-on: ${{ matrix.os }}
+        env:
+            COMPOSER_ALL_DEV_DEPENDENCIES_WITHOUT_PHPUNIT: phing/phing phpstan/phpstan php-parallel-lint/php-parallel-lint shopsys/coding-standards symfony/var-dumper symplify/easy-coding-standard phpstan/phpstan-phpunit
         strategy:
             matrix:
                 os: [ 'ubuntu-latest', 'macos-latest', 'windows-latest' ]
@@ -77,3 +79,18 @@ jobs:
             -   name: Run CI
                 if: ${{ matrix.php != '8.0' }}
                 run: vendor/bin/phing build-ci
+
+            -   name: Remove all dev-dependencies instead of phpunit and install lowest dependencies
+                if: ${{ matrix.deps-level == 'lowest' }}
+                run: |
+                    composer remove --no-update --dev ${{ env.COMPOSER_ALL_DEV_DEPENDENCIES_WITHOUT_PHPUNIT }}
+                    composer update --prefer-lowest
+
+            -   name: Remove all dev-dependencies instead of phpunit and install highest dependencies
+                if: ${{ matrix.deps-level == 'highest' }}
+                run: |
+                    composer remove --no-update --dev ${{ env.COMPOSER_ALL_DEV_DEPENDENCIES_WITHOUT_PHPUNIT }}
+                    composer update
+
+            -   name: Run tests
+                run: vendor/bin/phpunit --colors=always --testsuite Unit
