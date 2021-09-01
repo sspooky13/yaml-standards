@@ -14,12 +14,14 @@ jobs:
     build:
         name: PHP ${{ matrix.php }} on ${{ matrix.os }} with ${{ matrix.deps-level }} ${{ matrix.symfony }} dependency level
         runs-on: ${{ matrix.os }}
+        env:
+            COMPOSER_ALL_DEV_DEPENDENCIES_WITHOUT_PHPUNIT: phing/phing phpstan/phpstan php-parallel-lint/php-parallel-lint shopsys/coding-standards symfony/var-dumper symplify/easy-coding-standard phpstan/phpstan-phpunit
         strategy:
             matrix:
                 os: [ 'ubuntu-latest', 'macos-latest', 'windows-latest' ]
-                php: [ '7.1', '7.2', '7.3', '7.4' ]
+                php: [ '7.1', '7.2', '7.3', '7.4', '8.0' ]
                 deps-level: [ 'lowest', 'highest' ]
-                symfony: [ '^3.0', '^4.0.10' ]
+                symfony: [ '^3.4.31', '^4.0.10' ]
                 exclude:
                     # symfony/console fails on "YamlStandards\Command\YamlCommandTest::testCorrectRunCommandForFix -> Trying to access array offset on value of type int" and I think it's not necessary fix it, so I skip it
                     -   php: '7.4'
@@ -43,27 +45,52 @@ jobs:
                     tools: composer:v2
 
             -   name: Require Symfony at version ${{ matrix.symfony }}
-                if: ${{ matrix.symfony != '' && matrix.os != 'windows-latest' }}
-                run: composer require --no-update "symfony/console:${{ matrix.symfony }}" "symfony/config:${{ matrix.symfony }}" "symfony/yaml:${{ matrix.symfony }}"
+                run: composer require --no-update "symfony/console:${{ matrix.symfony }}" "symfony/config:${{ matrix.symfony }}" "symfony/http-kernel:${{ matrix.symfony }}" "symfony/yaml:${{ matrix.symfony }}"
+
+            -   name: Add caret to composer.json for symfony libraries for windows build
+                if: ${{ matrix.os == 'windows-latest' }}
+                shell: pwsh
+                run: |
+                    $symfonyVersionWithoutCaret = "${{ matrix.symfony }}".substring(1)
+                    (Get-Content composer.json) | ForEach-Object { $_.replace('"symfony/console": "' + $symfonyVersionWithoutCaret + '"', '"symfony/console": "${{ matrix.symfony }}"') } | Set-Content composer.json
+                    (Get-Content composer.json) | ForEach-Object { $_.replace('"symfony/config": "' + $symfonyVersionWithoutCaret + '"', '"symfony/config": "${{ matrix.symfony }}"') } | Set-Content composer.json
+                    (Get-Content composer.json) | ForEach-Object { $_.replace('"symfony/http-kernel": "' + $symfonyVersionWithoutCaret + '"', '"symfony/http-kernel": "${{ matrix.symfony }}"') } | Set-Content composer.json
+                    (Get-Content composer.json) | ForEach-Object { $_.replace('"symfony/yaml": "' + $symfonyVersionWithoutCaret + '"', '"symfony/yaml": "${{ matrix.symfony }}"') } | Set-Content composer.json
 
             -   name: "Set composer cache directory"
                 id: composer-cache
                 run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 
             -   name: "Cache composer"
-                uses: actions/cache@v2.1.2
+                uses: actions/cache@v2
                 with:
                     path: ${{ steps.composer-cache.outputs.dir }}
-                    key: ${{ runner.os }}-${{ matrix.php-version }}-composer-${{ hashFiles('composer.json') }}
-                    restore-keys: ${{ runner.os }}-${{ matrix.php-version }}-composer-
+                    key: ${{ runner.os }}-${{ matrix.php }}-${{ matrix.deps-level }}-${{ matrix.symfony }}-composer-${{ hashFiles('**/composer.json') }}
+                    restore-keys: ${{ runner.os }}-${{ matrix.php }}-${{ matrix.deps-level }}-${{ matrix.symfony }}-composer-
 
             -   name: Install lowest dependencies
-                if: ${{ matrix.deps-level == 'lowest' }}
+                if: ${{ matrix.deps-level == 'lowest' && matrix.php != '8.0' }}
                 run: composer update --prefer-lowest
 
             -   name: Install highest dependencies
-                if: ${{ matrix.deps-level == 'highest' }}
+                if: ${{ matrix.deps-level == 'highest' && matrix.php != '8.0' }}
                 run: composer update
 
             -   name: Run CI
+                if: ${{ matrix.php != '8.0' }}
                 run: vendor/bin/phing build-ci
+
+            -   name: Remove all dev-dependencies instead of phpunit and install lowest dependencies
+                if: ${{ matrix.deps-level == 'lowest' }}
+                run: |
+                    composer remove --no-update --dev ${{ env.COMPOSER_ALL_DEV_DEPENDENCIES_WITHOUT_PHPUNIT }}
+                    composer update --prefer-lowest
+
+            -   name: Remove all dev-dependencies instead of phpunit and install highest dependencies
+                if: ${{ matrix.deps-level == 'highest' }}
+                run: |
+                    composer remove --no-update --dev ${{ env.COMPOSER_ALL_DEV_DEPENDENCIES_WITHOUT_PHPUNIT }}
+                    composer update
+
+            -   name: Run tests
+                run: vendor/bin/phpunit --colors=always --testsuite Unit
