@@ -1,6 +1,11 @@
 # Changelog
 
 ## [Unreleased]
+## Added
+- add support for PHP 8
+
+## Removed
+- drop support for symfony 3.4.30 and lower
 
 ## [6.0.0] - 2021-03-21
 ### Added
