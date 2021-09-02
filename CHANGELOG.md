@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [7.0.0] - 2021-09-02
 ## Added
 - add support for PHP 8
 
@@ -225,7 +227,8 @@ patchesJson6902:
 [#14]: https://github.com/sspooky13/yaml-standards/issues/14
 [#13]: https://github.com/sspooky13/yaml-standards/pull/13
 
-[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/6.0.0...HEAD
+[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/7.0.0...HEAD
+[7.0.0]: https://github.com/sspooky13/yaml-standards/compare/6.0.0...7.0.0
 [6.0.0]: https://github.com/sspooky13/yaml-standards/compare/5.1.2...6.0.0
 [5.1.2]: https://github.com/sspooky13/yaml-standards/compare/5.1.1...5.1.2
 [5.1.1]: https://github.com/sspooky13/yaml-standards/compare/5.1.0...5.1.1
