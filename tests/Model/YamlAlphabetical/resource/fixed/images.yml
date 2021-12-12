@@ -1,6 +1,6 @@
 # Example:
 #-   name: product
-#    class: Shopsys\FrameworkBundle\Model\Product\Product
+#    class: YamlStandards\YamlStandardsFooBundle\Model\Product\Product
 #    types:
 #        -   name: gallery
 #            multiple: true
@@ -27,7 +27,7 @@
 #                    occurrence: 'Front-end: Product detail, Product list'
 
 -   name: payment
-    class: Shopsys\FrameworkBundle\Model\Payment\Payment
+    class: YamlStandards\YamlStandardsFooBundle\Model\Payment\Payment
     sizes:
         -   name: ~
             crop: false
@@ -36,7 +36,7 @@
             width: ~
 
 -   name: category
-    class: Shopsys\FrameworkBundle\Model\Category\Category
+    class: YamlStandards\YamlStandardsFooBundle\Model\Category\Category
     sizes:
         -   name: ~
             crop: false
@@ -45,7 +45,7 @@
             width: 30
 
 -   name: product
-    class: Shopsys\FrameworkBundle\Model\Product\Product
+    class: YamlStandards\YamlStandardsFooBundle\Model\Product\Product
     multiple: true
     sizes:
         -   name: ~
@@ -72,7 +72,7 @@
             width: 50
 
 -   name: sliderItem
-    class: Shopsys\FrameworkBundle\Model\Slider\SliderItem
+    class: YamlStandards\YamlStandardsFooBundle\Model\Slider\SliderItem
     sizes:
         -   name: ~
             additionalSizes:
@@ -83,7 +83,7 @@
             width: 900
 
 -   name: transport
-    class: Shopsys\FrameworkBundle\Model\Transport\Transport
+    class: YamlStandards\YamlStandardsFooBundle\Model\Transport\Transport
     sizes:
         -   name: ~
             crop: false
@@ -92,7 +92,7 @@
             width: ~
 
 -   name: noticer
-    class: Shopsys\FrameworkBundle\Model\Advert\Advert
+    class: YamlStandards\YamlStandardsFooBundle\Model\Advert\Advert
     sizes:
         -   name: header
             additionalSizes:
@@ -130,7 +130,7 @@
             width: 240
 
 -   name: brand
-    class: Shopsys\FrameworkBundle\Model\Product\Brand\Brand
+    class: YamlStandards\YamlStandardsFooBundle\Model\Product\Brand\Brand
     sizes:
         -   name: ~
             crop: false

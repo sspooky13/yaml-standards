@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## [7.0.1] - 2021-12-12
+### Changed
+- [#64] Changed names of classes used in yaml files in tests
+
 ## [7.0.0] - 2021-09-02
 ## Added
 - add support for PHP 8
@@ -219,6 +223,7 @@ patchesJson6902:
 [@DavidOstrozlik]: https://github.com/DavidOstrozlik
 [@PetrHeinz]: https://github.com/PetrHeinz
 
+[#64]: https://github.com/sspooky13/yaml-standards/issues/64
 [#35]: https://github.com/sspooky13/yaml-standards/pull/35
 [#32]: https://github.com/sspooky13/yaml-standards/pull/32
 [#31]: https://github.com/sspooky13/yaml-standards/pull/31
@@ -227,7 +232,8 @@ patchesJson6902:
 [#14]: https://github.com/sspooky13/yaml-standards/issues/14
 [#13]: https://github.com/sspooky13/yaml-standards/pull/13
 
-[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/7.0.0...HEAD
+[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/7.0.1...HEAD
+[7.0.1]: https://github.com/sspooky13/yaml-standards/compare/7.0.0...7.0.1
 [7.0.0]: https://github.com/sspooky13/yaml-standards/compare/6.0.0...7.0.0
 [6.0.0]: https://github.com/sspooky13/yaml-standards/compare/5.1.2...6.0.0
 [5.1.2]: https://github.com/sspooky13/yaml-standards/compare/5.1.1...5.1.2

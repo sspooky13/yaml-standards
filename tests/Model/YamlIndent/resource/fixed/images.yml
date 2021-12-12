@@ -1,6 +1,6 @@
 # Example:
 #-   name: product
-#    class: Shopsys\FrameworkBundle\Model\Product\Product
+#    class: YamlStandards\YamlStandardsFooBundle\Model\Product\Product
 #    types:
 #        -   name: gallery
 #            multiple: true
@@ -27,7 +27,7 @@
 #                    occurrence: 'Front-end: Product detail, Product list'
 
 -   name: payment
-    class: Shopsys\FrameworkBundle\Model\Payment\Payment
+    class: YamlStandards\YamlStandardsFooBundle\Model\Payment\Payment
     sizes:
         -   name: ~
             width: ~
@@ -36,7 +36,7 @@
             occurrence: 'Front-end: Ordering process'
 
 -   name: category
-    class: Shopsys\FrameworkBundle\Model\Category\Category
+    class: YamlStandards\YamlStandardsFooBundle\Model\Category\Category
     sizes:
         -   name: ~
             width: 30
@@ -45,7 +45,7 @@
             occurrence: 'Front-end: Product list by category'
 
 -   name: product
-    class: Shopsys\FrameworkBundle\Model\Product\Product
+    class: YamlStandards\YamlStandardsFooBundle\Model\Product\Product
     multiple: true
     sizes:
         -   name: ~
@@ -72,7 +72,7 @@
             occurrence: 'Front-end: Preview in autocomplete for search, preview in cart during ordering process'
 
 -   name: sliderItem
-    class: Shopsys\FrameworkBundle\Model\Slider\SliderItem
+    class: YamlStandards\YamlStandardsFooBundle\Model\Slider\SliderItem
     sizes:
         -   name: ~
             width: 900
@@ -83,7 +83,7 @@
                 - {width: 730, height: 230, media: "(max-width: 1023px)"}
 
 -   name: transport
-    class: Shopsys\FrameworkBundle\Model\Transport\Transport
+    class: YamlStandards\YamlStandardsFooBundle\Model\Transport\Transport
     sizes:
         -   name: ~
             width: ~
@@ -92,7 +92,7 @@
             occurrence: 'Front-end: Ordering process'
 
 -   name: noticer
-    class: Shopsys\FrameworkBundle\Model\Advert\Advert
+    class: YamlStandards\YamlStandardsFooBundle\Model\Advert\Advert
     sizes:
         -   name: header
             width: 1160
@@ -130,7 +130,7 @@
                 - {width: 730, height: ~, media: "(max-width: 768px)"}
 
 -   name: brand
-    class: Shopsys\FrameworkBundle\Model\Product\Brand\Brand
+    class: YamlStandards\YamlStandardsFooBundle\Model\Product\Brand\Brand
     sizes:
         -   name: ~
             width: 300
