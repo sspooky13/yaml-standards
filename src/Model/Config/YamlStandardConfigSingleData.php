@@ -9,12 +9,12 @@ class YamlStandardConfigSingleData
     /**
      * @var string[]
      */
-    private $pathToYamlFiles;
+    private $pathToFiles;
 
     /**
      * @var string[]
      */
-    private $pathToExcludedYamlFiles;
+    private $pathToExcludedFiles;
 
     /**
      * @var \YamlStandards\Model\Config\YamlStandardConfigSingleStandardData[]
@@ -22,31 +22,31 @@ class YamlStandardConfigSingleData
     private $yamlStandardConfigsSingleStandardData;
 
     /**
-     * @param string[] $pathToYamlFiles
-     * @param string[] $pathToExcludedYamlFiles
+     * @param string[] $pathToFiles
+     * @param string[] $pathToExcludedFiles
      * @param \YamlStandards\Model\Config\YamlStandardConfigSingleStandardData[] $yamlStandardConfigsSingleStandardData
      */
-    public function __construct(array $pathToYamlFiles, array $pathToExcludedYamlFiles, array $yamlStandardConfigsSingleStandardData)
+    public function __construct(array $pathToFiles, array $pathToExcludedFiles, array $yamlStandardConfigsSingleStandardData)
     {
-        $this->pathToYamlFiles = $pathToYamlFiles;
-        $this->pathToExcludedYamlFiles = $pathToExcludedYamlFiles;
+        $this->pathToFiles = $pathToFiles;
+        $this->pathToExcludedFiles = $pathToExcludedFiles;
         $this->yamlStandardConfigsSingleStandardData = $yamlStandardConfigsSingleStandardData;
     }
 
     /**
      * @return string[]
      */
-    public function getPathToYamlFiles(): array
+    public function getPathToFiles(): array
     {
-        return $this->pathToYamlFiles;
+        return $this->pathToFiles;
     }
 
     /**
      * @return string[]
      */
-    public function getPathToExcludedYamlFiles(): array
+    public function getPathToExcludedFiles(): array
     {
-        return $this->pathToExcludedYamlFiles;
+        return $this->pathToExcludedFiles;
     }
 
     /**

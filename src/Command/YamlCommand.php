@@ -44,21 +44,21 @@ class YamlCommand extends Command
         $yamlStandardConfigTotalData = $yamlStandardConfigLoader->loadFromYaml($inputSettingData->getPathToConfigFile());
 
         $symfonyStyle = new SymfonyStyle($input, $output);
-        $progressBar = $symfonyStyle->createProgressBar($yamlStandardConfigTotalData->getTotalCountOfYamlFiles());
+        $progressBar = $symfonyStyle->createProgressBar($yamlStandardConfigTotalData->getTotalCountOfFiles());
         $progressBar->setFormat('debug');
         $results = [[]];
 
         foreach ($yamlStandardConfigTotalData->getYamlStandardConfigsSingleData() as $yamlStandardConfigSingleData) {
-            foreach ($yamlStandardConfigSingleData->getPathToYamlFiles() as $pathToYamlFile) {
+            foreach ($yamlStandardConfigSingleData->getPathToFiles() as $pathToFile) {
                 $fileResults = [];
-                if ($this->isFileExcluded($pathToYamlFile, $yamlStandardConfigSingleData->getPathToExcludedYamlFiles())) {
+                if ($this->isFileExcluded($pathToFile, $yamlStandardConfigSingleData->getPathToExcludedFiles())) {
                     $progressBar->advance();
                     continue;
                 }
 
-                if (is_readable($pathToYamlFile) === false) {
+                if (is_readable($pathToFile) === false) {
                     $message = 'File is not readable.';
-                    $fileResults[] = new Result($pathToYamlFile, Result::RESULT_CODE_GENERAL_ERROR, $message);
+                    $fileResults[] = new Result($pathToFile, Result::RESULT_CODE_GENERAL_ERROR, $message);
                     $progressBar->advance();
                     continue;
                 }
@@ -68,14 +68,14 @@ class YamlCommand extends Command
                         $standardParametersData = $yamlStandardConfigSingleCheckerData->getStandardParametersData();
                         $fixer = $yamlStandardConfigSingleCheckerData->getFixer();
                         if ($fixer !== null && $inputSettingData->isFixEnabled()) {
-                            $fileResults[] = $fixer->runFix($pathToYamlFile, $pathToYamlFile, $standardParametersData);
+                            $fileResults[] = $fixer->runFix($pathToFile, $pathToFile, $standardParametersData);
                         } else {
-                            $fileResults[] = $yamlStandardConfigSingleCheckerData->getChecker()->runCheck($pathToYamlFile, $standardParametersData);
+                            $fileResults[] = $yamlStandardConfigSingleCheckerData->getChecker()->runCheck($pathToFile, $standardParametersData);
                         }
                     }
                 } catch (ParseException $e) {
                     $message = sprintf('Unable to parse the YAML string: %s', $e->getMessage());
-                    $fileResults[] = new Result($pathToYamlFile, Result::RESULT_CODE_GENERAL_ERROR, $message);
+                    $fileResults[] = new Result($pathToFile, Result::RESULT_CODE_GENERAL_ERROR, $message);
                 }
 
                 $results[] = $fileResults;
@@ -113,13 +113,13 @@ class YamlCommand extends Command
     }
 
     /**
-     * @param string $pathToYamlFile
-     * @param string[] $pathToExcludedYamlFiles
+     * @param string $pathToFile
+     * @param string[] $pathToExcludedFiles
      * @return bool
      */
-    private function isFileExcluded(string $pathToYamlFile, array $pathToExcludedYamlFiles): bool
+    private function isFileExcluded(string $pathToFile, array $pathToExcludedFiles): bool
     {
-        if (in_array($pathToYamlFile, $pathToExcludedYamlFiles, true)) {
+        if (in_array($pathToFile, $pathToExcludedFiles, true)) {
             return true;
         }
 

@@ -6,7 +6,7 @@ namespace YamlStandards\Model\Config;
 
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Yaml\Parser;
-use YamlStandards\Command\Service\YamlFilesPathService;
+use YamlStandards\Command\Service\FilesPathService;
 use YamlStandards\Model\Config\Exception\YamlStandardConfigNotFoundException;
 
 class YamlStandardConfigLoader
@@ -40,11 +40,11 @@ class YamlStandardConfigLoader
         $yamlStandardConfigsSingleData = [];
 
         foreach ($outputConfigs as $outputConfig) {
-            $pathToYamlFiles = YamlFilesPathService::getPathToYamlFiles($outputConfig[YamlStandardConfigDefinition::CONFIG_PATHS_TO_CHECK]);
-            $pathToExcludedYamlFiles = YamlFilesPathService::getPathToYamlFiles($outputConfig[YamlStandardConfigDefinition::CONFIG_EXCLUDED_PATHS]);
+            $pathToFiles = FilesPathService::getPathToFiles($outputConfig[YamlStandardConfigDefinition::CONFIG_PATHS_TO_CHECK]);
+            $pathToExcludedFiles = FilesPathService::getPathToFiles($outputConfig[YamlStandardConfigDefinition::CONFIG_EXCLUDED_PATHS]);
             $standardConfigs = $this->createStandardsConfig($outputConfig[YamlStandardConfigDefinition::CONFIG_CHECKERS]);
 
-            $yamlStandardConfigsSingleData[] = new YamlStandardConfigSingleData($pathToYamlFiles, $pathToExcludedYamlFiles, $standardConfigs);
+            $yamlStandardConfigsSingleData[] = new YamlStandardConfigSingleData($pathToFiles, $pathToExcludedFiles, $standardConfigs);
         }
 
         return new YamlStandardConfigTotalData($yamlStandardConfigsSingleData);

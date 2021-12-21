@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace YamlStandards\Command\Service;
 
-class YamlFilesPathService
+class FilesPathService
 {
     /**
      * @param string[] $patterns
      * @return string[]
      */
-    public static function getPathToYamlFiles(array $patterns): array
+    public static function getPathToFiles(array $patterns): array
     {
         $pathToFiles = [[]];
         foreach ($patterns as $pattern) {

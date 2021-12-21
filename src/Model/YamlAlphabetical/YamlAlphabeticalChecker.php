@@ -18,22 +18,22 @@ class YamlAlphabeticalChecker extends AbstractChecker
     /**
      * @inheritDoc
      */
-    public function check(string $pathToYamlFile, StandardParametersData $standardParametersData): Result
+    public function check(string $pathToFile, StandardParametersData $standardParametersData): Result
     {
-        $fileContent = file_get_contents($pathToYamlFile);
+        $fileContent = file_get_contents($pathToFile);
         $fileContent = str_replace("\r", '', $fileContent); // remove carriage returns
 
-        $rightFileLines = YamlAlphabeticalDataFactory::getCorrectYamlLines($pathToYamlFile, $standardParametersData->getDepth(), $standardParametersData->getAlphabeticalPrioritizedKeys());
+        $rightFileLines = YamlAlphabeticalDataFactory::getCorrectYamlLines($pathToFile, $standardParametersData->getDepth(), $standardParametersData->getAlphabeticalPrioritizedKeys());
 
         $rightFileContent = implode("\n", $rightFileLines);
 
         if ($fileContent === $rightFileContent) {
-            return new Result($pathToYamlFile, Result::RESULT_CODE_OK);
+            return new Result($pathToFile, Result::RESULT_CODE_OK);
         }
 
         $differ = new Differ();
         $diffBetweenStrings = $differ->diff($fileContent, $rightFileContent);
 
-        return new Result($pathToYamlFile, Result::RESULT_CODE_INVALID_FILE_SYNTAX, $diffBetweenStrings);
+        return new Result($pathToFile, Result::RESULT_CODE_INVALID_FILE_SYNTAX, $diffBetweenStrings);
     }
 }
