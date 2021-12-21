@@ -12,6 +12,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Yaml\Exception\ParseException;
 use YamlStandards\Command\Service\ResultService;
+use YamlStandards\Model\Component\Cache\NativeCache;
+use YamlStandards\Model\Component\Cache\NoCache;
 use YamlStandards\Model\Config\YamlStandardConfigLoader;
 use YamlStandards\Result\Result;
 
@@ -21,6 +23,8 @@ class YamlCommand extends Command
 
     public const ARGUMENT_PATH_TO_CONFIG_FILE = 'pathToConfigFile';
     public const OPTION_FIX = 'fix';
+    public const OPTION_PATH_TO_CACHE_DIR = 'path-to-cache-dir';
+    public const OPTION_DISABLE_CACHE = 'no-cache';
 
     protected static $defaultName = self::COMMAND_NAME;
 
@@ -30,7 +34,9 @@ class YamlCommand extends Command
             ->setName(self::COMMAND_NAME) // set command name for symfony/console lower version as 3.4
             ->setDescription('Check yaml files respect standards')
             ->addArgument(self::ARGUMENT_PATH_TO_CONFIG_FILE, InputArgument::OPTIONAL, 'Path to configuration file. By default configuration file is looking in root directory', './yaml-standards.yaml')
-            ->addOption(self::OPTION_FIX, null, InputOption::VALUE_NONE, 'Automatically fix problems');
+            ->addOption(self::OPTION_FIX, null, InputOption::VALUE_NONE, 'Automatically fix problems')
+            ->addOption(self::OPTION_PATH_TO_CACHE_DIR, null, InputOption::VALUE_REQUIRED, 'Custom path to cache dir', '/')
+            ->addOption(self::OPTION_DISABLE_CACHE, null, InputOption::VALUE_NONE, 'Disable cache functionality');
     }
 
     /**
@@ -39,19 +45,28 @@ class YamlCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $inputSettingData = new InputSettingData($input);
-
         $yamlStandardConfigLoader = new YamlStandardConfigLoader();
-        $yamlStandardConfigTotalData = $yamlStandardConfigLoader->loadFromYaml($inputSettingData->getPathToConfigFile());
+        $pathToConfigFile = $inputSettingData->getPathToConfigFile();
+        $pathToCacheDir = $inputSettingData->getPathToCacheDir();
+        $yamlStandardConfigTotalData = $yamlStandardConfigLoader->loadFromYaml($pathToConfigFile);
+        $cache = $inputSettingData->isCacheDisabled() ? new NoCache() : new NativeCache();
+        $cache->deleteCacheFileIfConfigFileWasChanged($pathToConfigFile, $pathToCacheDir);
 
         $symfonyStyle = new SymfonyStyle($input, $output);
         $progressBar = $symfonyStyle->createProgressBar($yamlStandardConfigTotalData->getTotalCountOfFiles());
         $progressBar->setFormat('debug');
         $results = [[]];
 
-        foreach ($yamlStandardConfigTotalData->getYamlStandardConfigsSingleData() as $yamlStandardConfigSingleData) {
-            foreach ($yamlStandardConfigSingleData->getPathToFiles() as $pathToFile) {
+        foreach ($yamlStandardConfigTotalData->getYamlStandardConfigsSingleData() as $configNumber => $yamlStandardConfigSingleData) {
+            // config number 0 is reserved for config file
+            ++$configNumber;
+
+            $filesToCache = [];
+            $cachedPathToFiles = $cache->getCachedPathToFiles($yamlStandardConfigSingleData->getPathToFiles(), $configNumber, $pathToCacheDir);
+            foreach ($cachedPathToFiles as $pathToFile) {
                 $fileResults = [];
                 if ($this->isFileExcluded($pathToFile, $yamlStandardConfigSingleData->getPathToExcludedFiles())) {
+                    $filesToCache[] = $pathToFile;
                     $progressBar->advance();
                     continue;
                 }
@@ -66,21 +81,29 @@ class YamlCommand extends Command
                 try {
                     foreach ($yamlStandardConfigSingleData->getYamlStandardConfigsSingleStandardData() as $yamlStandardConfigSingleCheckerData) {
                         $standardParametersData = $yamlStandardConfigSingleCheckerData->getStandardParametersData();
+                        $checker = $yamlStandardConfigSingleCheckerData->getChecker();
                         $fixer = $yamlStandardConfigSingleCheckerData->getFixer();
+
                         if ($fixer !== null && $inputSettingData->isFixEnabled()) {
-                            $fileResults[] = $fixer->runFix($pathToFile, $pathToFile, $standardParametersData);
+                            $result = $fixer->runFix($pathToFile, $pathToFile, $standardParametersData);
                         } else {
-                            $fileResults[] = $yamlStandardConfigSingleCheckerData->getChecker()->runCheck($pathToFile, $standardParametersData);
+                            $result = $checker->runCheck($pathToFile, $standardParametersData);
                         }
+                        $fileResults[] = $result;
                     }
                 } catch (ParseException $e) {
                     $message = sprintf('Unable to parse the YAML string: %s', $e->getMessage());
                     $fileResults[] = new Result($pathToFile, Result::RESULT_CODE_GENERAL_ERROR, $message);
                 }
 
+                if (ResultService::getResultCodeByResults($fileResults) === Result::RESULT_CODE_OK_AS_INTEGER) {
+                    $filesToCache[] = $pathToFile;
+                }
                 $results[] = $fileResults;
                 $progressBar->advance();
             }
+
+            $cache->cacheFiles($filesToCache, $configNumber, $pathToCacheDir);
         }
         $progressBar->finish();
         /** @var \YamlStandards\Result\Result[] $mergedResult */

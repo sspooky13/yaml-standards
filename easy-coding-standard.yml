@@ -11,6 +11,7 @@ parameters:
             - '*/src/Model/YamlIndent/YamlIndentDataFactory.php'
             - '*/src/Model/Component/Parser/YamlParser.php'
             - '*/src/Model/Config/YamlStandardConfigDefinition.php'
+            - '*/src/Command/YamlCommand.php'
             - '*/tests/Model/YamlAlphabetical/YamlSortServiceTest.php'
 
         SlevomatCodingStandard\Sniffs\Classes\UnusedPrivateElementsSniff.UnusedMethod:
