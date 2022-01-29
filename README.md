@@ -16,7 +16,7 @@ Install the latest version with [Composer](http://getcomposer.org/) command:
     composer require --dev sspooky13/yaml-standards
 
 ## Usage
-1. Create config file in project root directory with allowed standards and files/directories to check. You can copy config file `./example/yaml-standards.yml` and edit it according to your needs.
+1. Create config file in project root directory with allowed standards and files/directories to check. You can copy config file `./example/yaml-standards.yaml` and edit it according to your needs.
 2. Run `vendor/bin/yaml-standards`
 
 Tips:
