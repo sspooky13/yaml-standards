@@ -18,3 +18,6 @@ parameters:
 
         PhpCsFixer\Fixer\Whitespace\SingleBlankLineAtEofFixer:
             - '*/tests/Model/YamlEmptyLineAtEnd/resource/unfixed/foo.php' # this is only for unit test so this has to be skipped
+
+        PHP_CodeSniffer\Standards\Generic\Sniffs\Metrics\CyclomaticComplexitySniff.MaxExceeded:
+            - '*/src/Model/YamlIndent/YamlIndentDataFactory.php'
