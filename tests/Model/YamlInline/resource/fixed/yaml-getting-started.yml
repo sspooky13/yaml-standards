@@ -21,12 +21,12 @@ product:
         sku: BL394D
         quantity: 4
         description: Basketball
-        price: !!float 450
+        price: 450
     -
         sku: BL4438H
         quantity: 1
         description: 'Super Hoop'
-        price: !!float 2392
+        price: 2392
 tax: 251.42
 total: 4443.52
 comments: "Late afternoon is best. Backup contact is Nancy Billsmer @ 338-4338.\n"

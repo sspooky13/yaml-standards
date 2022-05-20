@@ -50,9 +50,9 @@ jobs:
         strategy:
             matrix:
                 os: [ 'ubuntu-latest', 'macos-latest', 'windows-latest' ]
-                php: [ '7.1', '7.2', '7.3', '7.4', '8.0' ]
+                php: [ '7.1', '7.2', '7.3', '7.4', '8.0', '8.1' ]
                 deps-level: [ 'lowest', 'highest' ]
-                symfony: [ '^3.4.31', '^4.0.10' ]
+                symfony: [ '^3.4.31', '^4.0.10', '^5.0', '^6.0' ]
                 exclude:
                     # symfony/console fails on "YamlStandards\Command\YamlCommandTest::testCorrectRunCommandForFix -> Trying to access array offset on value of type int" and I think it's not necessary fix it, so I skip it
                     -   php: '7.4'
@@ -61,6 +61,17 @@ jobs:
                     # Use an explicit chr() call to preserve the current behavior" but PHP 7.3 for MacOS was already skipped with Travis CI
                     -   php: '7.3'
                         os: 'macos-latest'
+                    # don't run check symfony versions without supported php
+                    -   php: '7.1'
+                        symfony: '^5.0'
+                    -   php: '7.1'
+                        symfony: '^6.0'
+                    -   php: '7.2'
+                        symfony: '^6.0'
+                    -   php: '7.3'
+                        symfony: '^6.0'
+                    -   php: '7.4'
+                        symfony: '^6.0'
         steps:
             -   name: Configure git to avoid issues with line endings
                 if: matrix.os == 'windows-latest'

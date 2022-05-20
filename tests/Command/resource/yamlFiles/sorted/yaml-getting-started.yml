@@ -16,13 +16,13 @@ invoice: 34843
 product:
     -
         description: Basketball
-        price: !!float 450
+        price: 450
         quantity: 4
         sku: BL394D
 
     -
         description: 'Super Hoop'
-        price: !!float 2392
+        price: 2392
         quantity: 1
         sku: BL4438H
 
