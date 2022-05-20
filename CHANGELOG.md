@@ -1,16 +1,21 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- add support for Symfony 6
+
+### Fixed
+- [#46] CI: add support for PHP 8.1 and Symfony 5 and 6
 
 ## [7.0.1] - 2021-12-12
 ### Changed
 - [#64] Changed names of classes used in yaml files in tests
 
 ## [7.0.0] - 2021-09-02
-## Added
+### Added
 - add support for PHP 8
 
-## Removed
+### Removed
 - drop support for symfony 3.4.30 and lower
 
 ## [6.0.0] - 2021-03-21
@@ -223,6 +228,7 @@ patchesJson6902:
 [@DavidOstrozlik]: https://github.com/DavidOstrozlik
 [@PetrHeinz]: https://github.com/PetrHeinz
 
+[#46]: https://github.com/sspooky13/yaml-standards/issues/46
 [#64]: https://github.com/sspooky13/yaml-standards/issues/64
 [#35]: https://github.com/sspooky13/yaml-standards/pull/35
 [#32]: https://github.com/sspooky13/yaml-standards/pull/32
