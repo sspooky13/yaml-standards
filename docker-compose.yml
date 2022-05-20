@@ -1,0 +1,14 @@
+version: "3.4"
+services:
+    php-fpm:
+        build:
+            context: .
+            dockerfile: docker/Dockerfile
+            args:
+                www_data_uid: 1000
+                www_data_gid: 1000
+        container_name: yaml-standards-php-fpm
+        volumes:
+            - .:/var/www/html
+        ports:
+            - "35729:35729"
