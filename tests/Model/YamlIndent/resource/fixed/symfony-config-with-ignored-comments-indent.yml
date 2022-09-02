@@ -76,11 +76,11 @@ doctrine:
                 is_bundle: false
 
 doctrine_migrations:
-  dir_name: "%kernel.root_dir%/../src/AppBundle/Migrations"
-  namespace: AppBundle\Migrations
-  table_name: migration_versions
-  name: Application Migrations
-  organize_migrations: false
+    dir_name: "%kernel.root_dir%/../src/AppBundle/Migrations"
+    namespace: AppBundle\Migrations
+    table_name: migration_versions
+    name: Application Migrations
+    organize_migrations: false
 
 # Swiftmailer Configuration
 swiftmailer:

@@ -12,39 +12,43 @@ class YamlIndentFixerTest extends TestCase
 {
     public function testFixUnfixedFile(): void
     {
-        $standardParametersData = $this->getStandardsParametersData(YamlStandardConfigDefinition::CONFIG_PARAMETERS_INDENTS_COMMENTS_WITHOUT_PARENT_VALUE_DEFAULT);
+        $standardParametersData = $this->getStandardsParametersData(YamlStandardConfigDefinition::CONFIG_PARAMETERS_INDENTS_COMMENTS_WITHOUT_PARENT_VALUE_DEFAULT, false);
         $pathToUnfixedFile = __DIR__ . '/resource/unfixed/yaml-getting-started.yml';
         $pathToFixedFile = __DIR__ . '/resource/fixed/yaml-getting-started.yml';
-        $tempCorrectYamlFile = $this->getTempCorrectYamlFile();
 
-        $yamlIndentChecker = new YamlIndentFixer();
-        $yamlIndentChecker->fix($pathToUnfixedFile, $tempCorrectYamlFile, $standardParametersData);
-
-        $yamlFileContent = file_get_contents($tempCorrectYamlFile);
-        $correctYamlFileContent = file_get_contents($pathToFixedFile);
-
-        $this->assertSame($correctYamlFileContent, $yamlFileContent);
+        $this->checkFile($pathToUnfixedFile, $standardParametersData, $pathToFixedFile);
     }
 
     public function testFixUnfixedFileWithPreservedComments(): void
     {
-        $standardParametersData = $this->getStandardsParametersData(YamlStandardConfigDefinition::CONFIG_PARAMETERS_INDENTS_COMMENTS_WITHOUT_PARENT_VALUE_PRESERVED);
+        $standardParametersData = $this->getStandardsParametersData(YamlStandardConfigDefinition::CONFIG_PARAMETERS_INDENTS_COMMENTS_WITHOUT_PARENT_VALUE_PRESERVED, false);
         $pathToUnfixedFile = __DIR__ . '/resource/unfixed/yaml-getting-started.yml';
         $pathToFixedFile = __DIR__ . '/resource/fixed/yaml-getting-started-with-preserved-comments.yml';
-        $tempCorrectYamlFile = $this->getTempCorrectYamlFile();
 
-        $yamlIndentChecker = new YamlIndentFixer();
-        $yamlIndentChecker->fix($pathToUnfixedFile, $tempCorrectYamlFile, $standardParametersData);
+        $this->checkFile($pathToUnfixedFile, $standardParametersData, $pathToFixedFile);
+    }
 
-        $yamlFileContent = file_get_contents($tempCorrectYamlFile);
-        $correctYamlFileContent = file_get_contents($pathToFixedFile);
+    public function testFixUnfixedFileWithIgnoredCommentsIndent(): void
+    {
+        $standardParametersData = $this->getStandardsParametersData(YamlStandardConfigDefinition::CONFIG_PARAMETERS_INDENTS_COMMENTS_WITHOUT_PARENT_VALUE_DEFAULT, true);
 
-        $this->assertSame($correctYamlFileContent, $yamlFileContent);
+        $pathToUnfixedFiles = [
+            __DIR__ . '/resource/unfixed/symfony-service.yml',
+            __DIR__ . '/resource/unfixed/symfony-security.yml',
+            __DIR__ . '/resource/unfixed/symfony-config.yml',
+        ];
+        $pathToFixedFiles = [
+            __DIR__ . '/resource/fixed/symfony-service-with-ignored-comments-indent.yml',
+            __DIR__ . '/resource/fixed/symfony-security-with-ignored-comments-indent.yml',
+            __DIR__ . '/resource/fixed/symfony-config-with-ignored-comments-indent.yml',
+        ];
+
+        $this->checkFiles($pathToUnfixedFiles, $standardParametersData, $pathToFixedFiles);
     }
 
     public function testFixUnfixedFiles(): void
     {
-        $standardParametersData = $this->getStandardsParametersData(YamlStandardConfigDefinition::CONFIG_PARAMETERS_INDENTS_COMMENTS_WITHOUT_PARENT_VALUE_DEFAULT);
+        $standardParametersData = $this->getStandardsParametersData(YamlStandardConfigDefinition::CONFIG_PARAMETERS_INDENTS_COMMENTS_WITHOUT_PARENT_VALUE_DEFAULT, false);
         $pathToUnfixedFiles = [
             __DIR__ . '/resource/unfixed/arraysWithUnquotedColons.yml',
             __DIR__ . '/resource/unfixed/kubernetes-postgres.yml',
@@ -71,17 +75,8 @@ class YamlIndentFixerTest extends TestCase
             __DIR__ . '/resource/fixed/yaml-getting-started.yml',
             __DIR__ . '/resource/fixed/yaml-standards.yaml',
         ];
-        $tempCorrectYamlFile = $this->getTempCorrectYamlFile();
 
-        $yamlIndentChecker = new YamlIndentFixer();
-
-        foreach ($pathToUnfixedFiles as $key => $pathToUnfixedFile) {
-            $yamlIndentChecker->fix($pathToUnfixedFile, $tempCorrectYamlFile, $standardParametersData);
-            $yamlFileContent = file_get_contents($tempCorrectYamlFile);
-            $correctYamlFileContent = file_get_contents($pathToFixedFiles[$key]);
-
-            $this->assertSame($correctYamlFileContent, $yamlFileContent);
-        }
+        $this->checkFiles($pathToUnfixedFiles, $standardParametersData, $pathToFixedFiles);
     }
 
     /**
@@ -94,10 +89,49 @@ class YamlIndentFixerTest extends TestCase
 
     /**
      * @param string $indentsCommentsWithoutParent
+     * @param bool $ignoreCommentsIndent
      * @return \YamlStandards\Model\Config\StandardParametersData
      */
-    private function getStandardsParametersData(string $indentsCommentsWithoutParent): StandardParametersData
+    private function getStandardsParametersData(string $indentsCommentsWithoutParent, bool $ignoreCommentsIndent): StandardParametersData
     {
-        return new StandardParametersData(4, 4, 4, YamlStandardConfigDefinition::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_SHORT, $indentsCommentsWithoutParent, []);
+        return new StandardParametersData(4, 4, 4, YamlStandardConfigDefinition::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_SHORT, $indentsCommentsWithoutParent, [], $ignoreCommentsIndent);
+    }
+
+    /**
+     * @param string $pathToUnfixedFile
+     * @param \YamlStandards\Model\Config\StandardParametersData $standardParametersData
+     * @param string $pathToFixedFile
+     */
+    protected function checkFile(string $pathToUnfixedFile, StandardParametersData $standardParametersData, string $pathToFixedFile): void
+    {
+        $tempCorrectYamlFile = $this->getTempCorrectYamlFile();
+
+        $yamlIndentFixer = new YamlIndentFixer();
+        $yamlIndentFixer->fix($pathToUnfixedFile, $tempCorrectYamlFile, $standardParametersData);
+
+        $yamlFileContent = file_get_contents($tempCorrectYamlFile);
+        $correctYamlFileContent = file_get_contents($pathToFixedFile);
+
+        $this->assertSame($correctYamlFileContent, $yamlFileContent);
+    }
+
+    /**
+     * @param array $pathToUnfixedFiles
+     * @param \YamlStandards\Model\Config\StandardParametersData $standardParametersData
+     * @param array $pathToFixedFiles
+     */
+    protected function checkFiles(array $pathToUnfixedFiles, StandardParametersData $standardParametersData, array $pathToFixedFiles): void
+    {
+        $tempCorrectYamlFile = $this->getTempCorrectYamlFile();
+
+        $yamlIndentFixer = new YamlIndentFixer();
+
+        foreach ($pathToUnfixedFiles as $key => $pathToUnfixedFile) {
+            $yamlIndentFixer->fix($pathToUnfixedFile, $tempCorrectYamlFile, $standardParametersData);
+            $yamlFileContent = file_get_contents($tempCorrectYamlFile);
+            $correctYamlFileContent = file_get_contents($pathToFixedFiles[$key]);
+
+            $this->assertSame($correctYamlFileContent, $yamlFileContent);
+        }
     }
 }

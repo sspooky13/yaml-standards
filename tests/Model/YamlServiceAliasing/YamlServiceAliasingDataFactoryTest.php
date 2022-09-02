@@ -207,6 +207,6 @@ services:
      */
     private function getStandardsParametersData(string $aliasingType): StandardParametersData
     {
-        return new StandardParametersData(4, 4, 2, $aliasingType, YamlStandardConfigDefinition::CONFIG_PARAMETERS_INDENTS_COMMENTS_WITHOUT_PARENT_VALUE_DEFAULT, []);
+        return new StandardParametersData(4, 4, 2, $aliasingType, YamlStandardConfigDefinition::CONFIG_PARAMETERS_INDENTS_COMMENTS_WITHOUT_PARENT_VALUE_DEFAULT, [], false);
     }
 }

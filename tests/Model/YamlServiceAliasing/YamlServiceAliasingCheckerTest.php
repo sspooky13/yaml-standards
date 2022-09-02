@@ -83,6 +83,6 @@ class YamlServiceAliasingCheckerTest extends TestCase
      */
     private function getStandardsParametersData(string $type): StandardParametersData
     {
-        return new StandardParametersData(4, 4, 2, $type, YamlStandardConfigDefinition::CONFIG_PARAMETERS_INDENTS_COMMENTS_WITHOUT_PARENT_VALUE_DEFAULT, []);
+        return new StandardParametersData(4, 4, 2, $type, YamlStandardConfigDefinition::CONFIG_PARAMETERS_INDENTS_COMMENTS_WITHOUT_PARENT_VALUE_DEFAULT, [], false);
     }
 }

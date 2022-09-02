@@ -57,6 +57,6 @@ class YamlSpacesBetweenGroupsCheckerTest extends TestCase
      */
     private function getStandardsParametersData(int $level): StandardParametersData
     {
-        return new StandardParametersData(4, 4, $level, YamlStandardConfigDefinition::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_SHORT, YamlStandardConfigDefinition::CONFIG_PARAMETERS_INDENTS_COMMENTS_WITHOUT_PARENT_VALUE_DEFAULT, []);
+        return new StandardParametersData(4, 4, $level, YamlStandardConfigDefinition::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_SHORT, YamlStandardConfigDefinition::CONFIG_PARAMETERS_INDENTS_COMMENTS_WITHOUT_PARENT_VALUE_DEFAULT, [], false);
     }
 }
