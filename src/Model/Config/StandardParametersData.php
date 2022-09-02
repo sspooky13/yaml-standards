@@ -37,12 +37,18 @@ class StandardParametersData
     private $alphabeticalPrioritizedKeys;
 
     /**
+     * @var bool
+     */
+    private $ignoreCommentsIndent;
+
+    /**
      * @param int $depth
      * @param int $indents
      * @param int $level
      * @param string $serviceAliasingType
      * @param string $indentsCommentsWithoutParent
      * @param string[] $alphabeticalPrioritizedKeys
+     * @param bool $ignoreCommentsIndent
      */
     public function __construct(
         int $depth,
@@ -50,7 +56,8 @@ class StandardParametersData
         int $level,
         string $serviceAliasingType,
         string $indentsCommentsWithoutParent,
-        array $alphabeticalPrioritizedKeys
+        array $alphabeticalPrioritizedKeys,
+        bool $ignoreCommentsIndent
     ) {
         $this->depth = $depth;
         $this->indents = $indents;
@@ -58,6 +65,7 @@ class StandardParametersData
         $this->serviceAliasingType = $serviceAliasingType;
         $this->indentsCommentsWithoutParent = $indentsCommentsWithoutParent;
         $this->alphabeticalPrioritizedKeys = $alphabeticalPrioritizedKeys;
+        $this->ignoreCommentsIndent = $ignoreCommentsIndent;
     }
 
     /**
@@ -106,5 +114,13 @@ class StandardParametersData
     public function getAlphabeticalPrioritizedKeys(): array
     {
         return $this->alphabeticalPrioritizedKeys;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isIgnoreCommentsIndent(): bool
+    {
+        return $this->ignoreCommentsIndent;
     }
 }
