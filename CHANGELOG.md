@@ -3,6 +3,7 @@
 ## [Unreleased]
 ### Added
 - add support for Symfony 6
+- Config: added new parameter for ignoring indent for comments for indent check
 
 ### Fixed
 - [#46] CI: add support for PHP 8.1 and Symfony 5 and 6
