@@ -21,6 +21,11 @@ class YamlIndentDataFactory
      */
     public function getRightFileLines(array $fileLines, int $key, StandardParametersData $standardParametersData, string $fileLine, bool $isCommentLine = false): string
     {
+        // return comment line with original indent
+        if (YamlService::isLineComment($fileLine) && $standardParametersData->isIgnoreCommentsIndent()) {
+            return $fileLine;
+        }
+
         $countOfIndents = $standardParametersData->getIndents();
         $lastFileRow = end($fileLines);
 

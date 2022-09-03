@@ -13,7 +13,7 @@
                 prioritizedKeys: [ key1, key2::exact ] # keys which will be sorted as first, by default it is empty
         -   pathToChecker: YamlStandards\Model\YamlIndent\YamlIndentChecker
             parameters:
-                { indents: 4, indentsCommentsWithoutParent: default/preserved } # count of indents which files must observe, preserve indents for comment lines without parent (comment line at the end of file); optional, by default it is '4' and 'default'
+                    { indents: 4, indentsCommentsWithoutParent: default/preserved, ignoreCommentsIndent: true/false } # count of indents which files must observe, preserve indents for comment lines without parent (comment line at the end of file), leave indent of comment line as it was; optional, by default it is '4' and 'default' and 'false'
         -   pathToChecker: YamlStandards\Model\YamlSpacesBetweenGroups\YamlSpacesBetweenGroupsChecker
             parameters:
                 { level: 2 } # max level to check, optional, by default it is 2

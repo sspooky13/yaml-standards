@@ -15,8 +15,8 @@ security:
 # https://symfony.com/doc/current/security.html#initial-security-yml-setup-authentication
     firewalls:
         dev:
-          pattern: ^/(_(profiler|wdt)|css|images|js)/
-          security: false
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
 
         main:
             # this firewall applies to all URLs
