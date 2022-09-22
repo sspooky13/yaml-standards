@@ -5,6 +5,9 @@
 - add support for Symfony 6
 - Config: added new parameter for ignoring indent for comments for indent check
 
+### Changed
+- removed status code from result class, now it's no longer necessary
+
 ### Fixed
 - [#46] CI: add support for PHP 8.1 and Symfony 5 and 6
 
