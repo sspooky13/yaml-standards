@@ -40,6 +40,8 @@ Tips:
 ## Options for run
 - `./path/to/your/configFile.yaml` Path to your config file. Default is `./yaml-standards.yaml`.
 - `--fix` Automatically fix allowed standards problems.
+- `--path-to-cache-dir=./path/to/cache/dir/` Custom path where should be cache file stored. Default is root directory.
+- `--no-cache` Turn off cache functionality.
 
 ## Implemented checkers
 - **YamlAlphabeticalChecker** - Check yaml file is alphabetically sorted to selected level. **This checker has fixer**.
