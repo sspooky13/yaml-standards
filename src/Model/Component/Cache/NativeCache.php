@@ -8,8 +8,8 @@ use YamlStandards\Model\Component\Cache\Exception\CustomPathToCacheDirectoryNotF
 
 class NativeCache implements CacheInterface
 {
-    private const CACHE_FILE_NAME = 'yaml-standards.cache';
-    private const CONFIG_NUMBER_FOR_CONFIG_FILE = 0;
+    public const CACHE_FILE_NAME = 'yaml-standards.cache';
+    public const CONFIG_NUMBER_FOR_CONFIG_FILE = 0;
 
     /**
      * @inheritDoc

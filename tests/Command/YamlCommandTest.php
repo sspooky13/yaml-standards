@@ -16,6 +16,7 @@ class YamlCommandTest extends TestCase
         $command = $this->createCommandTester();
         $commandExitCode = $command->execute([
             YamlCommand::ARGUMENT_PATH_TO_CONFIG_FILE => __DIR__ . '/resource/yaml-standards-alphabetical.yaml',
+            '--' . YamlCommand::OPTION_DISABLE_CACHE => true,
         ]);
 
         $this->assertEquals(0, $commandExitCode);
@@ -26,6 +27,7 @@ class YamlCommandTest extends TestCase
         $command = $this->createCommandTester();
         $commandExitCode = $command->execute([
             YamlCommand::ARGUMENT_PATH_TO_CONFIG_FILE => __DIR__ . '/resource/yaml-standards-indent.yaml',
+            '--' . YamlCommand::OPTION_DISABLE_CACHE => true,
         ]);
 
         $this->assertEquals(0, $commandExitCode);
@@ -36,6 +38,7 @@ class YamlCommandTest extends TestCase
         $command = $this->createCommandTester();
         $commandExitCode = $command->execute([
             YamlCommand::ARGUMENT_PATH_TO_CONFIG_FILE => __DIR__ . '/resource/yaml-standards-inline.yaml',
+            '--' . YamlCommand::OPTION_DISABLE_CACHE => true,
         ]);
 
         $this->assertEquals(0, $commandExitCode);
@@ -46,6 +49,7 @@ class YamlCommandTest extends TestCase
         $command = $this->createCommandTester();
         $commandExitCode = $command->execute([
             YamlCommand::ARGUMENT_PATH_TO_CONFIG_FILE => __DIR__ . '/resource/yaml-standards-space-between-groups.yaml',
+            '--' . YamlCommand::OPTION_DISABLE_CACHE => true,
         ]);
 
         $this->assertEquals(0, $commandExitCode);
@@ -56,6 +60,7 @@ class YamlCommandTest extends TestCase
         $command = $this->createCommandTester();
         $commandExitCode = $command->execute([
             YamlCommand::ARGUMENT_PATH_TO_CONFIG_FILE => __DIR__ . '/resource/yaml-standards-empty-line-at-end.yaml',
+            '--' . YamlCommand::OPTION_DISABLE_CACHE => true,
         ]);
 
         $this->assertEquals(0, $commandExitCode);
@@ -66,6 +71,7 @@ class YamlCommandTest extends TestCase
         $command = $this->createCommandTester();
         $commandExitCode = $command->execute([
             YamlCommand::ARGUMENT_PATH_TO_CONFIG_FILE => __DIR__ . '/resource/yaml-standards-service-aliasing.yaml',
+            '--' . YamlCommand::OPTION_DISABLE_CACHE => true,
         ]);
 
         $this->assertEquals(0, $commandExitCode);
@@ -76,6 +82,7 @@ class YamlCommandTest extends TestCase
         $command = $this->createCommandTester();
         $commandExitCode = $command->execute([
             YamlCommand::ARGUMENT_PATH_TO_CONFIG_FILE => __DIR__ . '/resource/yaml-standards-exclude.yaml',
+            '--' . YamlCommand::OPTION_DISABLE_CACHE => true,
         ]);
 
         $this->assertEquals(0, $commandExitCode);
@@ -86,7 +93,8 @@ class YamlCommandTest extends TestCase
         $command = $this->createCommandTester();
         $commandExitCode = $command->execute([
             YamlCommand::ARGUMENT_PATH_TO_CONFIG_FILE => __DIR__ . '/resource/yaml-standards-all.yaml',
-            '--' . YamlCommand::OPTION_FIX,
+            '--' . YamlCommand::OPTION_FIX => true,
+            '--' . YamlCommand::OPTION_DISABLE_CACHE => true,
         ]);
 
         $this->assertEquals(0, $commandExitCode);
@@ -97,6 +105,7 @@ class YamlCommandTest extends TestCase
         $command = $this->createCommandTester();
         $commandExitCode = $command->execute([
             YamlCommand::ARGUMENT_PATH_TO_CONFIG_FILE => __DIR__ . '/resource/yaml-standards-all.yaml',
+            '--' . YamlCommand::OPTION_DISABLE_CACHE => true,
         ]);
 
         $this->assertEquals(0, $commandExitCode);
@@ -109,6 +118,7 @@ class YamlCommandTest extends TestCase
         $command = $this->createCommandTester();
         $commandExitCode = $command->execute([
             YamlCommand::ARGUMENT_PATH_TO_CONFIG_FILE => __DIR__ . '/resource/yaml-standards-all-without-suffix.yaml',
+            '--' . YamlCommand::OPTION_DISABLE_CACHE => true,
         ]);
 
         $this->assertEquals(0, $commandExitCode);
