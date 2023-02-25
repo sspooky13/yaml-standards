@@ -12,6 +12,7 @@
 
 ### Fixed
 - [#46] CI: add support for PHP 8.1 and Symfony 5 and 6
+- [#73] Command: show information about file is not readable
 
 ## [7.0.1] - 2021-12-12
 ### Changed
@@ -234,6 +235,7 @@ patchesJson6902:
 [@DavidOstrozlik]: https://github.com/DavidOstrozlik
 [@PetrHeinz]: https://github.com/PetrHeinz
 
+[#73]: https://github.com/sspooky13/yaml-standards/issues/73
 [#70]: https://github.com/sspooky13/yaml-standards/issues/70
 [#55]: https://github.com/sspooky13/yaml-standards/issues/55
 [#46]: https://github.com/sspooky13/yaml-standards/issues/46

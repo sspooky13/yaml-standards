@@ -73,7 +73,7 @@ class YamlCommand extends Command
 
                 if (is_readable($pathToFile) === false) {
                     $message = 'File is not readable.';
-                    $fileResults[] = new Result($pathToFile, Result::RESULT_CODE_GENERAL_ERROR, $message);
+                    $results[] = [new Result($pathToFile, Result::RESULT_CODE_GENERAL_ERROR, $message)];
                     $progressBar->advance();
                     continue;
                 }
