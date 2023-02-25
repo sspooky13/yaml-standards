@@ -6,6 +6,7 @@
 - Config: added new parameter for ignoring indent for comments for indent check
 - [#55] added option to disable check only changed files and added option to change path to cache file
 - [#70] CI: add build PHP 8.2
+- [#72] Composer: added support to "sebastian/diff" version 5
 
 ### Changed
 - removed status code from result class, now it's no longer necessary
@@ -238,6 +239,7 @@ patchesJson6902:
 [@DavidOstrozlik]: https://github.com/DavidOstrozlik
 [@PetrHeinz]: https://github.com/PetrHeinz
 
+[#72]: https://github.com/sspooky13/yaml-standards/issues/72
 [#71]: https://github.com/sspooky13/yaml-standards/issues/71
 [#73]: https://github.com/sspooky13/yaml-standards/issues/73
 [#70]: https://github.com/sspooky13/yaml-standards/issues/70
