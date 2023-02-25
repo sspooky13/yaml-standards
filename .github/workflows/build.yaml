@@ -87,7 +87,7 @@ jobs:
                     tools: composer:v2
 
             -   name: Require Symfony at version ${{ matrix.symfony }}
-                run: composer require --no-update "symfony/console:${{ matrix.symfony }}" "symfony/config:${{ matrix.symfony }}" "symfony/http-kernel:${{ matrix.symfony }}" "symfony/yaml:${{ matrix.symfony }}"
+                run: composer require --no-update "symfony/console:${{ matrix.symfony }}" "symfony/config:${{ matrix.symfony }}" "symfony/yaml:${{ matrix.symfony }}"
 
             -   name: Add caret to composer.json for symfony libraries for windows build
                 if: ${{ matrix.os == 'windows-latest' }}
@@ -96,7 +96,6 @@ jobs:
                     $symfonyVersionWithoutCaret = "${{ matrix.symfony }}".substring(1)
                     (Get-Content composer.json) | ForEach-Object { $_.replace('"symfony/console": "' + $symfonyVersionWithoutCaret + '"', '"symfony/console": "${{ matrix.symfony }}"') } | Set-Content composer.json
                     (Get-Content composer.json) | ForEach-Object { $_.replace('"symfony/config": "' + $symfonyVersionWithoutCaret + '"', '"symfony/config": "${{ matrix.symfony }}"') } | Set-Content composer.json
-                    (Get-Content composer.json) | ForEach-Object { $_.replace('"symfony/http-kernel": "' + $symfonyVersionWithoutCaret + '"', '"symfony/http-kernel": "${{ matrix.symfony }}"') } | Set-Content composer.json
                     (Get-Content composer.json) | ForEach-Object { $_.replace('"symfony/yaml": "' + $symfonyVersionWithoutCaret + '"', '"symfony/yaml": "${{ matrix.symfony }}"') } | Set-Content composer.json
 
             -   name: Set composer cache directory

@@ -10,6 +10,9 @@
 ### Changed
 - removed status code from result class, now it's no longer necessary
 
+### Removed
+- [#71] Composer: removed dependency to "symfony/http-kernel"
+
 ### Fixed
 - [#46] CI: add support for PHP 8.1 and Symfony 5 and 6
 - [#73] Command: show information about file is not readable
@@ -235,6 +238,7 @@ patchesJson6902:
 [@DavidOstrozlik]: https://github.com/DavidOstrozlik
 [@PetrHeinz]: https://github.com/PetrHeinz
 
+[#71]: https://github.com/sspooky13/yaml-standards/issues/71
 [#73]: https://github.com/sspooky13/yaml-standards/issues/73
 [#70]: https://github.com/sspooky13/yaml-standards/issues/70
 [#55]: https://github.com/sspooky13/yaml-standards/issues/55

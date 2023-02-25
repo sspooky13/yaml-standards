@@ -7,7 +7,6 @@ namespace YamlStandards\Model\Config;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
-use Symfony\Component\HttpKernel\Kernel;
 
 class YamlStandardConfigDefinition implements ConfigurationInterface
 {
@@ -37,13 +36,13 @@ class YamlStandardConfigDefinition implements ConfigurationInterface
      */
     public function getConfigTreeBuilder(): TreeBuilder
     {
+        $treeBuilder = new TreeBuilder('yaml_standards_config');
+
         // fix for Symfony 4.2 and newer versions
-        if (Kernel::VERSION_ID >= 40200) {
-            $treeBuilder = new TreeBuilder('yaml_standards_config');
+        if (method_exists($treeBuilder, 'getRootNode')) {
             /** @var \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition $rootNode */
             $rootNode = $treeBuilder->getRootNode();
         } else {
-            $treeBuilder = new TreeBuilder();
             /** @var \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition $rootNode */
             $rootNode = /** @scrutinizer ignore-deprecated */ $treeBuilder->root('yaml_standards_config');
         }
