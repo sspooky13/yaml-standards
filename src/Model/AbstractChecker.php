@@ -10,14 +10,14 @@ use YamlStandards\Result\Result;
 abstract class AbstractChecker extends AbstractStandards implements CheckerInterface
 {
     /**
-     * @param string $pathToYamlFile
+     * @param string $pathToFile
      * @param \YamlStandards\Model\Config\StandardParametersData $standardParametersData
      * @return \YamlStandards\Result\Result
      */
-    public function runCheck(string $pathToYamlFile, StandardParametersData $standardParametersData): Result
+    public function runCheck(string $pathToFile, StandardParametersData $standardParametersData): Result
     {
-        $this->runCheckYamlFileIsValid($pathToYamlFile);
+        $this->runCheckYamlFileIsValid($pathToFile);
 
-        return $this->check($pathToYamlFile, $standardParametersData);
+        return $this->check($pathToFile, $standardParametersData);
     }
 }

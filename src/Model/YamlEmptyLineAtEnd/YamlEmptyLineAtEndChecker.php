@@ -17,9 +17,9 @@ class YamlEmptyLineAtEndChecker extends AbstractChecker
     /**
      * @inheritDoc
      */
-    public function check(string $pathToYamlFile, StandardParametersData $standardParametersData): Result
+    public function check(string $pathToFile, StandardParametersData $standardParametersData): Result
     {
-        $yamlContent = file_get_contents($pathToYamlFile);
+        $yamlContent = file_get_contents($pathToFile);
         $yamlContent = str_replace("\r", '', $yamlContent); // remove carriage returns
         $yamlLines = explode("\n", $yamlContent);
 
@@ -27,13 +27,13 @@ class YamlEmptyLineAtEndChecker extends AbstractChecker
         $correctYamlContent = implode("\n", $correctYamlLines);
 
         if ($yamlContent === $correctYamlContent) {
-            return new Result($pathToYamlFile, Result::RESULT_CODE_OK);
+            return new Result($pathToFile, Result::RESULT_CODE_OK);
         }
 
         $differ = new Differ();
         $diffBetweenStrings = $differ->diff($yamlContent, $correctYamlContent);
 
-        return new Result($pathToYamlFile, Result::RESULT_CODE_INVALID_FILE_SYNTAX, $diffBetweenStrings, true);
+        return new Result($pathToFile, Result::RESULT_CODE_INVALID_FILE_SYNTAX, $diffBetweenStrings, true);
     }
 
     /**

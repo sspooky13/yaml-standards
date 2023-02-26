@@ -19,6 +19,16 @@ class InputSettingData
     private $fixEnabled;
 
     /**
+     * @var string
+     */
+    private $pathToCacheDir;
+
+    /**
+     * @var bool
+     */
+    private $disableCache;
+
+    /**
      * @param \Symfony\Component\Console\Input\InputInterface $input
      */
     public function __construct(InputInterface $input)
@@ -27,6 +37,8 @@ class InputSettingData
         $pathToConfigFile = $input->getArgument(YamlCommand::ARGUMENT_PATH_TO_CONFIG_FILE);
         $this->pathToConfigFile = $pathToConfigFile;
         $this->fixEnabled = $input->getOption(YamlCommand::OPTION_FIX);
+        $this->pathToCacheDir = $input->getOption(YamlCommand::OPTION_PATH_TO_CACHE_DIR);
+        $this->disableCache = $input->getOption(YamlCommand::OPTION_DISABLE_CACHE);
     }
 
     /**
@@ -43,5 +55,21 @@ class InputSettingData
     public function isFixEnabled(): bool
     {
         return $this->fixEnabled;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPathToCacheDir(): string
+    {
+        return $this->pathToCacheDir;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCacheDisabled(): bool
+    {
+        return $this->disableCache;
     }
 }

@@ -4,6 +4,7 @@
 ### Added
 - add support for Symfony 6
 - Config: added new parameter for ignoring indent for comments for indent check
+- [#55] added option to disable check only changed files and added option to change path to cache file
 
 ### Changed
 - removed status code from result class, now it's no longer necessary
@@ -232,6 +233,7 @@ patchesJson6902:
 [@DavidOstrozlik]: https://github.com/DavidOstrozlik
 [@PetrHeinz]: https://github.com/PetrHeinz
 
+[#55]: https://github.com/sspooky13/yaml-standards/issues/55
 [#46]: https://github.com/sspooky13/yaml-standards/issues/46
 [#64]: https://github.com/sspooky13/yaml-standards/issues/64
 [#35]: https://github.com/sspooky13/yaml-standards/pull/35

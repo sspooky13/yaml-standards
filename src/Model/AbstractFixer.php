@@ -10,15 +10,15 @@ use YamlStandards\Result\Result;
 abstract class AbstractFixer extends AbstractStandards implements FixerInterface
 {
     /**
-     * @param string $pathToYamlFile
+     * @param string $pathToFile
      * @param string $pathToDumpFixedFile
      * @param \YamlStandards\Model\Config\StandardParametersData $standardParametersData
      * @return \YamlStandards\Result\Result
      */
-    public function runFix(string $pathToYamlFile, string $pathToDumpFixedFile, StandardParametersData $standardParametersData): Result
+    public function runFix(string $pathToFile, string $pathToDumpFixedFile, StandardParametersData $standardParametersData): Result
     {
-        $this->runCheckYamlFileIsValid($pathToYamlFile);
+        $this->runCheckYamlFileIsValid($pathToFile);
 
-        return $this->fix($pathToYamlFile, $pathToDumpFixedFile, $standardParametersData);
+        return $this->fix($pathToFile, $pathToDumpFixedFile, $standardParametersData);
     }
 }

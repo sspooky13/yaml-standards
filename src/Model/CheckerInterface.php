@@ -10,9 +10,9 @@ use YamlStandards\Result\Result;
 interface CheckerInterface
 {
     /**
-     * @param string $pathToYamlFile
+     * @param string $pathToFile
      * @param \YamlStandards\Model\Config\StandardParametersData $standardParametersData
      * @return \YamlStandards\Result\Result
      */
-    public function check(string $pathToYamlFile, StandardParametersData $standardParametersData): Result;
+    public function check(string $pathToFile, StandardParametersData $standardParametersData): Result;
 }

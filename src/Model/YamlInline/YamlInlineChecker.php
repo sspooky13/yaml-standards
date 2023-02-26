@@ -19,12 +19,12 @@ class YamlInlineChecker extends AbstractChecker
     /**
      * @inheritDoc
      */
-    public function check(string $pathToYamlFile, StandardParametersData $standardParametersData): Result
+    public function check(string $pathToFile, StandardParametersData $standardParametersData): Result
     {
-        $yamlArrayData = YamlService::getYamlData($pathToYamlFile);
+        $yamlArrayData = YamlService::getYamlData($pathToFile);
         $yamlStringData = Yaml::dump($yamlArrayData, 3);
 
-        $yamlContent = file_get_contents($pathToYamlFile);
+        $yamlContent = file_get_contents($pathToFile);
         $yamlContent = str_replace("\r", '', $yamlContent); // remove carriage returns
         $yamlLines = explode("\n", $yamlContent);
         $lastYamlElement = end($yamlLines);
@@ -38,13 +38,13 @@ class YamlInlineChecker extends AbstractChecker
         $filteredYamlFile = implode("\n", $filteredYamlLines);
 
         if ($yamlStringData === $filteredYamlFile) {
-            return new Result($pathToYamlFile, Result::RESULT_CODE_OK);
+            return new Result($pathToFile, Result::RESULT_CODE_OK);
         }
 
         $differ = new Differ();
         $diffBetweenStrings = $differ->diff($filteredYamlFile, $yamlStringData);
 
-        return new Result($pathToYamlFile, Result::RESULT_CODE_INVALID_FILE_SYNTAX, $diffBetweenStrings);
+        return new Result($pathToFile, Result::RESULT_CODE_INVALID_FILE_SYNTAX, $diffBetweenStrings);
     }
 
     /**

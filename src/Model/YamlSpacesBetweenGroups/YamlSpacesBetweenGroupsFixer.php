@@ -18,9 +18,9 @@ class YamlSpacesBetweenGroupsFixer extends AbstractFixer
     /**
      * @inheritDoc
      */
-    public function fix(string $pathToYamlFile, string $pathToDumpFixedFile, StandardParametersData $standardParametersData): Result
+    public function fix(string $pathToFile, string $pathToDumpFixedFile, StandardParametersData $standardParametersData): Result
     {
-        $yamlContent = file_get_contents($pathToYamlFile);
+        $yamlContent = file_get_contents($pathToFile);
         $yamlContent = str_replace("\r", '', $yamlContent); // remove carriage returns
         $yamlLines = explode("\n", $yamlContent);
         $lastYamlElement = end($yamlLines);
@@ -34,7 +34,7 @@ class YamlSpacesBetweenGroupsFixer extends AbstractFixer
         }
 
         if ($yamlContent === $correctYamlContent) {
-            return new Result($pathToYamlFile, Result::RESULT_CODE_OK);
+            return new Result($pathToFile, Result::RESULT_CODE_OK);
         }
 
         file_put_contents($pathToDumpFixedFile, $correctYamlContent);
@@ -42,6 +42,6 @@ class YamlSpacesBetweenGroupsFixer extends AbstractFixer
         $differ = new Differ();
         $diffBetweenStrings = $differ->diff($yamlContent, $correctYamlContent);
 
-        return new Result($pathToYamlFile, Result::RESULT_CODE_FIXED_INVALID_FILE_SYNTAX, $diffBetweenStrings);
+        return new Result($pathToFile, Result::RESULT_CODE_FIXED_INVALID_FILE_SYNTAX, $diffBetweenStrings);
     }
 }

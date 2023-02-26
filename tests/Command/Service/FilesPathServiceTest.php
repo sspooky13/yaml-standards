@@ -6,7 +6,7 @@ namespace YamlStandards\Command\Service;
 
 use PHPUnit\Framework\TestCase;
 
-class YamlFilesPathServiceTest extends TestCase
+class FilesPathServiceTest extends TestCase
 {
     public function testFindAllYamlFilesInDirs(): void
     {
@@ -15,7 +15,7 @@ class YamlFilesPathServiceTest extends TestCase
             './tests/Command/resource/yamlFiles/unSorted/route/*.yml',
         ];
 
-        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($pathToDirs);
+        $yamlFiles = FilesPathService::getPathToFiles($pathToDirs);
 
         $this->assertCount(3, $yamlFiles);
     }
@@ -31,16 +31,16 @@ class YamlFilesPathServiceTest extends TestCase
             './tests/Command/resource/otherFiles/*.xml',
         ];
 
-        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($pathToFiles);
+        $files = FilesPathService::getPathToFiles($pathToFiles);
 
-        $this->assertCount(6, $yamlFiles);
+        $this->assertCount(6, $files);
     }
 
     public function testReturnFullPathToFile(): void
     {
         $pathToFile = ['./tests/Command/resource/yamlFiles/unSorted/yaml-getting-started.yml'];
 
-        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($pathToFile);
+        $yamlFiles = FilesPathService::getPathToFiles($pathToFile);
 
         $this->assertEquals($pathToFile, $yamlFiles);
     }
@@ -49,7 +49,7 @@ class YamlFilesPathServiceTest extends TestCase
     {
         $pathToDirs = ['./tests/Command/resource/yamlFiles/unSorted/config/*.yml', './tests/Command/resource/yamlFiles/unSorted/route/*.yml'];
 
-        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($pathToDirs);
+        $yamlFiles = FilesPathService::getPathToFiles($pathToDirs);
 
         $expectedYamlFiles = [
             './tests/Command/resource/yamlFiles/unSorted/config/symfony-config.yml',
@@ -67,7 +67,7 @@ class YamlFilesPathServiceTest extends TestCase
             './tests/Command/resource/yaml-getting-started.yml',
         ];
 
-        $yamlFiles = YamlFilesPathService::getPathToYamlFiles($pathToFiles);
+        $yamlFiles = FilesPathService::getPathToFiles($pathToFiles);
 
         $this->assertCount(2, $yamlFiles);
     }

@@ -11,6 +11,7 @@ class Result
         RESULT_CODE_FIXED_INVALID_FILE_SYNTAX = 0.1,
         RESULT_CODE_INVALID_FILE_SYNTAX = 1.0,
         RESULT_CODE_GENERAL_ERROR = 2.0;
+    public const RESULT_CODE_OK_AS_INTEGER = 0;
 
     /**
      * @var string

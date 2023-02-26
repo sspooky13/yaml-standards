@@ -30,12 +30,12 @@ class YamlStandardConfigTotalData
     /**
      * @return int
      */
-    public function getTotalCountOfYamlFiles(): int
+    public function getTotalCountOfFiles(): int
     {
         $totalFiles = 0;
 
         foreach ($this->getYamlStandardConfigsSingleData() as $yamlStandardConfigSingleData) {
-            $totalFiles += count($yamlStandardConfigSingleData->getPathToYamlFiles());
+            $totalFiles += count($yamlStandardConfigSingleData->getPathToFiles());
         }
 
         return $totalFiles;
