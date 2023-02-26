@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [8.0.0] - 2023-02-26
 ### Added
 - add support for Symfony 6
 - Config: added new parameter for ignoring indent for comments for indent check
@@ -254,7 +256,8 @@ patchesJson6902:
 [#14]: https://github.com/sspooky13/yaml-standards/issues/14
 [#13]: https://github.com/sspooky13/yaml-standards/pull/13
 
-[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/7.0.1...HEAD
+[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/8.0.0...HEAD
+[8.0.0]: https://github.com/sspooky13/yaml-standards/compare/7.0.1...8.0.0
 [7.0.1]: https://github.com/sspooky13/yaml-standards/compare/7.0.0...7.0.1
 [7.0.0]: https://github.com/sspooky13/yaml-standards/compare/6.0.0...7.0.0
 [6.0.0]: https://github.com/sspooky13/yaml-standards/compare/5.1.2...6.0.0
