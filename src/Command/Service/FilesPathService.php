@@ -35,7 +35,7 @@ class FilesPathService
      */
     private static function globRecursive(string $pattern): array
     {
-        $pathNames = glob($pattern, GLOB_BRACE);
+        $pathNames = glob($pattern, (defined('GLOB_BRACE') ? GLOB_BRACE : 0));
         $files = array_filter($pathNames, 'is_file');
 
         foreach (glob(dirname($pattern) . '/*', GLOB_ONLYDIR | GLOB_NOSORT) as $dir) {
