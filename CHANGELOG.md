@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [8.0.1]
 - [#76] Files path service: only use GLOB_BRACE when available
 
 ## [8.0.0] - 2023-02-26
@@ -258,7 +260,8 @@ patchesJson6902:
 [#14]: https://github.com/sspooky13/yaml-standards/issues/14
 [#13]: https://github.com/sspooky13/yaml-standards/pull/13
 
-[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/8.0.0...HEAD
+[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/8.0.1...HEAD
+[8.0.1]: https://github.com/sspooky13/yaml-standards/compare/8.0.0...8.0.1
 [8.0.0]: https://github.com/sspooky13/yaml-standards/compare/7.0.1...8.0.0
 [7.0.1]: https://github.com/sspooky13/yaml-standards/compare/7.0.0...7.0.1
 [7.0.0]: https://github.com/sspooky13/yaml-standards/compare/6.0.0...7.0.0
