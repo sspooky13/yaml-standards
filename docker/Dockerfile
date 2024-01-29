@@ -1,4 +1,4 @@
-FROM php:7.1-fpm-buster as base
+FROM php:7.2-fpm-buster as base
 
 ARG project_root=.
 
