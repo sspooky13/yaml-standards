@@ -50,9 +50,9 @@ jobs:
         strategy:
             matrix:
                 os: [ 'ubuntu-latest', 'macos-latest', 'windows-latest' ]
-                php: [ '7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2' ]
+                php: [ '7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3' ]
                 deps-level: [ 'lowest', 'highest' ]
-                symfony: [ '^3.4.31', '^4.0.10', '^5.0', '^6.0' ]
+                symfony: [ '^3.4.31', '^4.0.10', '^5.0', '^6.0', '^7.0' ]
                 exclude:
                     # symfony/console fails on "YamlStandards\Command\YamlCommandTest::testCorrectRunCommandForFix -> Trying to access array offset on value of type int" and I think it's not necessary fix it, so I skip it
                     -   php: '7.4'
@@ -72,6 +72,16 @@ jobs:
                         symfony: '^6.0'
                     -   php: '7.4'
                         symfony: '^6.0'
+                    -   php: '7.2'
+                        symfony: '^7.0'
+                    -   php: '7.3'
+                        symfony: '^7.0'
+                    -   php: '7.4'
+                        symfony: '^7.0'
+                    -   php: '8.0'
+                        symfony: '^7.0'
+                    -   php: '8.1'
+                        symfony: '^7.0'
         steps:
             -   name: Configure git to avoid issues with line endings
                 if: matrix.os == 'windows-latest'
