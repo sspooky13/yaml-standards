@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace YamlStandards\Model\YamlAlphabetical;
 
 use SebastianBergmann\Diff\Differ;
+use SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
 use Symfony\Component\Yaml\Yaml;
 use YamlStandards\Model\AbstractChecker;
 use YamlStandards\Model\Config\StandardParametersData;
@@ -31,7 +32,7 @@ class YamlAlphabeticalChecker extends AbstractChecker
             return new Result($pathToFile, Result::RESULT_CODE_OK);
         }
 
-        $differ = new Differ();
+        $differ = new Differ(new UnifiedDiffOutputBuilder());
         $diffBetweenStrings = $differ->diff($fileContent, $rightFileContent);
 
         return new Result($pathToFile, Result::RESULT_CODE_INVALID_FILE_SYNTAX, $diffBetweenStrings);
