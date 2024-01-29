@@ -1,6 +1,12 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- added support for Symfony 7
+- [#77] CI: add build PHP 8.3 and Symfony 7
+
+### Removed
+- [#69][#75] dropped support PHP 7.1 and dropped support Symfony 4.1 and lower
 
 ## [8.1.1]
 ### Fixed
@@ -260,14 +266,17 @@ patchesJson6902:
 [#83]: https://github.com/sspooky13/yaml-standards/issues/83
 [#79]: https://github.com/sspooky13/yaml-standards/pull/79
 [#78]: https://github.com/sspooky13/yaml-standards/pull/78
+[#77]: https://github.com/sspooky13/yaml-standards/issues/77
 [#76]: https://github.com/sspooky13/yaml-standards/issues/76
+[#75]: https://github.com/sspooky13/yaml-standards/issues/75
+[#73]: https://github.com/sspooky13/yaml-standards/issues/73
 [#72]: https://github.com/sspooky13/yaml-standards/issues/72
 [#71]: https://github.com/sspooky13/yaml-standards/issues/71
-[#73]: https://github.com/sspooky13/yaml-standards/issues/73
 [#70]: https://github.com/sspooky13/yaml-standards/issues/70
+[#69]: https://github.com/sspooky13/yaml-standards/issues/69
+[#64]: https://github.com/sspooky13/yaml-standards/issues/64
 [#55]: https://github.com/sspooky13/yaml-standards/issues/55
 [#46]: https://github.com/sspooky13/yaml-standards/issues/46
-[#64]: https://github.com/sspooky13/yaml-standards/issues/64
 [#35]: https://github.com/sspooky13/yaml-standards/pull/35
 [#32]: https://github.com/sspooky13/yaml-standards/pull/32
 [#31]: https://github.com/sspooky13/yaml-standards/pull/31
