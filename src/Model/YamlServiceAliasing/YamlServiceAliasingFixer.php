@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace YamlStandards\Model\YamlServiceAliasing;
 
 use SebastianBergmann\Diff\Differ;
+use SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
 use YamlStandards\Model\AbstractFixer;
 use YamlStandards\Model\Component\YamlService;
 use YamlStandards\Model\Config\StandardParametersData;
@@ -37,7 +38,7 @@ class YamlServiceAliasingFixer extends AbstractFixer
 
         file_put_contents($pathToDumpFixedFile, $correctYamlContent);
 
-        $differ = new Differ();
+        $differ = new Differ(new UnifiedDiffOutputBuilder());
         $diffBetweenStrings = $differ->diff($yamlContent, $correctYamlContent);
 
         return new Result($pathToFile, Result::RESULT_CODE_FIXED_INVALID_FILE_SYNTAX, $diffBetweenStrings);
