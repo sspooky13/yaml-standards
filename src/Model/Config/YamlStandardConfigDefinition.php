@@ -38,14 +38,8 @@ class YamlStandardConfigDefinition implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('yaml_standards_config');
 
-        // fix for Symfony 4.2 and newer versions
-        if (method_exists($treeBuilder, 'getRootNode')) {
-            /** @var \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition $rootNode */
-            $rootNode = $treeBuilder->getRootNode();
-        } else {
-            /** @var \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition $rootNode */
-            $rootNode = /** @scrutinizer ignore-deprecated */ $treeBuilder->root('yaml_standards_config');
-        }
+        /** @var \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition $rootNode */
+        $rootNode = $treeBuilder->getRootNode();
 
         $this->buildItemsNode($rootNode->arrayPrototype());
 

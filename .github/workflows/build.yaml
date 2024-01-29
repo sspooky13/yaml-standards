@@ -15,7 +15,7 @@ jobs:
         name: Check code meets standards and tests pass (by localhost config)
         runs-on: ubuntu-latest
         env:
-            PHP_VERSION: '7.1'
+            PHP_VERSION: '7.2'
         steps:
             -   uses: actions/checkout@v2
 
@@ -46,13 +46,13 @@ jobs:
         name: Run only tests on PHP ${{ matrix.php }} on ${{ matrix.os }} with ${{ matrix.deps-level }} ${{ matrix.symfony }} dependency level
         runs-on: ${{ matrix.os }}
         env:
-            COMPOSER_ALL_DEV_DEPENDENCIES_WITHOUT_PHPUNIT: phing/phing phpstan/phpstan php-parallel-lint/php-parallel-lint shopsys/coding-standards symfony/var-dumper symplify/easy-coding-standard phpstan/phpstan-phpunit
+            COMPOSER_ALL_DEV_DEPENDENCIES_WITHOUT_PHPUNIT: phing/phing php-parallel-lint/php-parallel-lint phpstan/phpstan phpstan/phpstan-phpunit shopsys/coding-standards symfony/var-dumper
         strategy:
             matrix:
                 os: [ 'ubuntu-latest', 'macos-latest', 'windows-latest' ]
-                php: [ '7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3' ]
+                php: [ '7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3' ]
                 deps-level: [ 'lowest', 'highest' ]
-                symfony: [ '^3.4.31', '^4.0.10', '^5.0', '^6.0', '^7.0' ]
+                symfony: [ '^4.2.0', '^5.0', '^6.0', '^7.0' ]
                 exclude:
                     # symfony/console fails on "YamlStandards\Command\YamlCommandTest::testCorrectRunCommandForFix -> Trying to access array offset on value of type int" and I think it's not necessary fix it, so I skip it
                     -   php: '7.4'
@@ -62,10 +62,6 @@ jobs:
                     -   php: '7.3'
                         os: 'macos-latest'
                     # don't run check symfony versions without supported php
-                    -   php: '7.1'
-                        symfony: '^5.0'
-                    -   php: '7.1'
-                        symfony: '^6.0'
                     -   php: '7.2'
                         symfony: '^6.0'
                     -   php: '7.3'
