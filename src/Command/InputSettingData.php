@@ -29,6 +29,11 @@ class InputSettingData
     private $disableCache;
 
     /**
+     * @var bool
+     */
+    private $disableProgressBar;
+
+    /**
      * @param \Symfony\Component\Console\Input\InputInterface $input
      */
     public function __construct(InputInterface $input)
@@ -39,6 +44,7 @@ class InputSettingData
         $this->fixEnabled = $input->getOption(YamlCommand::OPTION_FIX);
         $this->pathToCacheDir = $input->getOption(YamlCommand::OPTION_PATH_TO_CACHE_DIR);
         $this->disableCache = $input->getOption(YamlCommand::OPTION_DISABLE_CACHE);
+        $this->disableProgressBar = $input->getOption(YamlCommand::OPTION_DISABLE_PROGRESS_BAR);
     }
 
     /**
@@ -71,5 +77,13 @@ class InputSettingData
     public function isCacheDisabled(): bool
     {
         return $this->disableCache;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isProgressBarDisabled(): bool
+    {
+        return $this->disableProgressBar;
     }
 }

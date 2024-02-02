@@ -8,6 +8,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Yaml\Exception\ParseException;
@@ -25,6 +26,7 @@ class YamlCommand extends Command
     public const OPTION_FIX = 'fix';
     public const OPTION_PATH_TO_CACHE_DIR = 'path-to-cache-dir';
     public const OPTION_DISABLE_CACHE = 'no-cache';
+    public const OPTION_DISABLE_PROGRESS_BAR = 'no-progress-bar';
 
     protected static $defaultName = self::COMMAND_NAME;
 
@@ -36,7 +38,8 @@ class YamlCommand extends Command
             ->addArgument(self::ARGUMENT_PATH_TO_CONFIG_FILE, InputArgument::OPTIONAL, 'Path to configuration file. By default configuration file is looking in root directory', './yaml-standards.yaml')
             ->addOption(self::OPTION_FIX, null, InputOption::VALUE_NONE, 'Automatically fix problems')
             ->addOption(self::OPTION_PATH_TO_CACHE_DIR, null, InputOption::VALUE_REQUIRED, 'Custom path to cache dir', sys_get_temp_dir() . '/')
-            ->addOption(self::OPTION_DISABLE_CACHE, null, InputOption::VALUE_NONE, 'Disable cache functionality');
+            ->addOption(self::OPTION_DISABLE_CACHE, null, InputOption::VALUE_NONE, 'Disable cache functionality')
+            ->addOption(self::OPTION_DISABLE_PROGRESS_BAR, null, InputOption::VALUE_NONE, 'Disable progress bar. Useful e.g. for nicer CI output.');
     }
 
     /**
@@ -52,7 +55,7 @@ class YamlCommand extends Command
         $cache = $inputSettingData->isCacheDisabled() ? new NoCache() : new NativeCache();
         $cache->deleteCacheFileIfConfigFileWasChanged($pathToConfigFile, $pathToCacheDir);
 
-        $symfonyStyle = new SymfonyStyle($input, $output);
+        $symfonyStyle = new SymfonyStyle($input, $inputSettingData->isProgressBarDisabled() ? new NullOutput() : $output);
         $progressBar = $symfonyStyle->createProgressBar($yamlStandardConfigTotalData->getTotalCountOfFiles());
         $progressBar->setFormat('debug');
         $results = [[]];

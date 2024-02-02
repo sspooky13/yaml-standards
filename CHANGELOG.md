@@ -1,6 +1,9 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- [#79] Added option to hide progress bar, Thanks to [@techi602]
+
 ### Changed
 - [#78] Use system temp dir as default cache dir instead of root of project, Thanks to [@techi602]
 
@@ -248,6 +251,7 @@ patchesJson6902:
 [@DavidOstrozlik]: https://github.com/DavidOstrozlik
 [@PetrHeinz]: https://github.com/PetrHeinz
 
+[#79]: https://github.com/sspooky13/yaml-standards/pull/79
 [#78]: https://github.com/sspooky13/yaml-standards/pull/78
 [#76]: https://github.com/sspooky13/yaml-standards/issues/76
 [#72]: https://github.com/sspooky13/yaml-standards/issues/72

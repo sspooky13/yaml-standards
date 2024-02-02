@@ -42,6 +42,7 @@ Tips:
 - `--fix` Automatically fix allowed standards problems.
 - `--path-to-cache-dir=./path/to/cache/dir/` Custom path where should be cache file stored. Default is root directory.
 - `--no-cache` Turn off cache functionality.
+- `--no-progress-bar` Turn off progress bar. Useful e.g. for nicer CI output.
 
 ## Implemented checkers
 - **YamlAlphabeticalChecker** - Check yaml file is alphabetically sorted to selected level. **This checker has fixer**.
