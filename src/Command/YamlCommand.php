@@ -35,7 +35,7 @@ class YamlCommand extends Command
             ->setDescription('Check yaml files respect standards')
             ->addArgument(self::ARGUMENT_PATH_TO_CONFIG_FILE, InputArgument::OPTIONAL, 'Path to configuration file. By default configuration file is looking in root directory', './yaml-standards.yaml')
             ->addOption(self::OPTION_FIX, null, InputOption::VALUE_NONE, 'Automatically fix problems')
-            ->addOption(self::OPTION_PATH_TO_CACHE_DIR, null, InputOption::VALUE_REQUIRED, 'Custom path to cache dir', '/')
+            ->addOption(self::OPTION_PATH_TO_CACHE_DIR, null, InputOption::VALUE_REQUIRED, 'Custom path to cache dir', sys_get_temp_dir() . '/')
             ->addOption(self::OPTION_DISABLE_CACHE, null, InputOption::VALUE_NONE, 'Disable cache functionality');
     }
 

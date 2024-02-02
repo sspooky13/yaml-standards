@@ -1,8 +1,11 @@
 # Changelog
 
 ## [Unreleased]
+### Changed
+- [#78] Use system temp dir as default cache dir instead of root of project, Thanks to [@techi602]
 
 ## [8.0.1]
+### Fixed
 - [#76] Files path service: only use GLOB_BRACE when available
 
 ## [8.0.0] - 2023-02-26
@@ -239,11 +242,13 @@ patchesJson6902:
 - create base command to check yaml sort
 - create `--diff` mode
 
+[@techi602]: https://github.com/techi602
 [@ChrisDBrown]: https://github.com/ChrisDBrown
 [@boris-brtan]: https://github.com/boris-brtan
 [@DavidOstrozlik]: https://github.com/DavidOstrozlik
 [@PetrHeinz]: https://github.com/PetrHeinz
 
+[#78]: https://github.com/sspooky13/yaml-standards/pull/78
 [#76]: https://github.com/sspooky13/yaml-standards/issues/76
 [#72]: https://github.com/sspooky13/yaml-standards/issues/72
 [#71]: https://github.com/sspooky13/yaml-standards/issues/71
