@@ -40,7 +40,7 @@ Tips:
 ## Options for run
 - `./path/to/your/configFile.yaml` Path to your config file. Default is `./yaml-standards.yaml`.
 - `--fix` Automatically fix allowed standards problems.
-- `--path-to-cache-dir=./path/to/cache/dir/` Custom path where should be cache file stored. Default is root directory.
+- `--path-to-cache-dir=./path/to/cache/dir/` Custom path where should be cache file stored. Default is the directory PHP stores temporary files in by default ([sys_get_temp_dir()](https://www.php.net/manual/en/function.sys-get-temp-dir.php)).
 - `--no-cache` Turn off cache functionality.
 - `--no-progress-bar` Turn off progress bar. Useful e.g. for nicer CI output.
 
