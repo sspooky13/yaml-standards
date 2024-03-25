@@ -10,6 +10,7 @@
 
 ### Fixed
 - fixed application when using sebastian/diff version 5 (set Builder class for Differ class)
+- [#80] fixed PHP Deprecated: Use of "self" in callables is deprecated, Thanks to [@TomasLudvik]
 
 ## [8.1.0]
 ### Added
@@ -256,12 +257,14 @@ patchesJson6902:
 - create base command to check yaml sort
 - create `--diff` mode
 
+[@TomasLudvik]: https://github.com/TomasLudvik
 [@techi602]: https://github.com/techi602
 [@ChrisDBrown]: https://github.com/ChrisDBrown
 [@boris-brtan]: https://github.com/boris-brtan
 [@DavidOstrozlik]: https://github.com/DavidOstrozlik
 [@PetrHeinz]: https://github.com/PetrHeinz
 
+[#80]: https://github.com/sspooky13/yaml-standards/pull/80
 [#79]: https://github.com/sspooky13/yaml-standards/pull/79
 [#78]: https://github.com/sspooky13/yaml-standards/pull/78
 [#77]: https://github.com/sspooky13/yaml-standards/issues/77
