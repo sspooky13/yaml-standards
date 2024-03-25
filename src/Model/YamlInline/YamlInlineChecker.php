@@ -30,8 +30,8 @@ class YamlInlineChecker extends AbstractChecker
         $yamlLines = explode("\n", $yamlContent);
         $lastYamlElement = end($yamlLines);
         $filteredYamlLines = array_filter($yamlLines, [YamlService::class, 'isLineNotBlank']);
-        $filteredYamlLines = array_filter($filteredYamlLines, ['self', 'removeCommentLine']);
-        $filteredYamlLines = array_map(['self', 'removeComments'], $filteredYamlLines);
+        $filteredYamlLines = array_filter($filteredYamlLines, [__CLASS__, 'removeCommentLine']);
+        $filteredYamlLines = array_map([__CLASS__, 'removeComments'], $filteredYamlLines);
         if (YamlService::isLineBlank($lastYamlElement)) {
             $filteredYamlLines[] = '';
         }

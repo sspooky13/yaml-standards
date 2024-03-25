@@ -67,8 +67,8 @@ class YamlSortService
         $arrayWithUnderscoreKeys = array_filter($yamlArrayData, [YamlService::class, 'hasArrayKeyUnderscoreAsFirstCharacter'], ARRAY_FILTER_USE_KEY);
         $arrayWithOtherKeys = array_filter($yamlArrayData, [YamlService::class, 'hasNotArrayKeyUnderscoreAsFirstCharacter'], ARRAY_FILTER_USE_KEY);
 
-        uksort($arrayWithUnderscoreKeys, ['self', 'sortArrayAlphabetical']);
-        uksort($arrayWithOtherKeys, ['self', 'sortArrayAlphabetical']);
+        uksort($arrayWithUnderscoreKeys, [__CLASS__, 'sortArrayAlphabetical']);
+        uksort($arrayWithOtherKeys, [__CLASS__, 'sortArrayAlphabetical']);
 
         $arrayData = array_merge($arrayWithUnderscoreKeys, $arrayWithOtherKeys);
 
