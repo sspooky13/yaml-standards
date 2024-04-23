@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [8.1.1]
 ### Fixed
 - [#83] fixed application when using sebastian/diff version 5 (set Builder class for Differ class)
 
@@ -274,7 +276,8 @@ patchesJson6902:
 [#14]: https://github.com/sspooky13/yaml-standards/issues/14
 [#13]: https://github.com/sspooky13/yaml-standards/pull/13
 
-[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/8.1.0...HEAD
+[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/8.1.1...HEAD
+[8.1.1]: https://github.com/sspooky13/yaml-standards/compare/8.1.0...8.1.1
 [8.1.0]: https://github.com/sspooky13/yaml-standards/compare/8.0.1...8.1.0
 [8.0.1]: https://github.com/sspooky13/yaml-standards/compare/8.0.0...8.0.1
 [8.0.0]: https://github.com/sspooky13/yaml-standards/compare/7.0.1...8.0.0
