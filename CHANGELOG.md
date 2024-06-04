@@ -4,6 +4,7 @@
 ### Added
 - added support for Symfony 7
 - [#77] CI: add build PHP 8.3 and Symfony 7
+- [#84] added support for sebastian/diff version 6, Thanks to [@TomasLudvik]
 
 ### Removed
 - [#69][#75] dropped support PHP 7.1 and dropped support Symfony 4.1 and lower
@@ -267,6 +268,7 @@ patchesJson6902:
 [@DavidOstrozlik]: https://github.com/DavidOstrozlik
 [@PetrHeinz]: https://github.com/PetrHeinz
 
+[#84]: https://github.com/sspooky13/yaml-standards/pull/84/files
 [#83]: https://github.com/sspooky13/yaml-standards/issues/83
 [#80]: https://github.com/sspooky13/yaml-standards/pull/80
 [#79]: https://github.com/sspooky13/yaml-standards/pull/79
