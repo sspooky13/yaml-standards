@@ -42,6 +42,11 @@ class StandardParametersData
     private $ignoreCommentsIndent;
 
     /**
+     * @var string
+     */
+    private $serviceArgumentType;
+
+    /**
      * @param int $depth
      * @param int $indents
      * @param int $level
@@ -49,6 +54,7 @@ class StandardParametersData
      * @param string $indentsCommentsWithoutParent
      * @param string[] $alphabeticalPrioritizedKeys
      * @param bool $ignoreCommentsIndent
+     * @param string $serviceArgumentType
      */
     public function __construct(
         int $depth,
@@ -57,7 +63,8 @@ class StandardParametersData
         string $serviceAliasingType,
         string $indentsCommentsWithoutParent,
         array $alphabeticalPrioritizedKeys,
-        bool $ignoreCommentsIndent
+        bool $ignoreCommentsIndent,
+        string $serviceArgumentType
     ) {
         $this->depth = $depth;
         $this->indents = $indents;
@@ -66,6 +73,7 @@ class StandardParametersData
         $this->indentsCommentsWithoutParent = $indentsCommentsWithoutParent;
         $this->alphabeticalPrioritizedKeys = $alphabeticalPrioritizedKeys;
         $this->ignoreCommentsIndent = $ignoreCommentsIndent;
+        $this->serviceArgumentType = $serviceArgumentType;
     }
 
     /**
@@ -122,5 +130,13 @@ class StandardParametersData
     public function isIgnoreCommentsIndent(): bool
     {
         return $this->ignoreCommentsIndent;
+    }
+
+    /**
+     * @return string
+     */
+    public function getServiceArgumentType(): string
+    {
+        return $this->serviceArgumentType;
     }
 }

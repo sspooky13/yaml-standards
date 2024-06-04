@@ -98,6 +98,6 @@ class YamlIndentCheckerTest extends TestCase
      */
     private function getStandardsParametersData(string $indentsCommentsWithoutParent): StandardParametersData
     {
-        return new StandardParametersData(4, 4, 4, YamlStandardConfigDefinition::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_SHORT, $indentsCommentsWithoutParent, [], false);
+        return new StandardParametersData(4, 4, 4, YamlStandardConfigDefinition::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_SHORT, $indentsCommentsWithoutParent, [], false, YamlStandardConfigDefinition::CONFIG_PARAMETERS_SERVICE_ARGUMENT_TYPE_VALUE_GRADUALLY);
     }
 }

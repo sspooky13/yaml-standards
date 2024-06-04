@@ -71,7 +71,7 @@ class YamlServiceAliasingDataFactory
      * @param int $key
      * @return bool
      */
-    private static function belongLineToServices(array $yamlLines, int $key): bool
+    public static function belongLineToServices(array $yamlLines, int $key): bool
     {
         while ($key > 0) {
             $key--;

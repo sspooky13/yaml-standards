@@ -19,6 +19,9 @@ services:
         # if you need to do this, you can override this setting on individual services
         public: false
 
+    # needed for the 'localizeddate' Twig filter
+    Twig\Extensions\IntlExtension: null
+
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:
@@ -49,9 +52,6 @@ services:
     # 'arguments' key and define the arguments just below the service class
     App\Twig\AppExtension:
         $locales: '%app_locales%'
-
-    # needed for the 'localizeddate' Twig filter
-    Twig\Extensions\IntlExtension: null
 
     app.mailer:
         alias: App\Mail\PhpMailer

@@ -73,7 +73,8 @@ class YamlStandardConfigLoader
             $indentsCommentsWithoutParent = $parameters[YamlStandardConfigDefinition::CONFIG_PARAMETERS_INDENTS_COMMENTS_WITHOUT_PARENT];
             $alphabeticalPrioritizedKeys = $parameters[YamlStandardConfigDefinition::CONFIG_PARAMETERS_ALPHABETICAL_PRIORITIZED_KEYS];
             $ignoreCommentsIndent = $parameters[YamlStandardConfigDefinition::CONFIG_PARAMETERS_IGNORE_COMMENTS_INDENT];
-            $parametersClass = new StandardParametersData($depth, $indents, $level, $serviceAliasingType, $indentsCommentsWithoutParent, $alphabeticalPrioritizedKeys, $ignoreCommentsIndent);
+            $serviceArgumentType = $parameters[YamlStandardConfigDefinition::CONFIG_PARAMETERS_SERVICE_ARGUMENT_TYPE];
+            $parametersClass = new StandardParametersData($depth, $indents, $level, $serviceAliasingType, $indentsCommentsWithoutParent, $alphabeticalPrioritizedKeys, $ignoreCommentsIndent, $serviceArgumentType);
 
             $yamlStandardConfigsSingleCheckerData[] = new YamlStandardConfigSingleStandardData($checkerClass, $fixerClass, $parametersClass);
         }

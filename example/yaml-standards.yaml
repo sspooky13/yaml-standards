@@ -20,5 +20,8 @@
         -   pathToChecker: YamlStandards\Model\YamlServiceAliasing\YamlServiceAliasingChecker
             parameters:
                 { serviceAliasingType: short/long, indents: 4 } # select your code style for aliases https://symfony.com/doc/master/service_container/alias_private.html#aliasing, by default it is 'short', set indents for show/fix right result, by default it is 4, all are optional
+        -   pathToChecker: YamlStandards\Model\YamlServiceArgument\YamlServiceArgumentChecker
+            parameters:
+                { serviceArgumentType: gradually/specifically } # define how service arguments should be formatted: 'gradually' (- value1, - value2) or 'specifically' ($param1: value1, $param2: value2), by default it is 'gradually'
         -   pathToChecker: YamlStandards\Model\YamlInline\YamlInlineChecker # only for turn it on
         -   pathToChecker: YamlStandards\Model\YamlEmptyLineAtEnd\YamlEmptyLineAtEndChecker # only for turn it on

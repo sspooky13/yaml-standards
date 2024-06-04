@@ -32,7 +32,7 @@ class YamlAlphabeticalCheckerTest extends TestCase
             $standardParametersData = $this->getStandardsParametersData();
             $result = $yamlAlphabeticalChecker->check($pathToFile, $standardParametersData);
 
-            $this->assertSame(Result::RESULT_CODE_OK, $result->getResultCode(), sprintf('YAML spaces between groups check of "%s" failed.', $pathToFile));
+            $this->assertSame(Result::RESULT_CODE_OK, $result->getResultCode(), sprintf('YAML alphabetical check of "%s" failed.', $pathToFile));
         }
     }
 
@@ -41,6 +41,6 @@ class YamlAlphabeticalCheckerTest extends TestCase
      */
     private function getStandardsParametersData(): StandardParametersData
     {
-        return new StandardParametersData(5, 4, 2, YamlStandardConfigDefinition::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_SHORT, YamlStandardConfigDefinition::CONFIG_PARAMETERS_INDENTS_COMMENTS_WITHOUT_PARENT_VALUE_DEFAULT, [], false);
+        return new StandardParametersData(5, 4, 2, YamlStandardConfigDefinition::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_SHORT, YamlStandardConfigDefinition::CONFIG_PARAMETERS_INDENTS_COMMENTS_WITHOUT_PARENT_VALUE_DEFAULT, [], false, YamlStandardConfigDefinition::CONFIG_PARAMETERS_SERVICE_ARGUMENT_TYPE_VALUE_GRADUALLY);
     }
 }

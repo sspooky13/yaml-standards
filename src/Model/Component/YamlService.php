@@ -121,7 +121,7 @@ class YamlService
     }
 
     /**
-     * line start of array, e.g. "- foo: bar" or "- foo" or "- { foo: bar }"
+     * line start of array, e.g. "- foo: bar" or "- foo" or "- { foo: bar }" or "- '%parameter%'" or "- '@service'"
      *
      * @param string $trimmedLine
      * @return bool
@@ -210,6 +210,23 @@ class YamlService
     }
 
     /**
+     * specifically parameter line in service file, e.g. "$pathToDir: '%arg_1%'"
+     *
+     * @param string $line
+     * @return bool
+     *
+     * @example
+     * services:
+     *      Foo\FooBundle\FooFacade:
+     *          arguments:
+     *              $pathToDir: '%arg_1%'
+     */
+    public static function isLineOfParameterDeterminedSpecifically(string $line): bool
+    {
+        return trim($line) !== '$' && self::hasLineColon($line);
+    }
+
+    /**
      * @param string[] $yamlLines
      * @return string[]
      *
@@ -275,6 +292,70 @@ class YamlService
             }
 
             return $line;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param array $yamlLines
+     * @param int $key
+     * @param int $countOfRowIndents it should be in same position as "class:" definition or other service definitions
+     * @return string|null
+     */
+    public static function getServiceClassName(array $yamlLines, int $key, int $countOfRowIndents): ?string
+    {
+        while ($key < count($yamlLines)) {
+            $key++;
+            if (!isset($yamlLines[$key])) {
+                break;
+            }
+            $nextYamlLine = $yamlLines[$key];
+            $explodedNextLine = explode(':', $nextYamlLine);
+            if (count($explodedNextLine) < 2) {
+                continue;
+            }
+            [$lineKey, $lineValue] = $explodedNextLine;
+            $trimmedLineKey = trim($lineKey);
+            $trimmedLineValue = trim($lineValue);
+            $countOfNextRowIndents = self::rowIndentsOf($nextYamlLine);
+
+            if ($countOfRowIndents === $countOfNextRowIndents) {
+                if ($trimmedLineKey === 'class') {
+                    return $trimmedLineValue;
+                }
+            }
+
+            if ($countOfNextRowIndents < $countOfRowIndents) {
+                break;
+            }
+        }
+
+        while ($key > 0) {
+            $key--;
+            $prevLine = $yamlLines[$key];
+            $explodedPrevLine = explode(':', $prevLine);
+            if (count($explodedPrevLine) < 2) {
+                continue;
+            }
+            [$lineKey, $lineValue] = $explodedPrevLine;
+            $trimmedLineKey = trim($lineKey);
+            $trimmedLineValue = trim($lineValue);
+            $countOfPrevRowIndents = self::rowIndentsOf($prevLine);
+
+            if ($countOfRowIndents === $countOfPrevRowIndents) {
+                if ($trimmedLineKey === 'class') {
+                    return $trimmedLineValue;
+                }
+            }
+
+            if ($countOfRowIndents > $countOfPrevRowIndents && self::isLineNotBlank($prevLine)) {
+                // Extract service name from the line (e.g., "YamlStandardsApp\Service\TestService:" -> "YamlStandardsApp\Service\TestService")
+                if (strpos($prevLine, ':') !== false) {
+                    $serviceName = explode(':', $prevLine)[0];
+                    return trim($serviceName);
+                }
+            }
         }
 
         return null;

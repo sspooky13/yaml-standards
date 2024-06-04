@@ -1,0 +1,20 @@
+parameters:
+    database_host: localhost
+    database_name: mydb
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    YamlStandards\Model\YamlServiceArgument\resource\TestService\SimpleTestService:
+        arguments:
+            - 'value1'
+            - 'value2'
+            - 123
+
+    YamlStandards\Model\YamlServiceArgument\resource\TestService\AnotherTestService:
+        arguments:
+            $service1: '@service.one'
+            $service2: '@service.two'
+            $service3: '@service.three'
