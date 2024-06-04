@@ -1,0 +1,36 @@
+-   pathsToCheck:
+        - path/to/file
+        - path/to/dir
+    excludedPaths:
+        - path/to/file
+        - path/to/dir
+    checkers:
+        -   pathToChecker: path/to/checker
+            parameters:
+                { parameter: value }
+        -   pathToChecker: path/to/checker
+            parameters:
+                { parameter: value, secondParameter: value }
+        -   pathToChecker: path/to/checker
+            parameters:
+                { parameter: value, secondParameter: value, thirdParameter: value }
+        -   pathToChecker: path/to/checker
+        -   pathToChecker: path/to/checker
+
+-   pathsToCheck:
+        - path/to/file
+    excludedPaths:
+        - path/to/dir
+    checkers:
+        -   pathToChecker: path/to/checker
+            parameters:
+                { parameter: value }
+
+-   pathsToCheck:
+        - path/to/file
+    excludedPaths:
+        - path/to/dir
+    checkers:
+        -   pathToChecker: path/to/checker
+            parameters:
+                { parameter: value }

@@ -1,0 +1,936 @@
+imports:
+    - { resource: services/*.yml }
+
+parameters:
+    fp_js_form_validator.factory.class: YamlStandards\YamlStandardsFooBundle\Form\JsFormValidatorFactory
+    knp_menu.factory_extension.routing.class: YamlStandards\YamlStandardsFooBundle\Model\AdminNavigation\RoutingExtension
+    prezent_doctrine_translatable.listener.class: YamlStandards\YamlStandardsFooBundle\Model\Localization\TranslatableListener
+    faker.seed: 1234
+    yamlStandards.entity_extension.map: {}
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    YamlStandards\YamlStandardsFooBundle\:
+        resource: '../../**/*{Calculation,Facade,Factory,Generator,Handler,InlineEdit,Listener,Loader,Mapper,Parser,Provider,Recalculator,Registry,Repository,Resolver,Service,Scheduler,Subscriber,Transformer}.php'
+        exclude: '../../{Command,Controller,DependencyInjection,Form,Migrations,Resources,Twig}'
+
+    YamlStandards\YamlStandardsFooBundle\Model\AdvancedSearch\Filter\:
+        resource: '../../Model/AdvancedSearch/Filter/*Filter.php'
+
+    YamlStandards\YamlStandardsFooBundle\Model\AdvancedSearchOrder\Filter\:
+        resource: '../../Model/AdvancedSearchOrder/Filter/*Filter.php'
+
+    YamlStandards\YamlStandardsFooBundle\Controller\:
+        resource: '../../Controller/'
+        tags: ['controller.service_arguments']
+
+    yamlStandards.doctrine.orm.default_entity_manager:
+        class: '%yamlStandards.doctrine.orm.entity_manager.class%'
+
+        factory: ['%yamlStandards.doctrine.orm.entity_manager.class%', create]
+        public: true
+        arguments:
+            - '@yamlStandards.doctrine.dbal.default_connection'
+            - '@yamlStandards.doctrine.orm.default_configuration'
+
+    YamlStandards\Doctrine\Common\Cache\ChainCache: ~
+
+    yamlStandards.doctrine.orm.entity_manager.abstract:
+        synthetic: true
+        public: true
+
+    YamlStandards\Faker\Generator:
+        factory: [YamlStandards\Faker\Factory, create]
+        calls:
+            - [seed, ['%faker.seed%']]
+
+    yamlStandards.fragment.handler:
+        class: YamlStandards\YamlStandardsFooBundle\Component\HttpFoundation\FragmentHandler
+        arguments:
+            - '@service_container'
+            - '@request_stack'
+            - '%kernel.debug%'
+
+    YamlStandards\Symfony\Component\Translation\MessageSelector: '@translator.selector'
+
+    YamlStandards\Doctrine\Common\Annotations\DocParser: '@yamlStandards.jms_translation.doc_parser'
+
+    # disable original DefaultPhpFileExtractor
+    yamlStandards.jms_translation.extractor.file.default_php_extractor:
+        alias: YamlStandards\YamlStandardsFooBundle\Component\Translation\PhpFileExtractor
+
+    # normalize translation messages during extraction
+    yamlStandards.jms_translation.extractor_manager:
+        alias: YamlStandards\YamlStandardsFooBundle\Component\Translation\NormalizingExtractorManager
+
+    YamlStandards\NinjaMutex\Lock\LockInterface:
+        class: YamlStandards\NinjaMutex\Lock\FlockLock
+        arguments:
+            - '%yamlStandards.root_dir%/var/lock'
+
+    yamlStandards.sensio_framework_extra.routing.loader.annot_class:
+        class: YamlStandards\YamlStandardsFooBundle\Component\AnnotatedRouteControllerLoader
+        arguments:
+            - '@annotation_reader'
+
+    yamlStandards.doctrine.cache_driver.query_cache:
+        class: YamlStandards\Doctrine\Common\Cache\ChainCache
+        arguments:
+            -
+                - '@YamlStandards\Doctrine\Common\Cache\ArrayCache'
+                - '@yamlStandards.shop.component.yamlStandards.doctrine.cache.query.redis_cache'
+
+    YamlStandards\Doctrine\Common\Cache\ArrayCache: ~
+
+    yamlStandards.doctrine.cache_driver.metadata_cache:
+        class: YamlStandards\Doctrine\Common\Cache\ChainCache
+        arguments:
+            -
+                - '@YamlStandards\Doctrine\Common\Cache\ArrayCache'
+                - '@yamlStandards.shop.component.yamlStandards.doctrine.cache.metadata.redis_cache'
+
+    YamlStandards\YamlStandardsFooBundle\Model\AdminNavigation\BreadcrumbOverrider: ~
+
+    YamlStandards\YamlStandardsFooBundle\Model\AdminNavigation\SideMenuBuilder:
+        public: true
+        arguments:
+            $menuFactory: '@knp_menu.factory'
+        tags:
+            - { name: knp_menu.menu_builder, method: createMenu, alias: admin_side_menu }
+
+    YamlStandards\YamlStandardsFooBundle\Model\AdvancedSearch\OrderAdvancedSearchConfig: ~
+
+    YamlStandards\YamlStandardsFooBundle\Model\AdvancedSearch\ProductAdvancedSearchConfig: ~
+
+    YamlStandards\YamlStandardsFooBundle\Model\Module\ModuleList: ~
+
+    YamlStandards\YamlStandardsFooBundle\Component\Breadcrumb\BreadcrumbResolver:
+        factory: ['@YamlStandards\YamlStandardsFooBundle\Model\Breadcrumb\FrontBreadcrumbResolverFactory', create]
+
+    YamlStandards\YamlStandardsFooBundle\Model\Cart\CartMigrationFacade:
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+
+    YamlStandards\YamlStandardsFooBundle\Component\Csv\CsvReader: ~
+
+    YamlStandards\YamlStandardsFooBundle\Component\Cron\Config\CronConfig: ~
+
+    YamlStandards\YamlStandardsFooBundle\Model\Cart\Watcher\CartWatcherFacade:
+        arguments:
+            - '@yamlStandards.shop.component.flash_message.sender.front'
+
+    YamlStandards\YamlStandardsFooBundle\Model\Category\CategoryVisibilityRepository:
+        tags:
+            # must be ran before ProductVisibilityFacade
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority: 20 }
+
+    YamlStandards\YamlStandardsFooBundle\Component\Cron\CronFacade:
+        arguments:
+            - '@yamlStandards.monolog.logger.cron'
+
+    YamlStandards\YamlStandardsFooBundle\DataFixtures\ProductDataFixtureReferenceInjector: ~
+
+    YamlStandards\YamlStandardsFooBundle\Component\Css\CssFacade:
+        arguments:
+            - '%yamlStandards.css_version_filepath%'
+
+    YamlStandards\YamlStandardsFooBundle\Component\DataFixture\PersistentReferenceFacade:
+        public: true
+
+    yamlStandards.shop.component.yamlStandards.doctrine.cache.metadata.redis_cache:
+        class: YamlStandards\Doctrine\Common\Cache\RedisCache
+        factory: 'YamlStandards\YamlStandardsFooBundle\Component\YamlStandards\Doctrine\Cache\RedisCacheFactory:create'
+        arguments:
+            - '@snc_redis.doctrine_metadata'
+
+    yamlStandards.shop.component.yamlStandards.doctrine.cache.query.redis_cache:
+        class: YamlStandards\Doctrine\Common\Cache\RedisCache
+        factory: 'YamlStandards\YamlStandardsFooBundle\Component\YamlStandards\Doctrine\Cache\RedisCacheFactory:create'
+        arguments:
+            - '@snc_redis.doctrine_query'
+
+    YamlStandards\YamlStandardsFooBundle\Component\YamlStandards\Doctrine\DatabaseSchemaFacade:
+        arguments:
+            - '%yamlStandards.default_db_schema_filepath%'
+
+    YamlStandards\YamlStandardsFooBundle\Component\Domain\Domain:
+        factory: ['@YamlStandards\YamlStandardsFooBundle\Component\Domain\DomainFactory', create]
+        arguments:
+            - '%yamlStandards.domain_config_filepath%'
+            - '%yamlStandards.domain_urls_config_filepath%'
+
+    YamlStandards\YamlStandardsFooBundle\Component\Domain\Multidomain\MultiDomainEntityClassProvider: ~
+
+    YamlStandards\YamlStandardsFooBundle\Component\Domain\Multidomain\MultiDomainEntityClassProviderInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\MultiDomainEntityClassProvider
+
+    YamlStandards\YamlStandardsFooBundle\Component\Domain\DomainAwareSecurityHeadersSetter:
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+
+    YamlStandards\YamlStandardsFooBundle\Domain\DomainIdsProviderInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Component\Domain\Domain
+
+    YamlStandards\YamlStandardsFooBundle\Component\Domain\DomainFacade:
+        arguments:
+            - '%yamlStandards.domain_images_dir%'
+
+    YamlStandards\YamlStandardsFooBundle\Component\Domain\DomainService:
+        arguments:
+            - '@yamlStandards.monolog.logger'
+
+    YamlStandards\YamlStandardsFooBundle\Component\Domain\DomainDataCreator: ~
+
+    YamlStandards\YamlStandardsFooBundle\Component\Domain\Multidomain\MultidomainEntityDataCreator: ~
+
+    YamlStandards\YamlStandardsFooBundle\Component\Domain\Multidomain\MultidomainEntityClassFinder: ~
+
+    YamlStandards\YamlStandardsFooBundle\Component\Form\MultipleFormSetting: ~
+
+    YamlStandards\YamlStandardsFooBundle\Component\Error\ErrorPagesFacade:
+        arguments:
+            - '%yamlStandards.error_pages_dir%'
+
+    YamlStandards\YamlStandardsFooBundle\Component\Error\ExceptionListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+
+    YamlStandards\YamlStandardsFooBundle\Component\FileUpload\FileNamingConvention: ~
+
+    YamlStandards\YamlStandardsFooBundle\Component\FileUpload\FileUpload:
+        arguments: ['%kernel.cache_dir%', '%yamlStandards.uploaded_file_dir%', '%yamlStandards.image_dir%']
+
+    YamlStandards\YamlStandardsFooBundle\Component\FileUpload\DoctrineListener:
+        tags:
+            - { name: yamlStandards.doctrine.event_listener, event: postPersist }
+            - { name: yamlStandards.doctrine.event_listener, event: postUpdate }
+            - { name: yamlStandards.doctrine.event_listener, event: prePersist }
+            - { name: yamlStandards.doctrine.event_listener, event: preUpdate }
+
+    yamlStandards.shop.component.flash_message.bag.admin:
+        class: YamlStandards\YamlStandardsFooBundle\Component\FlashMessage\Bag
+        public: true
+        arguments: ['admin']
+
+    yamlStandards.shop.component.flash_message.bag.front:
+        class: YamlStandards\YamlStandardsFooBundle\Component\FlashMessage\Bag
+        public: true
+        arguments: ['front']
+
+    yamlStandards.shop.component.flash_message.sender.admin:
+        class: YamlStandards\YamlStandardsFooBundle\Component\FlashMessage\FlashMessageSender
+        public: true
+        arguments:
+            - '@yamlStandards.shop.component.flash_message.bag.admin'
+
+    yamlStandards.shop.component.flash_message.sender.front:
+        class: YamlStandards\YamlStandardsFooBundle\Component\FlashMessage\FlashMessageSender
+        public: true
+        arguments:
+            - '@yamlStandards.shop.component.flash_message.bag.front'
+
+    YamlStandards\YamlStandardsFooBundle\Component\Form\TimedSpamValidationListener:
+        $options: []
+
+    YamlStandards\YamlStandardsFooBundle\Component\Grid\InlineEdit\GridInlineEditRegistry:
+        arguments: [!tagged yamlStandards.grid_inline_edit]
+
+    YamlStandards\YamlStandardsFooBundle\Component\Image\DirectoryStructureCreator:
+        arguments:
+            - '%yamlStandards.image_dir%'
+            - '%yamlStandards.domain_images_dir%'
+
+    YamlStandards\YamlStandardsFooBundle\Component\Image\Config\ImageConfig:
+        factory: ['@YamlStandards\YamlStandardsFooBundle\Component\Image\Config\ImageConfigLoader', loadFromYaml]
+        arguments:
+            - '%yamlStandards.image_config_filepath%'
+
+    YamlStandards\YamlStandardsFooBundle\Component\Image\ImageDeleteDoctrineListener:
+        tags:
+            - { name: yamlStandards.doctrine.event_listener, event: preRemove }
+
+    YamlStandards\YamlStandardsFooBundle\Component\Image\ImageFacade:
+        arguments: ['%yamlStandards.image_url_prefix%']
+
+    YamlStandards\YamlStandardsFooBundle\Component\Image\ImageLocator:
+        arguments: ['%yamlStandards.image_dir%']
+
+    YamlStandards\Intervention\Image\ImageManager:
+        arguments:
+            - [driver: 'gd']
+
+    YamlStandards\YamlStandardsFooBundle\Component\Javascript\Compiler\Constant\JsConstantCompilerPass: ~
+
+    YamlStandards\YamlStandardsFooBundle\Component\Javascript\Compiler\Translator\JsTranslatorCompilerPass: ~
+
+    YamlStandards\YamlStandardsFooBundle\Component\Javascript\Compiler\JsCompiler:
+        arguments:
+            -
+                - '@YamlStandards\YamlStandardsFooBundle\Component\Javascript\Compiler\Translator\JsTranslatorCompilerPass'
+                - '@YamlStandards\YamlStandardsFooBundle\Component\Javascript\Compiler\Constant\JsConstantCompilerPass'
+
+    YamlStandards\YamlStandardsFooBundle\Component\Javascript\Parser\Translator\JsTranslatorCallParser:
+        class: YamlStandards\YamlStandardsFooBundle\Component\Javascript\Parser\Translator\JsTranslatorCallParser
+        factory: ['@YamlStandards\YamlStandardsFooBundle\Component\Javascript\Parser\Translator\JsTranslatorCallParserFactory', create]
+        synthetic: false
+
+    YamlStandards\YamlStandardsFooBundle\Component\Log\SlowLogSubscriber:
+        arguments:
+            - '@yamlStandards.monolog.logger.slow'
+        tags:
+            - { name: kernel.event_subscriber }
+
+    YamlStandards\YamlStandardsFooBundle\Component\HttpFoundation\TransactionalMasterRequestService:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+
+    YamlStandards\YamlStandardsFooBundle\Component\HttpFoundation\VaryResponseByXRequestedWithHeaderListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+
+    YamlStandards\YamlStandardsFooBundle\Component\HttpFoundation\XmlResponse: ~
+
+    YamlStandards\YamlStandardsFooBundle\Component\Setting\Setting: ~
+
+    YamlStandards\YamlStandardsFooBundle\Component\Setting\ClearSettingsCacheDoctrineSubscriber:
+        tags: ['yamlStandards.doctrine.event_subscriber']
+
+    YamlStandards\YamlStandardsFooBundle\Component\System\System: ~
+
+    YamlStandards\YamlStandardsFooBundle\Model\Sitemap\SitemapDumperFactory:
+        arguments:
+            - '@event_dispatcher'
+
+    YamlStandards\YamlStandardsFooBundle\Model\Sitemap\SitemapFacade:
+        arguments:
+            - '%yamlStandards.sitemaps_dir%'
+            - '%yamlStandards.sitemaps_url_prefix%'
+
+    YamlStandards\YamlStandardsFooBundle\Model\Sitemap\SitemapListener:
+        tags:
+            - { name: 'kernel.event_subscriber', priority: 100 }
+
+    YamlStandards\YamlStandardsFooBundle\Component\Translation\TranslatableEntityDataCreator: ~
+
+    YamlStandards\YamlStandardsFooBundle\Component\Translation\NormalizingExtractorManager:
+        arguments:
+            - '@yamlStandards.jms_translation.extractor.file_extractor'
+            - '@logger'
+
+    YamlStandards\YamlStandardsFooBundle\Component\Translation\JsFileExtractor:
+        tags:
+            - { name: yamlStandards.jms_translation.file_visitor }
+
+    YamlStandards\YamlStandardsFooBundle\Component\Translation\PhpFileExtractor:
+        factory: ['@YamlStandards\YamlStandardsFooBundle\Component\Translation\PhpFileExtractorFactory', create]
+        tags:
+            - { name: yamlStandards.jms_translation.file_visitor }
+
+    YamlStandards\YamlStandardsFooBundle\Component\Translation\ConstraintMessageExtractor:
+        tags:
+            - { name: yamlStandards.jms_translation.file_visitor }
+
+    YamlStandards\YamlStandardsFooBundle\Component\Translation\PoDumper:
+        tags:
+            - { name: yamlStandards.jms_translation.dumper, format: po }
+
+    YamlStandards\YamlStandardsFooBundle\Component\Form\ResizeFormListener:
+        synthetic: true
+        public: true
+
+    YamlStandards\YamlStandardsFooBundle\Component\Translation\MessageIdNormalizer: ~
+
+    YamlStandards\Symfony\Component\Translation\IdentityTranslator: ~
+
+    YamlStandards\YamlStandardsFooBundle\Component\Translation\Translator:
+        decorates: translator
+        arguments:
+            - '@YamlStandards\YamlStandardsFooBundle\Component\Translation\Translator.inner'
+            - '@YamlStandards\YamlStandardsFooBundle\Component\Translation\Translator.inner'
+            - '@YamlStandards\Symfony\Component\Translation\IdentityTranslator'
+
+    YamlStandards\YamlStandardsFooBundle\Component\Translation\TwigFileExtractor:
+        decorates: 'yamlStandards.jms_translation.extractor.file.twig_extractor'
+        arguments:
+            - '@YamlStandards\YamlStandardsFooBundle\Component\Translation\TwigFileExtractor.inner'
+
+    YamlStandards\YamlStandardsFooBundle\Component\UploadedFile\Config\UploadedFileConfig:
+        factory: ['@YamlStandards\YamlStandardsFooBundle\Component\UploadedFile\Config\UploadedFileConfigLoader', loadFromYaml]
+        arguments:
+            - '%yamlStandards.uploaded_file_config_filepath%'
+
+    YamlStandards\YamlStandardsFooBundle\Component\UploadedFile\UploadedFileDeleteDoctrineListener:
+        tags:
+            - { name: yamlStandards.doctrine.event_listener, event: preRemove }
+
+    YamlStandards\YamlStandardsFooBundle\Component\UploadedFile\DirectoryStructureCreator: ~
+
+    YamlStandards\YamlStandardsFooBundle\Component\UploadedFile\UploadedFileLocator:
+        arguments:
+            - '%yamlStandards.uploaded_file_dir%'
+            - '%yamlStandards.uploaded_file_url_prefix%'
+
+    YamlStandards\YamlStandardsFooBundle\Form\Constraints\NotSelectedDomainToShowValidator:
+        tags:
+            - { name: validator.constraint_validator, alias: YamlStandards\YamlStandardsFooBundle\Form\Constraints\NotSelectedDomainToShowValidator }
+
+    YamlStandards\YamlStandardsFooBundle\Form\Constraints\UniqueSlugsOnDomainsValidator:
+        tags:
+            - { name: validator.constraint_validator, alias: YamlStandards\YamlStandardsFooBundle\Form\Constraints\UniqueSlugsOnDomainsValidator }
+
+    YamlStandards\YamlStandardsFooBundle\Model\Administrator\Security\AdministratorUserProvider: ~
+
+    YamlStandards\YamlStandardsFooBundle\Model\Cookies\CookiesFacade:
+        arguments:
+            - '%kernel.environment%'
+
+    YamlStandards\YamlStandardsFooBundle\Model\Customer\FrontendUserProvider: ~
+
+    YamlStandards\YamlStandardsFooBundle\Model\Customer\CurrentCustomer: ~
+
+    YamlStandards\YamlStandardsFooBundle\Model\Customer\Mail\ResetPasswordMail: ~
+
+    YamlStandards\YamlStandardsFooBundle\Model\PersonalData\Mail\PersonalDataAccessMail: ~
+
+    YamlStandards\YamlStandardsFooBundle\Model\PersonalData\Mail\PersonalDataExportMail: ~
+
+    YamlStandards\YamlStandardsFooBundle\DataFixtures\Performance\CategoryDataFixture:
+        arguments:
+            - "%yamlStandards.performance_data.category.counts_by_level%"
+
+    YamlStandards\YamlStandardsFooBundle\DataFixtures\Performance\OrderDataFixture:
+        arguments:
+            - "%yamlStandards.performance_data.order.total_count%"
+            - "%yamlStandards.performance_data.order.item_count_per_order%"
+
+    YamlStandards\YamlStandardsFooBundle\DataFixtures\Performance\ProductDataFixture:
+        arguments:
+            - "%yamlStandards.performance_data.product.total_count%"
+
+    YamlStandards\YamlStandardsFooBundle\DataFixtures\Performance\UserDataFixture:
+        arguments:
+            - "%yamlStandards.performance_data.user.count_per_domain%"
+
+    YamlStandards\YamlStandardsFooBundle\DataFixtures\Demo\ProductDataFixtureCsvReader:
+        arguments:
+            - '%yamlStandards.data_fixtures.resource_products_filepath%'
+
+    YamlStandards\YamlStandardsFooBundle\DataFixtures\Demo\UserDataFixtureLoader:
+        arguments:
+            - '%yamlStandards.data_fixtures.resource_customers_filepath%'
+
+    YamlStandards\YamlStandardsFooBundle\Model\Feed\FeedConfigFacade:
+        arguments:
+            - '%yamlStandards.feed_url_prefix%'
+            - '%yamlStandards.feed_dir%'
+
+    YamlStandards\YamlStandardsFooBundle\Model\Feed\FeedPathProvider:
+        arguments:
+            $feedUrlPrefix: '%yamlStandards.feed_url_prefix%'
+            $feedDir: '%yamlStandards.feed_dir%'
+
+    YamlStandards\YamlStandardsFooBundle\Model\Feed\FeedRegistry:
+        arguments:
+            $knownTypes: ['daily', 'hourly']
+            $defaultType: 'daily'
+
+    YamlStandards\YamlStandardsFooBundle\Component\HttpFoundation\ResponseListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+
+    YamlStandards\YamlStandardsFooBundle\Component\HttpFoundation\SubRequestListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+
+    YamlStandards\YamlStandardsFooBundle\Model\Localization\Localization: ~
+
+    YamlStandards\YamlStandardsFooBundle\Component\Localization\DateTimeFormatter:
+        factory: ['@YamlStandards\YamlStandardsFooBundle\Model\Localization\CustomDateTimeFormatterFactory', create]
+
+    CommerceGuys\Intl\Currency\CurrencyRepositoryInterface:
+        class: YamlStandards\YamlStandardsFooBundle\Model\Localization\IntlCurrencyRepository
+
+    YamlStandards\YamlStandardsFooBundle\Model\Mail\MailerService:
+        arguments: ['@mailer']
+
+    YamlStandards\YamlStandardsFooBundle\Model\Heureka\HeurekaSetting: ~
+
+    YamlStandards\YamlStandardsFooBundle\Model\Heureka\HeurekaFacade:
+        arguments:
+            - '@logger'
+
+    YamlStandards\YamlStandardsFooBundle\Model\Pricing\DelayedPricingSetting: ~
+
+    YamlStandards\YamlStandardsFooBundle\Model\Pricing\InputPriceRecalculationScheduler:
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+
+    YamlStandards\YamlStandardsFooBundle\Model\Product\Availability\ProductAvailabilityRecalculator:
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+
+    yamlStandards.shop.product.bestselling_product.cache_provider:
+        class: YamlStandards\Doctrine\Common\Cache\RedisCache
+        factory: 'YamlStandards\YamlStandardsFooBundle\Component\YamlStandards\Doctrine\Cache\RedisCacheFactory:create'
+        arguments:
+            - '@snc_redis.bestselling_products'
+
+    YamlStandards\YamlStandardsFooBundle\Model\Product\BestsellingProduct\CachedBestsellingProductFacade:
+        arguments:
+            - '@yamlStandards.shop.product.bestselling_product.cache_provider'
+
+    YamlStandards\YamlStandardsFooBundle\Model\Pricing\Rounding: ~
+
+    YamlStandards\YamlStandardsFooBundle\Model\Pricing\PricingSetting: ~
+
+    YamlStandards\YamlStandardsFooBundle\Model\Product\Pricing\ProductPriceCalculationForUser: ~
+
+    YamlStandards\YamlStandardsFooBundle\Model\Product\Pricing\ProductPriceRecalculator:
+        tags:
+            # must be run before ProductVisibilityFacade
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority: 20 }
+
+    YamlStandards\YamlStandardsFooBundle\Model\Product\ProductVisibilityFacade:
+        tags:
+            # must be ran after CategoryVisibilityRepository and ProductPriceRecalculator
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority: 10 }
+
+    # Define RedirectController explicitly to prevent creating it on-the-fly
+    # when redirecting (it causes unnecessary container rebuild).
+    YamlStandards\Symfony\Bundle\FrameworkBundle\Controller\RedirectController:
+        calls:
+            - [setContainer, ['@service_container']]
+
+    YamlStandards\Symfony\Component\Config\Loader\LoaderInterface: '@routing.loader'
+
+    YamlStandards\YamlStandardsFooBundle\Component\YamlStandards\Doctrine\SqlQuoter: ~
+
+    YamlStandards\YamlStandardsFooBundle\Component\Router\CurrentDomainRouter:
+        tags:
+            - { name: router, priority: 70 }
+
+    YamlStandards\YamlStandardsFooBundle\Component\Router\DomainRouterFactory:
+        arguments: ['%router.resource%']
+
+    YamlStandards\YamlStandardsFooBundle\Component\Router\FriendlyUrl\FriendlyUrlRouterFactory:
+        arguments: ['%yamlStandards.router.friendly_url_router_filepath%']
+
+    YamlStandards\YamlStandardsFooBundle\Component\Router\LocalizedRouterFactory:
+        arguments: ['%yamlStandards.router.locale_router_filepaths%']
+
+    YamlStandards\YamlStandardsFooBundle\Component\Router\Security\RouteCsrfProtector:
+        arguments:
+            - '@annotations.reader'
+
+    YamlStandards\YamlStandardsFooBundle\Model\Script\ScriptFacade:
+        public: true
+
+    YamlStandards\YamlStandardsFooBundle\Model\Security\LoginService:
+        arguments:
+            - '@security.token_storage'
+            - '@YamlStandards\Symfony\Component\HttpKernel\Debug\TraceableEventDispatcher'
+
+    YamlStandards\Symfony\Component\HttpKernel\Debug\TraceableEventDispatcher:
+        arguments:
+            - '@event_dispatcher'
+
+    YamlStandards\YamlStandardsFooBundle\Component\Filesystem\FilepathComparator: ~
+
+    YamlStandards\YamlStandardsFooBundle\Model\Security\Filesystem\FilemanagerAccess:
+        public: true
+        arguments:
+            - '%yamlStandards.filemanager_upload_dir%'
+
+    YamlStandards\YamlStandardsFooBundle\Model\Security\LoginAsUserFacade:
+        arguments:
+            - '@security.token_storage'
+            - '@event_dispatcher'
+
+    YamlStandards\YamlStandardsFooBundle\Model\Security\LoginListener:
+        tags:
+            - { name: kernel.event_listener, event: security.interactive_login, method: onSecurityInteractiveLogin }
+
+    YamlStandards\YamlStandardsFooBundle\Twig\Javascript\JavascriptCompilerService:
+        arguments:
+            - '%yamlStandards.web_dir%'
+            - ['%yamlStandards.javascript_sources_dir%', '%yamlStandards.framework.javascript_sources_dir%']
+            - '%yamlStandards.javascript_url_prefix%'
+
+    yamlStandards.translation.loader.po:
+        class: YamlStandards\YamlStandardsFooBundle\Component\Translation\PoFileLoader
+        tags:
+            - { name: 'translation.loader', alias: 'po' }
+
+    YamlStandards\YamlStandardsFooBundle\Component\Error\ExceptionController:
+        arguments:
+            - '@twig'
+            - '%kernel.debug%'
+
+    YamlStandards\YamlStandardsFooBundle\Component\Error\NotLogFakeHttpExceptionsExceptionListener:
+        tags:
+            - { name: 'yamlStandards.monolog.logger', channel: 'request' }
+        arguments:
+            - '%yamlStandards.twig.exception_listener.controller%'
+            - '@?logger'
+
+    yamlStandards.twig.stringloader:
+        class: Twig_Loader_Array
+
+    YamlStandards\YamlStandardsFooBundle\Form\Constraints\UniqueEmailValidator:
+        tags:
+            - { name: validator.constraint_validator, alias: YamlStandards\YamlStandardsFooBundle\Form\Constraints\UniqueEmailValidator }
+
+    yamlStandards.monolog.activation_strategy.not_found:
+        abstract: true
+
+    yamlStandards.monolog.handler.fingers_crossed.error_level_activation_strategy:
+        abstract: true
+
+    YamlStandards\Doctrine\Common\EventManager: '@yamlStandards.doctrine.dbal.default_connection.event_manager'
+
+    YamlStandards\Doctrine\Bundle\FixturesBundle\Loader\SymfonyFixturesLoader: '@yamlStandards.doctrine.fixtures.loader'
+
+    YamlStandards\YamlStandardsFooBundle\Component\YamlStandards\Doctrine\NotNullableColumnsFinder: ~
+
+    YamlStandards\YamlStandardsFooBundle\Component\YamlStandards\Doctrine\StringColumnsFinder: ~
+
+    YamlStandards\YamlStandardsFooBundle\Component\EntityExtension\EntityExtensionParentMetadataCleanerEventSubscriber:
+        class: YamlStandards\YamlStandardsFooBundle\Component\EntityExtension\EntityExtensionParentMetadataCleanerEventSubscriber
+        tags:
+            - { name: yamlStandards.doctrine.event_subscriber, priority: 10 }
+
+    YamlStandards\YamlStandardsFooBundle\Component\EntityExtension\EntityManagerDecorator:
+        decorates: 'yamlStandards.doctrine.orm.default_entity_manager'
+        arguments:
+            - '@YamlStandards\YamlStandardsFooBundle\Component\EntityExtension\EntityManagerDecorator.inner'
+            - '@yamlStandards.doctrine.orm.default_configuration'
+
+    YamlStandards\YamlStandardsFooBundle\Component\EntityExtension\EntityNameResolver:
+        arguments:
+            - '%yamlStandards.entity_extension.map%'
+
+    yamlStandards.joschi127_doctrine_entity_override.event_subscriber.load_orm_metadata:
+        class: YamlStandards\Joschi127\DoctrineEntityOverrideBundle\EventListener\LoadORMMetadataSubscriber
+        arguments:
+            - "@service_container"
+            - "%yamlStandards.entity_extension.map%"
+        tags:
+            - { name: yamlStandards.doctrine.event_subscriber, priority: -10 }
+
+    YamlStandards\Metadata\MetadataFactory: '@yamlStandards.prezent_doctrine_translatable.metadata_factory'
+
+    YamlStandards\Craue\FormFlowBundle\Storage\DataManager: '@yamlStandards.craue.form.flow.data_manager_default'
+
+    YamlStandards\FM\ElfinderBundle\Configuration\ElFinderConfigurationReader: '@yamlStandards.fm_elfinder.configurator.default'
+
+    YamlStandards\YamlStandardsFooBundle\Command\CheckMicroservicesCommand:
+        arguments:
+            $microserviceProductSearchClient: '@yamlStandards.microservice_client.product_search'
+            $microserviceProductSearchExportClient: '@yamlStandards.microservice_client.product_search_export'
+
+    YamlStandards\YamlStandardsFooBundle\Model\PersonalData\PersonalDataAccessRequestFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\PersonalData\PersonalDataAccessRequestFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Administrator\AdministratorFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Administrator\AdministratorFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Administrator\Activity\AdministratorActivityFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Administrator\Activity\AdministratorActivityFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Administrator\AdministratorGridLimitFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Administrator\AdministratorGridLimitFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Advert\AdvertFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Advert\AdvertFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Article\ArticleFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Article\ArticleFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Article\ArticleDetailFriendlyUrlDataProvider:
+        tags:
+            - {name: yamlStandards.friendly_url_provider}
+
+    YamlStandards\YamlStandardsFooBundle\Model\Product\Availability\AvailabilityFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Product\Availability\AvailabilityFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Customer\BillingAddressFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Customer\BillingAddressFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Product\Brand\BrandFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Product\Brand\BrandFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Product\Brand\BrandDetailFriendlyUrlDataProvider:
+        tags:
+            - {name: yamlStandards.friendly_url_provider}
+
+    YamlStandards\YamlStandardsFooBundle\Model\Cart\Item\CartItemFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Cart\Item\CartItemFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Category\CategoryFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Category\CategoryFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Country\CountryFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Country\CountryFactory
+
+    YamlStandards\YamlStandardsFooBundle\Component\Cron\CronModuleFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Component\Cron\CronModuleFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Pricing\Currency\CurrencyFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Pricing\Currency\CurrencyFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Customer\DeliveryAddressFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Customer\DeliveryAddressFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Module\EnabledModuleFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Module\EnabledModuleFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Product\Flag\FlagFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Product\Flag\FlagFactory
+
+    YamlStandards\YamlStandardsFooBundle\Component\Router\FriendlyUrl\CompilerPass\FriendlyUrlDataProviderConfig: ~
+
+    YamlStandards\YamlStandardsFooBundle\Component\Router\FriendlyUrl\FriendlyUrlFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Component\Router\FriendlyUrl\FriendlyUrlFactory
+
+    YamlStandards\YamlStandardsFooBundle\Component\Image\ImageFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Component\Image\ImageFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Mail\MailTemplateFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Mail\MailTemplateFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Product\BestsellingProduct\ManualBestsellingProductFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Product\BestsellingProduct\ManualBestsellingProductFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Newsletter\NewsletterSubscriberFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Newsletter\NewsletterSubscriberFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Order\OrderFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Order\OrderFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Order\OrderNumberSequenceFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Order\OrderNumberSequenceFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Order\Item\OrderPaymentFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Order\Item\OrderPaymentFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Order\Item\OrderProductFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Order\Item\OrderProductFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Order\Status\OrderStatusFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Order\Status\OrderStatusFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Order\Item\OrderTransportFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Order\Item\OrderTransportFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Product\Parameter\ParameterFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Product\Parameter\ParameterFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Product\Parameter\ParameterValueFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Product\Parameter\ParameterValueFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Payment\PaymentFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Payment\PaymentFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Payment\PaymentPriceFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Payment\PaymentPriceFactory
+
+    YamlStandards\YamlStandardsFooBundle\Component\DataFixture\PersistentReferenceFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Component\DataFixture\PersistentReferenceFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Pricing\Group\PricingGroupFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Pricing\Group\PricingGroupFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Product\ProductFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Product\ProductFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Product\ProductDetailFriendlyUrlDataProvider:
+        tags:
+            - {name: yamlStandards.friendly_url_provider}
+
+    YamlStandards\YamlStandardsFooBundle\Model\Product\ProductListFriendlyUrlDataProvider:
+        tags:
+            - {name: yamlStandards.friendly_url_provider}
+
+    YamlStandards\YamlStandardsFooBundle\Model\Product\Accessory\ProductAccessoryFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Product\Accessory\ProductAccessoryFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Product\Pricing\ProductCalculatedPriceFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Product\Pricing\ProductCalculatedPriceFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Product\ProductCategoryDomainFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Product\ProductCategoryDomainFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Product\Pricing\ProductManualInputPriceFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Product\Pricing\ProductManualInputPriceFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Product\Parameter\ProductParameterValueFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Product\Parameter\ProductParameterValueFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Product\ProductVisibilityFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Product\ProductVisibilityFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Order\PromoCode\PromoCodeFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Order\PromoCode\PromoCodeFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Script\ScriptFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Script\ScriptFactory
+
+    YamlStandards\YamlStandardsFooBundle\Component\Setting\SettingValueFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Component\Setting\SettingValueFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Slider\SliderItemFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Slider\SliderItemFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Category\TopCategory\TopCategoryFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Category\TopCategory\TopCategoryFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Product\TopProduct\TopProductFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Product\TopProduct\TopProductFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Transport\TransportFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Transport\TransportFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Transport\TransportPriceFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Transport\TransportPriceFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Product\Unit\UnitFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Product\Unit\UnitFactory
+
+    YamlStandards\YamlStandardsFooBundle\Component\UploadedFile\UploadedFileFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Component\UploadedFile\UploadedFileFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Customer\UserFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Customer\UserFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Pricing\Vat\VatFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Pricing\Vat\VatFactory
+
+    YamlStandards\YamlStandardsFooBundle\Component\Router\FriendlyUrl\FriendlyUrlDataFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Component\Router\FriendlyUrl\FriendlyUrlDataFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Administrator\AdministratorDataFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Administrator\AdministratorDataFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Advert\AdvertDataFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Advert\AdvertDataFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Article\ArticleDataFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Article\ArticleDataFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Category\CategoryDataFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Category\CategoryDataFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Country\CountryDataFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Country\CountryDataFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Customer\CustomerDataFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Customer\CustomerDataFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Customer\BillingAddressDataFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Customer\BillingAddressDataFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Customer\DeliveryAddressDataFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Customer\DeliveryAddressDataFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Customer\UserDataFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Customer\UserDataFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Mail\MailTemplateDataFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Mail\MailTemplateDataFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Order\OrderDataFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Order\OrderDataFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Order\Item\OrderItemDataFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Order\Item\OrderItemDataFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Order\Item\OrderTransportDataFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Order\Item\OrderTransportDataFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Order\Item\OrderPaymentDataFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Order\Item\OrderPaymentDataFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Order\PromoCode\PromoCodeDataFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Order\PromoCode\PromoCodeDataFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Order\Status\OrderStatusDataFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Order\Status\OrderStatusDataFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Payment\PaymentDataFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Payment\PaymentDataFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\PersonalData\PersonalDataAccessRequestDataFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\PersonalData\PersonalDataAccessRequestDataFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Pricing\Currency\CurrencyDataFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Pricing\Currency\CurrencyDataFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Pricing\Group\PricingGroupDataFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Pricing\Group\PricingGroupDataFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Pricing\Vat\VatDataFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Pricing\Vat\VatDataFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Product\Availability\AvailabilityDataFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Product\Availability\AvailabilityDataFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Product\Brand\BrandDataFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Product\Brand\BrandDataFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Product\Flag\FlagDataFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Product\Flag\FlagDataFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Product\Parameter\ProductParameterValueDataFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Product\Parameter\ProductParameterValueDataFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Product\Parameter\ParameterValueDataFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Product\Parameter\ParameterValueDataFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Product\Parameter\ParameterDataFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Product\Parameter\ParameterDataFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Product\Unit\UnitDataFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Product\Unit\UnitDataFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Product\Search\ProductSearchRepository:
+        arguments:
+            $microserviceProductSearchClient: '@yamlStandards.microservice_client.product_search'
+
+    YamlStandards\YamlStandardsFooBundle\Model\Product\ProductDataFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Product\ProductDataFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Script\ScriptDataFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Script\ScriptDataFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Slider\SliderItemDataFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Slider\SliderItemDataFactory
+
+    YamlStandards\YamlStandardsFooBundle\Model\Transport\TransportDataFactoryInterface:
+        alias: YamlStandards\YamlStandardsFooBundle\Model\Transport\TransportDataFactory
+
+    YamlStandards\YamlStandardsFooBundle\Component\Microservice\ProductSearchExport\ProductSearchExportStructureFacade:
+        arguments:
+            $microserviceClient: '@yamlStandards.microservice_client.product_search_export'
+
+    YamlStandards\YamlStandardsFooBundle\Model\Product\ProductSearchExport\ProductSearchExportExporter:
+        arguments:
+            $client: '@yamlStandards.microservice_client.product_search_export'
+
+    YamlStandards\YamlStandardsFooBundle\Model\Product\ProductSearchExport\ProductSearchExportDataConverter: ~
+
+    yamlStandards.microservice_client.product_search:
+        factory: 'YamlStandards\YamlStandardsFooBundle\Component\Microservice\MicroserviceClientFactory:create'
+        arguments:
+            $microserviceUrl: '%microservice_product_search_url%'
+
+    yamlStandards.microservice_client.product_search_export:
+        factory: 'YamlStandards\YamlStandardsFooBundle\Component\Microservice\MicroserviceClientFactory:create'
+        arguments:
+            $microserviceUrl: '%microservice_product_search_export_url%'

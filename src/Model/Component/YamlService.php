@@ -121,7 +121,7 @@ class YamlService
     }
 
     /**
-     * line start of array, e.g. "- foo: bar" or "- foo" or "- { foo: bar }"
+     * line start of array, e.g. "- foo: bar" or "- foo" or "- { foo: bar }" or "- '%parameter%'" or "- '@service'"
      *
      * @param string $trimmedLine
      * @return bool
@@ -275,6 +275,50 @@ class YamlService
             }
 
             return $line;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param array $yamlLines
+     * @param int $key
+     * @param int $countOfRowIndents it should be in same position as "class:" definition or other service definitions
+     * @return string|null
+     */
+    public static function getServiceClassName(array $yamlLines, int $key, int $countOfRowIndents): ?string
+    {
+        while ($key < count($yamlLines)) {
+            $key++;
+            $nextYamlLine = $yamlLines[$key];
+            $explodedNextLine = explode(':', $nextYamlLine);
+            [$lineKey, $lineValue] = $explodedNextLine;
+            $trimmedLineKey = trim($lineKey);
+            $trimmedLineValue = trim($lineValue);
+            $countOfNextRowIndents = self::rowIndentsOf($nextYamlLine);
+
+            if ($countOfRowIndents === $countOfNextRowIndents) {
+                if ($trimmedLineKey === 'class') {
+                    return $trimmedLineValue;
+                }
+            }
+
+            if ($countOfNextRowIndents < $countOfRowIndents) {
+                break;
+            }
+        }
+
+        while ($key > 0) {
+            $key--;
+            $prevLine = $yamlLines[$key];
+            $countOfPrevRowIndents = self::rowIndentsOf($prevLine);
+            $explodedNextLine = explode(':', $prevLine);
+            [$lineKey,] = $explodedNextLine;
+            $trimmedLineKey = trim($lineKey);
+
+            if ($countOfRowIndents > $countOfPrevRowIndents) {
+                return $trimmedLineKey;
+            }
         }
 
         return null;
