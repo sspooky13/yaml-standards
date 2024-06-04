@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [9.0.0]
 ### Added
 - added support for Symfony 7
 - [#77] CI: add build PHP 8.3 and Symfony 7
@@ -292,7 +294,8 @@ patchesJson6902:
 [#14]: https://github.com/sspooky13/yaml-standards/issues/14
 [#13]: https://github.com/sspooky13/yaml-standards/pull/13
 
-[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/8.1.1...HEAD
+[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/9.0.0...HEAD
+[9.0.0]: https://github.com/sspooky13/yaml-standards/compare/8.1.1...9.0.0
 [8.1.1]: https://github.com/sspooky13/yaml-standards/compare/8.1.0...8.1.1
 [8.1.0]: https://github.com/sspooky13/yaml-standards/compare/8.0.1...8.1.0
 [8.0.1]: https://github.com/sspooky13/yaml-standards/compare/8.0.0...8.0.1
