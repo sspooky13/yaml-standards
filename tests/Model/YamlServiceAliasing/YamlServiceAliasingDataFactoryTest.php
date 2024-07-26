@@ -112,7 +112,7 @@ services:
         $reflectionMethod = $reflectionClass->getMethod('isLineOppositeAliasByType');
         $reflectionMethod->setAccessible(true);
 
-        $yamlLine = '        alias: App\Mail\PhpMailer';
+        $yamlLine = '        alias: YamlStandardsApp\Mail\PhpMailer';
 
         $isLineAlias = $reflectionMethod->invokeArgs(new YamlServiceAliasingDataFactory(), [$yamlLine, YamlStandardConfigDefinition::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_SHORT]);
 
@@ -125,7 +125,7 @@ services:
         $reflectionMethod = $reflectionClass->getMethod('isLineOppositeAliasByType');
         $reflectionMethod->setAccessible(true);
 
-        $yamlLine = '    app.mailer: \'@App\Mail\PhpMailer\'';
+        $yamlLine = '    app.mailer: \'@YamlStandardsApp\Mail\PhpMailer\'';
 
         $isLineAlias = $reflectionMethod->invokeArgs(new YamlServiceAliasingDataFactory(), [$yamlLine, YamlStandardConfigDefinition::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_LONG]);
 
@@ -140,8 +140,8 @@ services:
 
         $yamlContent = 'services:
     app.mailer:
-        alias: App\Mail\PhpMailer';
-        $yamlLines = ['services:', '    app.mailer:', '        alias: App\Mail\PhpMailer'];
+        alias: YamlStandardsApp\Mail\PhpMailer';
+        $yamlLines = ['services:', '    app.mailer:', '        alias: YamlStandardsApp\Mail\PhpMailer'];
 
         $yamlParsedData = Yaml::parse($yamlContent);
         $isAliasStandalone = $reflectionMethod->invokeArgs(new YamlServiceAliasingDataFactory(), [$yamlLines, $yamlParsedData, 2, YamlStandardConfigDefinition::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_SHORT]);
@@ -157,9 +157,9 @@ services:
 
         $yamlContent = 'services:
     app.mailer:
-        alias: App\Mail\PhpMailer
+        alias: YamlStandardsApp\Mail\PhpMailer
         public: true';
-        $yamlLines = ['services:', '    app.mailer:', '        alias: App\Mail\PhpMailer', '        public: true'];
+        $yamlLines = ['services:', '    app.mailer:', '        alias: YamlStandardsApp\Mail\PhpMailer', '        public: true'];
 
         $yamlParsedData = Yaml::parse($yamlContent);
         $isAliasStandalone = $reflectionMethod->invokeArgs(new YamlServiceAliasingDataFactory(), [$yamlLines, $yamlParsedData, 2, YamlStandardConfigDefinition::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_SHORT]);

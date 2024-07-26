@@ -31,7 +31,7 @@ services:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
 
-# Example service with specifically named arguments (should be gradually)
+    # Example service with specifically named arguments (should be gradually)
     YamlStandards\Model\YamlServiceArgument\resource\TestService\SimpleTestService:
         arguments:
             - '%app.notifications.email_sender%'
