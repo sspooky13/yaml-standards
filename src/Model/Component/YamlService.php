@@ -210,6 +210,23 @@ class YamlService
     }
 
     /**
+     * specifically parameter line in service file, e.g. "$pathToDir: '%arg_1%'"
+     *
+     * @param string $line
+     * @return bool
+     *
+     * @example
+     * services:
+     *      Foo\FooBundle\FooFacade:
+     *          arguments:
+     *              $pathToDir: '%arg_1%'
+     */
+    public static function isLineOfParameterDeterminedSpecifically(string $line): bool
+    {
+        return trim($line) !== '$' && self::hasLineColon($line);
+    }
+
+    /**
      * @param string[] $yamlLines
      * @return string[]
      *
@@ -311,12 +328,19 @@ class YamlService
         while ($key > 0) {
             $key--;
             $prevLine = $yamlLines[$key];
-            $countOfPrevRowIndents = self::rowIndentsOf($prevLine);
-            $explodedNextLine = explode(':', $prevLine);
-            [$lineKey,] = $explodedNextLine;
+            $explodedPrevLine = explode(':', $prevLine);
+            [$lineKey, $lineValue] = $explodedPrevLine;
             $trimmedLineKey = trim($lineKey);
+            $trimmedLineValue = trim($lineValue);
+            $countOfPrevRowIndents = self::rowIndentsOf($prevLine);
 
-            if ($countOfRowIndents > $countOfPrevRowIndents) {
+            if ($countOfRowIndents === $countOfPrevRowIndents) {
+                if ($trimmedLineKey === 'class') {
+                    return $trimmedLineValue;
+                }
+            }
+
+            if ($countOfRowIndents > $countOfPrevRowIndents && self::isLineNotBlank($prevLine)) {
                 return $trimmedLineKey;
             }
         }

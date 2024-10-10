@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace YamlStandards\Model\YamlServiceArgument;
 
+use ReflectionClass;
 use YamlStandards\Model\Component\YamlService;
 use YamlStandards\Model\Config\StandardParametersData;
 use YamlStandards\Model\Config\YamlStandardConfigDefinition;
@@ -26,60 +27,50 @@ class YamlServiceArgumentDataFactory
             }
 
             $explodedLine = explode(':', $yamlLine);
-            [$lineKey, $lineValue] = $explodedLine;
+            [$lineKey] = $explodedLine;
             $trimmedLineKey = trim($lineKey);
-            $trimmedLineValue = trim($lineValue);
             $countOfRowIndents = YamlService::rowIndentsOf($yamlLine);
 
             $argumentsShouldBeDefined = 'gradually'; // todo
             if ($trimmedLineKey === self::ARGUMENTS_KEY) {
-                if ($argumentsShouldBeDefined === 'gradually') {
-                    $key++;
-                    $nextYamlLine = $yamlLines[$key];
-                    $countOfNextRowIndents = YamlService::rowIndentsOf($nextYamlLine);
-                    if ($countOfNextRowIndents >= $countOfRowIndents && YamlService::isLineStartOfArrayWithKeyAndValue(trim($nextYamlLine))) {
-                        continue;
-                    }
-
-                    while ($key > 0) {
-                        $nextYamlLine = $yamlLines[$key + 1];
-                        $countOfNextRowIndents = YamlService::rowIndentsOf($nextYamlLine);
-                        if ($countOfRowIndents === $countOfNextRowIndents) {
-
-                        }
-                        $key--;
-                        $prevLine = $yamlLines[$key];
-                        $trimmedPrevLine = trim($prevLine);
-                        $isPrevLineArrayLine = YamlService::hasLineDashOnStartOfLine($trimmedPrevLine);
-                        $countOfPrevRowIndents = YamlService::rowIndentsOf($prevLine);
-                    }
-                }
                 if ($argumentsShouldBeDefined === 'specifically') {
-
+                    $classNameWhereArgumentsBelong = YamlService::getServiceClassName($yamlLines, $key, $countOfRowIndents);
+                    $class = new ReflectionClass($classNameWhereArgumentsBelong);
+                    $constructor = $class->getConstructor();
+                    $parameters = $constructor->getParameters();
+                    $parameterPosition = 0;
+                    while ($key < count($yamlLines)) {
+                        $key++;
+                        $nextYamlLine = $yamlLines[$key];
+                        $countOfNextRowIndents = YamlService::rowIndentsOf($nextYamlLine);
+                        $trimmedNextLine = trim($nextYamlLine);
+                        if ($countOfNextRowIndents >= $countOfRowIndents && YamlService::isLineStartOfArrayWithKeyAndValue($trimmedNextLine)) {
+                            $explodedNextLine = explode('-', $nextYamlLine);
+                            [, $nextLineValue] = $explodedNextLine;
+                            $trimmedNextLineValue = trim($nextLineValue);
+                            $indents = YamlService::createCorrectIndentsByCountOfIndents($countOfNextRowIndents);
+                            $yamlLines[$key] = sprintf('%s$%s: %s', $indents, $parameters[$parameterPosition]->getName(), $trimmedNextLineValue);
+                            $parameterPosition++;
+                        }
+                    }
                 }
-            }
-
-
-
-
-
-            $replacedLineValue = str_replace(['@', '\'', '"'], '', $trimmedLineValue);
-
-            if ($type === YamlStandardConfigDefinition::CONFIG_PARAMETERS_SERVICE_ALIASING_TYPE_VALUE_SHORT) {
-                $key--;
-                $prevYamlLine = $yamlLines[$key];
-                $yamlLines[$key] = $prevYamlLine . ' \'@' . $replacedLineValue . '\'';
-                unset($yamlLines[$key + 1]); // remove `alias:` line
-            } else {
-                $countOfRowIndents = YamlService::rowIndentsOf($yamlLine);
-                $nextIndents = $standardParametersData->getIndents(); // `alias:` is child so I need add extra indents
-                $indents = YamlService::createCorrectIndentsByCountOfIndents($countOfRowIndents + $nextIndents);
-                $yamlLines[$key] = $lineKey . ':';
-                $yamlLines[$key . 'alias'] = $indents . 'alias: ' . $replacedLineValue;
+                if ($argumentsShouldBeDefined === 'gradually') {
+                    while ($key < count($yamlLines)) {
+                        $key++;
+                        $nextYamlLine = $yamlLines[$key];
+                        $countOfNextRowIndents = YamlService::rowIndentsOf($nextYamlLine);
+                        $trimmedNextLine = trim($nextYamlLine);
+                        if ($countOfNextRowIndents >= $countOfRowIndents && YamlService::isLineOfParameterDeterminedSpecifically($trimmedNextLine)) {
+                            $explodedNextLine = explode(':', $nextYamlLine);
+                            [, $nextLineValue] = $explodedNextLine;
+                            $trimmedNextLineValue = trim($nextLineValue);
+                            $indents = YamlService::createCorrectIndentsByCountOfIndents($countOfNextRowIndents);
+                            $yamlLines[$key] = sprintf('%s- %s', $indents, $trimmedNextLineValue);
+                        }
+                    }
+                }
             }
         }
-
-        ksort($yamlLines, SORT_NATURAL); // add `key . alias` to right position
 
         return $yamlLines;
     }
