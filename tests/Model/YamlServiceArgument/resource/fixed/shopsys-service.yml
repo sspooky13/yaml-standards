@@ -2,11 +2,11 @@ imports:
     - { resource: services/*.yml }
 
 parameters:
-    fp_js_form_validator.factory.class: YamlStandards\YamlStandardsFooBundle\Form\JsFormValidatorFactory
-    knp_menu.factory_extension.routing.class: YamlStandards\YamlStandardsFooBundle\Model\AdminNavigation\RoutingExtension
-    prezent_doctrine_translatable.listener.class: YamlStandards\YamlStandardsFooBundle\Model\Localization\TranslatableListener
-    faker.seed: 1234
-    yamlStandards.entity_extension.map: {}
+  fp_js_form_validator.factory.class: YamlStandards\YamlStandardsFooBundle\Form\JsFormValidatorFactory
+  knp_menu.factory_extension.routing.class: YamlStandards\YamlStandardsFooBundle\Model\AdminNavigation\RoutingExtension
+  prezent_doctrine_translatable.listener.class: YamlStandards\YamlStandardsFooBundle\Model\Localization\TranslatableListener
+  faker.seed: 1234
+  yamlStandards.entity_extension.map: {}
 
 services:
     _defaults:

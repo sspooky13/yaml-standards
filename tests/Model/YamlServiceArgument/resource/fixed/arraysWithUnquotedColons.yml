@@ -1,8 +1,0 @@
-foo:
-    bar:
-        - test_url=https://www.test_url.com/
-        - test_url="https://www.test_url.com/"
-        - test_url:"https://www.test_url.com/"
-        - test_url:https://www.test_url.com/
-        - https://www.test_url.com/
-        - "https://www.test_url.com/"

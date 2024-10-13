@@ -33,17 +33,17 @@ class YamlServiceArgumentDataFactory
 
             $argumentsShouldBeDefined = 'gradually'; // todo
             if ($trimmedLineKey === self::ARGUMENTS_KEY) {
-                if ($argumentsShouldBeDefined === 'specifically') {
-                    $classNameWhereArgumentsBelong = YamlService::getServiceClassName($yamlLines, $key, $countOfRowIndents);
-                    $class = new ReflectionClass($classNameWhereArgumentsBelong);
-                    $constructor = $class->getConstructor();
-                    $parameters = $constructor->getParameters();
-                    $parameterPosition = 0;
-                    while ($key < count($yamlLines)) {
-                        $key++;
-                        $nextYamlLine = $yamlLines[$key];
-                        $countOfNextRowIndents = YamlService::rowIndentsOf($nextYamlLine);
-                        $trimmedNextLine = trim($nextYamlLine);
+                $classNameWhereArgumentsBelong = YamlService::getServiceClassName($yamlLines, $key, $countOfRowIndents);
+                $class = new ReflectionClass($classNameWhereArgumentsBelong);
+                $constructor = $class->getConstructor();
+                $parameters = $constructor->getParameters();
+                $parameterPosition = 0;
+                while ($key < count($yamlLines)) {
+                    $key++;
+                    $nextYamlLine = $yamlLines[$key];
+                    $countOfNextRowIndents = YamlService::rowIndentsOf($nextYamlLine);
+                    $trimmedNextLine = trim($nextYamlLine);
+                    if ($argumentsShouldBeDefined === 'specifically') {
                         if ($countOfNextRowIndents >= $countOfRowIndents && YamlService::isLineStartOfArrayWithKeyAndValue($trimmedNextLine)) {
                             $explodedNextLine = explode('-', $nextYamlLine);
                             [, $nextLineValue] = $explodedNextLine;
@@ -53,13 +53,7 @@ class YamlServiceArgumentDataFactory
                             $parameterPosition++;
                         }
                     }
-                }
-                if ($argumentsShouldBeDefined === 'gradually') {
-                    while ($key < count($yamlLines)) {
-                        $key++;
-                        $nextYamlLine = $yamlLines[$key];
-                        $countOfNextRowIndents = YamlService::rowIndentsOf($nextYamlLine);
-                        $trimmedNextLine = trim($nextYamlLine);
+                    if ($argumentsShouldBeDefined === 'gradually') {
                         if ($countOfNextRowIndents >= $countOfRowIndents && YamlService::isLineOfParameterDeterminedSpecifically($trimmedNextLine)) {
                             $explodedNextLine = explode(':', $nextYamlLine);
                             [, $nextLineValue] = $explodedNextLine;
