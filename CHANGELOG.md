@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- [#86] Composer: added support to "sebastian/diff" version 7, Thanks to [@p-golovin] for report
 
 ## [9.0.0]
 ### Added
@@ -263,6 +265,7 @@ patchesJson6902:
 - create base command to check yaml sort
 - create `--diff` mode
 
+[@p-golovin]: https://github.com/p-golovin
 [@TomasLudvik]: https://github.com/TomasLudvik
 [@techi602]: https://github.com/techi602
 [@ChrisDBrown]: https://github.com/ChrisDBrown
@@ -270,7 +273,8 @@ patchesJson6902:
 [@DavidOstrozlik]: https://github.com/DavidOstrozlik
 [@PetrHeinz]: https://github.com/PetrHeinz
 
-[#84]: https://github.com/sspooky13/yaml-standards/pull/84/files
+[#86]: https://github.com/sspooky13/yaml-standards/issues/86
+[#84]: https://github.com/sspooky13/yaml-standards/pull/84
 [#83]: https://github.com/sspooky13/yaml-standards/issues/83
 [#80]: https://github.com/sspooky13/yaml-standards/pull/80
 [#79]: https://github.com/sspooky13/yaml-standards/pull/79
