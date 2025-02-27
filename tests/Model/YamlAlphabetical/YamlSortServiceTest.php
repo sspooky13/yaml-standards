@@ -12,7 +12,7 @@ class YamlSortServiceTest extends TestCase
     /**
      * @return array
      */
-    public function getDataForAlphabeticalSortProvider(): array
+    public static function getDataForAlphabeticalSortProvider(): array
     {
         return [
             [
@@ -131,7 +131,7 @@ class YamlSortServiceTest extends TestCase
     /**
      * @return array
      */
-    public function getArrayDataAndPrioritizedKeysProvider(): array
+    public static function getArrayDataAndPrioritizedKeysProvider(): array
     {
         return [
             [
