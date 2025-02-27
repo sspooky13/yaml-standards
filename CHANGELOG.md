@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [9.1.0]
 ### Added
 - [#86] Composer: added support to "sebastian/diff" version 7, Thanks to [@p-golovin] for report
 
@@ -298,7 +300,8 @@ patchesJson6902:
 [#14]: https://github.com/sspooky13/yaml-standards/issues/14
 [#13]: https://github.com/sspooky13/yaml-standards/pull/13
 
-[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/9.0.0...HEAD
+[Unreleased]: https://github.com/sspooky13/yaml-standards/compare/9.1.0...HEAD
+[9.1.0]: https://github.com/sspooky13/yaml-standards/compare/9.0.0...9.1.0
 [9.0.0]: https://github.com/sspooky13/yaml-standards/compare/8.1.1...9.0.0
 [8.1.1]: https://github.com/sspooky13/yaml-standards/compare/8.1.0...8.1.1
 [8.1.0]: https://github.com/sspooky13/yaml-standards/compare/8.0.1...8.1.0
