@@ -2,6 +2,11 @@ FROM php:7.2-fpm-buster as base
 
 ARG project_root=.
 
+# Fix Debian Buster (EOL) repository URLs to use archive.debian.org
+RUN sed -i 's|http://deb.debian.org/debian|http://archive.debian.org/debian|g' /etc/apt/sources.list && \
+    sed -i 's|http://security.debian.org/debian-security|http://archive.debian.org/debian-security|g' /etc/apt/sources.list && \
+    sed -i '/stretch-updates/d' /etc/apt/sources.list
+
 # install required tools
 # git for computing diffs
 # wget for installation of other tools
