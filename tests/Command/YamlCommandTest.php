@@ -130,7 +130,15 @@ class YamlCommandTest extends TestCase
     private function createCommandTester(): CommandTester
     {
         $application = new Application();
-        $application->add(new YamlCommand());
+
+        // Symfony 8.0+ removed add() method in favor of addCommand()
+        // For backward compatibility with Symfony 4.2-7.x, we check which method exists
+        if (method_exists($application, 'addCommand')) {
+            $application->addCommand(new YamlCommand());
+        } else {
+            $application->add(new YamlCommand());
+        }
+
         $command = $application->find('yaml-standards');
 
         return new CommandTester($command);

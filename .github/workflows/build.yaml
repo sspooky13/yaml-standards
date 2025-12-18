@@ -17,7 +17,7 @@ jobs:
         env:
             PHP_VERSION: '7.2'
         steps:
-            -   uses: actions/checkout@v2
+            -   uses: actions/checkout@v4
 
             -   name: Setup PHP ${{ env.PHP_VERSION }} and composer
                 uses: shivammathur/setup-php@v2
@@ -31,7 +31,7 @@ jobs:
                 run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 
             -   name: Cache composer
-                uses: actions/cache@v2
+                uses: actions/cache@v4
                 with:
                     path: ${{ steps.composer-cache.outputs.dir }}
                     key: job-standards-with-tests-${{ env.PHP_VERSION }}-composer-${{ hashFiles('**/composer.json') }}
@@ -97,7 +97,7 @@ jobs:
                 if: matrix.os == 'windows-latest'
                 run: git config --global core.autocrlf false
 
-            -   uses: actions/checkout@v2
+            -   uses: actions/checkout@v4
 
             -   name: Setup PHP ${{ matrix.php }} and composer
                 uses: shivammathur/setup-php@v2
@@ -123,7 +123,7 @@ jobs:
                 run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 
             -   name: Cache composer
-                uses: actions/cache@v2
+                uses: actions/cache@v4
                 with:
                     path: ${{ steps.composer-cache.outputs.dir }}
                     key: job-only-tests-${{ runner.os }}-${{ matrix.php }}-${{ matrix.deps-level }}-${{ matrix.symfony }}-composer-${{ hashFiles('**/composer.json') }}
