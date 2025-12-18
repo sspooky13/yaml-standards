@@ -1,6 +1,9 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- [#89] added support for Symfony 8, Thanks to [@bnowak] for report
+- CI: add build PHP 8.4, PHP 8.5 and Symfony 8
 
 ## [9.1.0]
 ### Added
@@ -267,6 +270,7 @@ patchesJson6902:
 - create base command to check yaml sort
 - create `--diff` mode
 
+[@bnowak]: https://github.com/bnowak
 [@p-golovin]: https://github.com/p-golovin
 [@TomasLudvik]: https://github.com/TomasLudvik
 [@techi602]: https://github.com/techi602
@@ -275,6 +279,7 @@ patchesJson6902:
 [@DavidOstrozlik]: https://github.com/DavidOstrozlik
 [@PetrHeinz]: https://github.com/PetrHeinz
 
+[#89]: https://github.com/sspooky13/yaml-standards/issues/89
 [#86]: https://github.com/sspooky13/yaml-standards/issues/86
 [#84]: https://github.com/sspooky13/yaml-standards/pull/84
 [#83]: https://github.com/sspooky13/yaml-standards/issues/83
