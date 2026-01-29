@@ -1,4 +1,9 @@
 parameters:
+    level: 2
+    paths:
+        - bin
+        - src
+        - tests
     reportUnmatchedIgnoredErrors: false # this is skipped because for symfony 4.2 and newer versions someone error doesn't showing
     ignoreErrors:
         -
