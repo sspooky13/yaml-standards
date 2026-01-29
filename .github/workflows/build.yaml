@@ -14,17 +14,25 @@ jobs:
     run-standards-with-tests:
         name: Check code meets standards and tests pass (by localhost config)
         runs-on: ubuntu-latest
-        env:
-            PHP_VERSION: '7.2'
+        strategy:
+            matrix:
+                include:
+                    - php: 7.2
+                      symfony: ^5.0
+                    - php: 8.5
+                      symfony: ^8.0
         steps:
             -   uses: actions/checkout@v4
 
-            -   name: Setup PHP ${{ env.PHP_VERSION }} and composer
+            -   name: Setup PHP ${{ matrix.php }} and composer
                 uses: shivammathur/setup-php@v2
                 with:
-                    php-version: ${{ env.PHP_VERSION }}
+                    php-version: ${{ matrix.php }}
                     coverage: none # disable xdebug, pcov
                     tools: composer:v2
+
+            -   name: Require Symfony at version ${{ matrix.symfony }}
+                run: composer require --no-update "symfony/console:${{ matrix.symfony }}" "symfony/config:${{ matrix.symfony }}" "symfony/yaml:${{ matrix.symfony }}"
 
             -   name: Set composer cache directory
                 id: composer-cache
@@ -34,13 +42,13 @@ jobs:
                 uses: actions/cache@v4
                 with:
                     path: ${{ steps.composer-cache.outputs.dir }}
-                    key: job-standards-with-tests-${{ env.PHP_VERSION }}-composer-${{ hashFiles('**/composer.json') }}
-                    restore-keys: job-standards-with-tests-${{ env.PHP_VERSION }}-composer-
+                    key: job-standards-with-tests-${{ matrix.php }}-composer-${{ hashFiles('**/composer.json') }}
+                    restore-keys: job-standards-with-tests-${{ matrix.php }}-composer-
 
             -   name: Install dependencies
                 run: composer install
 
-            -   name: Run standarts and tests
+            -   name: Run standards and tests
                 run: vendor/bin/phing build-ci
     run-only-tests:
         name: Run only tests on PHP ${{ matrix.php }} on ${{ matrix.os }} with ${{ matrix.deps-level }} ${{ matrix.symfony }} dependency level
@@ -109,7 +117,7 @@ jobs:
             -   name: Require Symfony at version ${{ matrix.symfony }}
                 run: composer require --no-update "symfony/console:${{ matrix.symfony }}" "symfony/config:${{ matrix.symfony }}" "symfony/yaml:${{ matrix.symfony }}"
 
-            -   name: Add caret to composer.json for symfony libraries for windows build
+            -   name: Add caret to composer.json for Symfony libraries for windows build
                 if: ${{ matrix.os == 'windows-latest' }}
                 shell: pwsh
                 run: |
