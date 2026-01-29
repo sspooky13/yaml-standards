@@ -24,6 +24,6 @@ if (!$autoloadFileFound) {
 
 $application = new Application('YAML standards');
 $application->setCatchExceptions(false);
-$application->add(new YamlCommand());
+$application->addCommands([new YamlCommand()]);
 $application->setDefaultCommand('yaml-standards', true);
 $application->run();
