@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Fixed
+- [#90] fixed application when using Symfony 8 or higher, Thanks to [@bnowak] for report
 
 ## [9.2.0]
 ### Added
@@ -281,6 +283,7 @@ patchesJson6902:
 [@DavidOstrozlik]: https://github.com/DavidOstrozlik
 [@PetrHeinz]: https://github.com/PetrHeinz
 
+[#90]: https://github.com/sspooky13/yaml-standards/issues/90
 [#89]: https://github.com/sspooky13/yaml-standards/issues/89
 [#86]: https://github.com/sspooky13/yaml-standards/issues/86
 [#84]: https://github.com/sspooky13/yaml-standards/pull/84
