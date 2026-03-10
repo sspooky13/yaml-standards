@@ -322,7 +322,7 @@ class YamlService
 
             if ($countOfRowIndents === $countOfNextRowIndents) {
                 if ($trimmedLineKey === 'class') {
-                    return $trimmedLineValue;
+                    return self::removeQuotationMarks($trimmedLineValue);
                 }
             }
 
@@ -345,7 +345,7 @@ class YamlService
 
             if ($countOfRowIndents === $countOfPrevRowIndents) {
                 if ($trimmedLineKey === 'class') {
-                    return $trimmedLineValue;
+                    return self::removeQuotationMarks($trimmedLineValue);
                 }
             }
 
@@ -353,11 +353,16 @@ class YamlService
                 // Extract service name from the line (e.g., "YamlStandardsApp\Service\TestService:" -> "YamlStandardsApp\Service\TestService")
                 if (strpos($prevLine, ':') !== false) {
                     $serviceName = explode(':', $prevLine)[0];
-                    return trim($serviceName);
+                    return trim(self::removeQuotationMarks($serviceName));
                 }
             }
         }
 
         return null;
+    }
+
+    private static function removeQuotationMarks(string $value)
+    {
+        return str_replace(['"', "'"], '', $value);
     }
 }

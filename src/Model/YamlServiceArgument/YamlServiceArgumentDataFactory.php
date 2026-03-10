@@ -24,7 +24,7 @@ class YamlServiceArgumentDataFactory
     public static function getCorrectYamlLines(array $yamlLines, StandardParametersData $standardParametersData): array
     {
         foreach ($yamlLines as $key => $yamlLine) {
-            if (!YamlServiceAliasingDataFactory::belongLineToServices($yamlLines, $key)) {
+            if (YamlServiceAliasingDataFactory::belongLineToServices($yamlLines, $key) === false) {
                 continue;
             }
 
@@ -34,10 +34,16 @@ class YamlServiceArgumentDataFactory
             $countOfRowIndents = YamlService::rowIndentsOf($yamlLine);
 
             $argumentsShouldBeDefined = $standardParametersData->getServiceArgumentType();
-            if ($trimmedLineKey === self::ARGUMENTS_KEY) {
+            if ($trimmedLineKey === self::ARGUMENTS_KEY && self::isInsideCallsSection($yamlLines, $key, $countOfRowIndents) === false) {
                 $classNameWhereArgumentsBelong = YamlService::getServiceClassName($yamlLines, $key, $countOfRowIndents);
                 $class = new ReflectionClass($classNameWhereArgumentsBelong);
+                if ($class->isInterface()) {
+                    continue;
+                }
                 $constructor = $class->getConstructor();
+                if ($constructor === null) {
+                    continue;
+                }
                 $parameters = $constructor->getParameters();
                 $parameterPosition = 0;
                 while ($key < count($yamlLines)) {
@@ -50,7 +56,7 @@ class YamlServiceArgumentDataFactory
                     $trimmedNextLine = trim($nextYamlLine);
                     if ($argumentsShouldBeDefined === self::ARGUMENT_DEFINITION_SPECIFICALLY) {
                         if ($countOfNextRowIndents >= $countOfRowIndents && YamlService::isLineStartOfArrayWithKeyAndValue($trimmedNextLine)) {
-                            $explodedNextLine = explode('-', $nextYamlLine);
+                            $explodedNextLine = explode('-', $nextYamlLine, 2);
                             [, $nextLineValue] = $explodedNextLine;
                             $trimmedNextLineValue = trim($nextLineValue);
                             $indents = YamlService::createCorrectIndentsByCountOfIndents($countOfNextRowIndents);
@@ -60,7 +66,7 @@ class YamlServiceArgumentDataFactory
                     }
                     if ($argumentsShouldBeDefined === self::ARGUMENT_DEFINITION_GRADUALLY) {
                         if ($countOfNextRowIndents > $countOfRowIndents && YamlService::isLineOfParameterDeterminedSpecifically($trimmedNextLine) && trim(explode(':', $trimmedNextLine)[0]) !== self::ARGUMENTS_KEY) {
-                            $explodedNextLine = explode(':', $nextYamlLine);
+                            $explodedNextLine = explode(':', $nextYamlLine, 2);
                             if (count($explodedNextLine) >= 2) {
                                 [, $nextLineValue] = $explodedNextLine;
                                 $trimmedNextLineValue = trim($nextLineValue);
@@ -74,5 +80,31 @@ class YamlServiceArgumentDataFactory
         }
 
         return $yamlLines;
+    }
+
+    /**
+     * @param string[] $yamlLines
+     */
+    private static function isInsideCallsSection(array $yamlLines, int $currentKey, int $currentIndents): bool
+    {
+        for ($i = $currentKey - 1; $i >= 0; $i--) {
+            $line = $yamlLines[$i];
+            if (trim($line) === '') {
+                continue;
+            }
+            $lineIndents = YamlService::rowIndentsOf($line);
+            if ($lineIndents < $currentIndents) {
+                $trimmedLine = trim($line);
+                if (strncmp($trimmedLine, '-', 1) === 0) {
+                    $currentIndents = $lineIndents;
+                    continue;
+                }
+                $lineKey = trim(explode(':', $trimmedLine)[0]);
+
+                return $lineKey === 'calls';
+            }
+        }
+
+        return false;
     }
 }
