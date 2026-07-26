@@ -44,6 +44,7 @@ services:
         arguments:
             - '@database_connection'
             - '@logger'
+            - '@mailer'
 
     # needed for the 'localizeddate' Twig filter
     Twig\Extensions\IntlExtension: ~

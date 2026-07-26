@@ -361,6 +361,84 @@ class YamlService
         return null;
     }
 
+    /**
+     * end of a block belonging to a key indented by $blockIndents; a block sequence item may share the key's indent (dash-style list), so it still belongs to the block, anything else at the same or lower indent is a sibling key or a dedent
+     *
+     * @param string $trimmedLine
+     * @param int $lineIndents
+     * @param int $blockIndents
+     * @return bool
+     */
+    public static function isEndOfBlock(string $trimmedLine, int $lineIndents, int $blockIndents): bool
+    {
+        if ($lineIndents < $blockIndents) {
+            return true;
+        }
+
+        return $lineIndents === $blockIndents && self::hasLineDashOnStartOfLine($trimmedLine) === false;
+    }
+
+    /**
+     * naive balance of flow-collection brackets on a line: opening ({ [) minus closing (} ]), used to detect multi-line inline collections so a caller does not descend into a single multi-line value
+     *
+     * @param string $line
+     * @return int
+     */
+    public static function getFlowCollectionDepthChange(string $line): int
+    {
+        return substr_count($line, '{') + substr_count($line, '[')
+            - substr_count($line, '}') - substr_count($line, ']');
+    }
+
+    /**
+     * Number of direct entries of a block whose key is on line $blockKey (indented by $blockIndents). Lines that belong to a nested value (a deeper block map/sequence or a multi-line flow collection) are not counted.
+     *
+     * @param string[] $yamlLines
+     * @param int $blockKey
+     * @param int $blockIndents
+     * @return int
+     */
+    public static function countDirectEntriesOfBlock(array $yamlLines, int $blockKey, int $blockIndents): int
+    {
+        $count = 0;
+        $flowCollectionDepth = 0;
+        $entryIndents = null;
+        $key = $blockKey;
+
+        while ($key < count($yamlLines)) {
+            $key++;
+            if (array_key_exists($key, $yamlLines) === false) {
+                break;
+            }
+            $line = $yamlLines[$key];
+            $trimmedLine = trim($line);
+            if ($trimmedLine === '') {
+                continue;
+            }
+            $lineIndents = self::rowIndentsOf($line);
+
+            if ($flowCollectionDepth > 0) {
+                $flowCollectionDepth += self::getFlowCollectionDepthChange($line);
+                continue;
+            }
+            if (self::isEndOfBlock($trimmedLine, $lineIndents, $blockIndents)) {
+                break;
+            }
+            if ($entryIndents === null) {
+                $entryIndents = $lineIndents;
+            }
+            if ($lineIndents > $entryIndents) {
+                $flowCollectionDepth += self::getFlowCollectionDepthChange($line);
+                continue;
+            }
+
+            $count++;
+            $flowCollectionDepth += self::getFlowCollectionDepthChange($line);
+        }
+
+        return $count;
+    }
+
     private static function removeQuotationMarks(string $value)
     {
         return str_replace(['"', "'"], '', $value);

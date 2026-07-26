@@ -45,6 +45,16 @@ class YamlServiceArgumentDataFactory
                     continue;
                 }
                 $parameters = $constructor->getParameters();
+
+                // converting named arguments to positional ones (dashes) is only safe when every
+                // constructor parameter is provided; a partial set (e.g. only the non-autowirable
+                // services named) has no positional equivalent, so leave such a service untouched
+                if ($argumentsShouldBeDefined === self::ARGUMENT_DEFINITION_GRADUALLY
+                    && YamlService::countDirectEntriesOfBlock($yamlLines, $key, $countOfRowIndents) < count($parameters)
+                ) {
+                    continue;
+                }
+
                 $parameterPosition = 0;
                 $flowCollectionDepth = 0;
                 $argumentItemIndents = null;
@@ -63,13 +73,13 @@ class YamlServiceArgumentDataFactory
                     // we are inside a multi-line flow collection ({ } / [ ]) - these lines are part of the
                     // value of a single argument, not arguments themselves, so leave them untouched
                     if ($flowCollectionDepth > 0) {
-                        $flowCollectionDepth += self::getFlowCollectionDepthChange($nextYamlLine);
+                        $flowCollectionDepth += YamlService::getFlowCollectionDepthChange($nextYamlLine);
                         continue;
                     }
 
                     // the arguments block ended - we reached a dedent or a sibling key (e.g. `class:`);
                     // a block sequence item may share the indent of the `arguments:` key, so it does not end the block
-                    if (self::isEndOfArgumentsBlock($trimmedNextLine, $countOfNextRowIndents, $countOfRowIndents)) {
+                    if (YamlService::isEndOfBlock($trimmedNextLine, $countOfNextRowIndents, $countOfRowIndents)) {
                         break;
                     }
 
@@ -81,7 +91,7 @@ class YamlServiceArgumentDataFactory
                     // more deeply indented than an entry - this is a nested (block) value of the previous
                     // argument (e.g. a map or list), not an argument itself, so leave it untouched
                     if ($countOfNextRowIndents > $argumentItemIndents) {
-                        $flowCollectionDepth += self::getFlowCollectionDepthChange($nextYamlLine);
+                        $flowCollectionDepth += YamlService::getFlowCollectionDepthChange($nextYamlLine);
                         continue;
                     }
 
@@ -108,41 +118,12 @@ class YamlServiceArgumentDataFactory
                         }
                     }
 
-                    $flowCollectionDepth += self::getFlowCollectionDepthChange($nextYamlLine);
+                    $flowCollectionDepth += YamlService::getFlowCollectionDepthChange($nextYamlLine);
                 }
             }
         }
 
         return $yamlLines;
-    }
-
-    /**
-     * A block sequence item may share the indent of the `arguments:` key (dash-style list), so it still belongs to the block. Anything else at the same or lower indent is a sibling key or a dedent.
-     *
-     * @param string $trimmedLine
-     * @param int $lineIndents
-     * @param int $argumentsIndents
-     * @return bool
-     */
-    private static function isEndOfArgumentsBlock(string $trimmedLine, int $lineIndents, int $argumentsIndents): bool
-    {
-        if ($lineIndents < $argumentsIndents) {
-            return true;
-        }
-
-        return $lineIndents === $argumentsIndents && strncmp($trimmedLine, '-', 1) !== 0;
-    }
-
-    /**
-     * Naive balance of flow-collection brackets on a line: opening ({ [) minus closing (} ]). Used to detect multi-line inline collections so the fixer does not descend into the value of a single argument.
-     *
-     * @param string $line
-     * @return int
-     */
-    private static function getFlowCollectionDepthChange(string $line): int
-    {
-        return substr_count($line, '{') + substr_count($line, '[')
-            - substr_count($line, '}') - substr_count($line, ']');
     }
 
     /**

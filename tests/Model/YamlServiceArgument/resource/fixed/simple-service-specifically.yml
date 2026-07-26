@@ -35,3 +35,10 @@ services:
             -
                 local: '@local_filesystem'
                 main: '@main_filesystem'
+
+    # only a subset of constructor parameters is named (the rest are autowired) - a partial set has no
+    # positional equivalent, so the fixer must leave it untouched in both gradually and specifically modes
+    YamlStandards\Model\YamlServiceArgument\resource\TestService\PartialArgumentsTestService:
+        arguments:
+            $manuallyWiredService: '@manually_wired.service'
+            $anotherManuallyWiredService: '@another_manually_wired.service'
