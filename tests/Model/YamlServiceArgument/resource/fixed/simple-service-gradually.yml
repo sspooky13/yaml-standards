@@ -18,3 +18,20 @@ services:
             - '@service.one'
             - '@service.two'
             - '@service.three'
+
+    # associative array passed as an argument value (flow map) - the fixer must not descend into it
+    YamlStandards\Model\YamlServiceArgument\resource\TestService\FlowMapTestService:
+        arguments:
+            - ~
+            - '@service_container'
+            - {
+                'Foo\FooValidator': 'service.foo_validator',
+                'Foo\BarValidator': 'service.bar_validator'
+            }
+
+    # associative array passed as an argument value (block map) - the fixer must not turn its keys into dashes
+    YamlStandards\Model\YamlServiceArgument\resource\TestService\BlockMapTestService:
+        arguments:
+            -
+                local: '@local_filesystem'
+                main: '@main_filesystem'

@@ -18,3 +18,20 @@ services:
             $service1: '@service.one'
             $service2: '@service.two'
             $service3: '@service.three'
+
+    # associative array passed as an argument value (flow map) - only the top-level entries become $param, the map itself is left intact
+    YamlStandards\Model\YamlServiceArgument\resource\TestService\FlowMapTestService:
+        arguments:
+            $firstParameter: ~
+            $container: '@service_container'
+            $validatorMap: {
+                'Foo\FooValidator': 'service.foo_validator',
+                'Foo\BarValidator': 'service.bar_validator'
+            }
+
+    # associative array passed as an argument value (block map) - the fixer must not turn its keys into dashes
+    YamlStandards\Model\YamlServiceArgument\resource\TestService\BlockMapTestService:
+        arguments:
+            -
+                local: '@local_filesystem'
+                main: '@main_filesystem'
